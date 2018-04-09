@@ -1,0 +1,26 @@
+{
+    "set": {
+        "tiles": [{
+             "name": "wall1",
+             "symmetry": "I",
+             "weight": 100
+         }, {
+             "name": "empty",
+             "symmetry": "X"
+         }],
+        "neighbors": [
+
+            ["horizontal", "wall1", "wall1"],
+            ["horizontal", "wall1 1", "wall1 1"],
+
+            ["horizontal", "wall1 1", "empty"],
+            ["horizontal", "wall1", "empty"],
+
+            ["vertical", "empty", "empty"],
+            ["vertical", "wall1", "empty"],
+            ["vertical", "wall1 1", "empty"]
+        ],
+        "pixelsize": 8,
+        "voxelsize": 4
+    }
+}

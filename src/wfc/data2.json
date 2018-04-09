@@ -1,0 +1,141 @@
+{
+    "set": {
+        "tiles": [{
+             "name": "down",
+             "symmetry": "T"
+         }, {
+             "name": "empty",
+             "symmetry": "X"
+         }, {
+             "name": "line",
+             "symmetry": "I"
+         }, {
+             "name": "turn",
+             "symmetry": "L"
+         }, {
+             "name": "up",
+             "symmetry": "T"
+         }, {
+             "name": "vertical",
+             "symmetry": "X"
+         }, {
+             "name": "ground",
+             "symmetry": "X"
+         }],
+        "neighbors": [
+            ["horizontal", "down 1", "down 3"],
+            ["horizontal", "down", "down"],
+            ["horizontal", "down", "down 1"],
+            ["horizontal", "down", "down 2"],
+            ["horizontal", "down 3", "down 1"],
+            ["horizontal", "down", "empty"],
+            ["horizontal", "down 3", "empty"],
+            ["horizontal", "down", "line"],
+            ["horizontal", "down 3", "line"],
+            ["horizontal", "down 1", "line 1"],
+            ["horizontal", "down", "turn"],
+            ["horizontal", "down", "turn 3"],
+            ["horizontal", "down 3", "turn"],
+            ["horizontal", "down 1", "turn 1"],
+            ["horizontal", "down", "up"],
+            ["horizontal", "down", "up 1"],
+            ["horizontal", "down", "up 2"],
+            ["horizontal", "down 3", "up"],
+            ["horizontal", "down 3", "up 1"],
+            ["horizontal", "down 1", "up 3"],
+            ["horizontal", "down", "vertical"],
+            ["horizontal", "down 3", "vertical"],
+            ["horizontal", "empty", "empty"],
+            ["horizontal", "empty", "line"],
+            ["horizontal", "empty", "turn"],
+            ["horizontal", "empty", "up"],
+            ["horizontal", "empty", "up 1"],
+            ["horizontal", "empty", "vertical"],
+            ["horizontal", "line", "line"],
+            ["horizontal", "line 1", "line 1"],
+            ["horizontal", "line", "turn"],
+            ["horizontal", "line 1", "turn 1"],
+            ["horizontal", "line", "up"],
+            ["horizontal", "line", "up 1"],
+            ["horizontal", "line 1", "up 3"],
+            ["horizontal", "line", "vertical"],
+            ["horizontal", "turn", "turn 2"],
+            ["horizontal", "turn", "turn 1"],
+            ["horizontal", "turn 1", "turn"],
+            ["horizontal", "turn 1", "turn 3"],
+            ["horizontal", "turn", "up 3"],
+            ["horizontal", "up", "turn"],
+            ["horizontal", "up", "turn 3"],
+            ["horizontal", "up 3", "turn"],
+            ["horizontal", "turn 1", "vertical"],
+            ["horizontal", "up 1", "up 3"],
+            ["horizontal", "up", "up"],
+            ["horizontal", "up", "up 1"],
+            ["horizontal", "up", "up 2"],
+            ["horizontal", "up 3", "up 1"],
+            ["horizontal", "up", "vertical"],
+            ["horizontal", "up 3", "vertical"],
+            ["horizontal", "vertical", "vertical"],
+            ["vertical", "empty", "down"],
+            ["vertical", "empty", "empty"],
+            ["vertical", "empty", "line"],
+            ["vertical", "line", "empty"],
+            ["vertical", "empty", "turn"],
+            ["vertical", "turn", "empty"],
+            ["vertical", "up", "empty"],
+            ["vertical", "line", "line"],
+            ["vertical", "line", "line 1"],
+            ["vertical", "line", "turn"],
+            ["vertical", "turn", "line"],
+            ["vertical", "up", "line"],
+            ["vertical", "up 1", "line"],
+            ["vertical", "line", "down"],
+            ["vertical", "line 1", "down"],
+            ["vertical", "turn", "down"],
+            ["vertical", "turn 3", "down"],
+            ["vertical", "up", "down"],
+            ["vertical", "up", "down 1"],
+            ["vertical", "up", "down 2"],
+            ["vertical", "down", "up"],
+            ["vertical", "down", "up 1"],
+            ["vertical", "down", "up 2"],
+            ["vertical", "down", "vertical"],
+            ["vertical", "turn", "turn"],
+            ["vertical", "turn", "turn 1"],
+            ["vertical", "turn", "turn 2"],
+            ["vertical", "up", "turn"],
+            ["vertical", "up", "turn 3"],
+            ["vertical", "vertical", "up"],
+            ["vertical", "vertical", "vertical"]
+        ],
+        "subsets": {
+            "subset": [{
+                "tile": [{
+                    "name": "down",
+                    "symmetry": "T"
+                }, {
+                    "name": "line",
+                    "symmetry": "I"
+                }, {
+                    "name": "turn",
+                    "symmetry": "L"
+                }, {
+                    "name": "up",
+                    "symmetry": "T"
+                }, {
+                    "name": "vertical",
+                    "symmetry": "X"
+                }],
+                "name": "dense knots"
+            }, {
+                "tile": [{
+                    "name": "turn",
+                    "symmetry": "L"
+                }],
+                "name": "only turns"
+            }]
+        },
+        "pixelsize": 8,
+        "voxelsize": 3
+    }
+}
