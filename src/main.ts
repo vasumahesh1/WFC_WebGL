@@ -11,10 +11,11 @@ import Texture from './rendering/gl/Texture';
 import SpotLight from './lights/SpotLight';
 import WFC from './WFC';
 
-// Define an object with application parameters and button callbacks
-// const controls = {
-//   // Extra credit: Add interactivity
-// };
+
+var Logger = require('debug');
+var mainAppLog = Logger("mainApp:WFC:trace");
+var mainAppLogInfo = Logger("mainApp:WFC:info");
+
 
 function axisAngleToQuaternion(axis: vec3, angle: number) {
   let quat = vec4.create();
@@ -31,6 +32,8 @@ function axisAngleToQuaternion(axis: vec3, angle: number) {
 
   return quat;
 }
+
+let captureIndex = 0;
 
 let shouldCapture: boolean = false;
 
@@ -50,20 +53,19 @@ function toggleLightColor() {
 
 let wfc: any;
 
-function doWFC() {
+function doWFC(capture : boolean) {
   wfc = new WFC('Test', null, 20, 20, 6, true, "ground", "empty", "empty");
+  wfc.captureState = true;
 
   for (let k = 0; k < 10; k++) {
     let result = wfc.run();
 
     if (result) {
-      console.log('DONE!');
+      mainAppLogInfo('DONE WFC!');
       break;
 
     } else {
-      // console.log(wfc.textOutput());
-      // console.log(wfc.observed);
-      console.log('CONTRADICTION!');
+      mainAppLogInfo('CONTRADICTION!');
     }
   }
 
@@ -79,6 +81,7 @@ const SM_VIEWPORT_TRANSFORM:mat4 = mat4.fromValues(
 let controls = {
   saveImage: saveImage,
   doWFC: doWFC,
+  iterateScene: iterateScene,
   toggleLightColor: toggleLightColor,
   skyLight: {
     color: WHITE_COLOR,
@@ -135,6 +138,7 @@ let meshes:any = {
   'pipeT' : './resources/test/pipe2.obj',
   'wallside1' : './resources/test/wallside1.obj',
   'wallroof1' : './resources/test/wallroof1.obj',
+  'straightwall1' : './resources/test/straightwall1.obj',
 };
 
 let textures: any = [
@@ -154,6 +158,7 @@ let textures: any = [
   ['./resources/test/pipe2.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wallside1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wallroof1.png', './resources/textures/default_emissive.png'],
+  ['./resources/test/straightwall1.png', './resources/textures/default_emissive.png'],
 ];
 
 let sceneOBJs: { [symbol: string]: string; } = { };
@@ -205,11 +210,39 @@ function testUV(camera: Camera) {
   let dir = vec2.fromValues(p2[0] - p1[0], p2[1] - p1[1]);
   // vec2.normalize(dir, dir);
 
-  console.log('Light Direction in UV Space is: ', dir[0], dir[1]);
+  mainAppLogInfo('Light Direction in UV Space is: ', dir[0], dir[1]);
 }
 
-function loadScene() {
-  let transforms = doWFC();
+let interval:any;
+
+function iterateScene() {
+  interval = setInterval(function() {
+    loadScene(true);
+    ++captureIndex;
+  }, 500);
+}
+
+function loadScene(capture:boolean = false) {
+  let transforms = [];
+  if (!capture) {
+    transforms = doWFC(capture);
+    mainAppLogInfo(`Recorded ${wfc.states.length} states`);
+  } else {
+    mainAppLogInfo('Showing State:' , captureIndex);
+    transforms = wfc.transformState(wfc.states[captureIndex]);
+
+    if (captureIndex > wfc.states.length) {
+      clearInterval(interval);
+      loadScene(false);
+      return;
+    }
+  }
+
+  for (var i = 0; i < sceneMeshes.length; ++i) {
+    sceneMeshes[i].destory();
+  }
+
+  sceneMeshes = [];
 
   for(var key in sceneOBJs) {
     let mesh = new MeshInstanced('InstanceMesh_' + key, sceneOBJs[key]);
@@ -260,7 +293,7 @@ function downloadImage() {
     link.download = "image.png";
 
     link.href = URL.createObjectURL(blob);
-    console.log(blob);
+    mainAppLogInfo(blob);
 
     link.click();
 
@@ -290,7 +323,7 @@ function setShadowMapData(shader: any, shader2: any) {
 
   // let t = vec4.fromValues(25,25,20,1);
   // vec4.transformMat4(t, t, lightSpaceViewProj);
-  // console.log(t);
+  // mainAppLogInfo(t);
 }
 
 
@@ -307,6 +340,7 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'saveImage').name('Save Image');
   gui.add(controls, 'doWFC').name('Do WFC');
+  gui.add(controls, 'iterateScene').name('Next Iteration');
   gui.add(controls, 'toggleLightColor').name('Toggle Sky Color');
 
   var group;

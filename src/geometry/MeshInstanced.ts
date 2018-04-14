@@ -212,7 +212,7 @@ class MeshInstanced extends Drawable {
     gl.bindBuffer(gl.ARRAY_BUFFER, this.bufUv);
     gl.bufferData(gl.ARRAY_BUFFER, this.uvs, gl.STATIC_DRAW);
       
-    dCreateInfo(`Created ${this.name} with ${this.instances} Instances`);
+    dCreate(`Created ${this.name} with ${this.instances} Instances`);
   }
 };
 

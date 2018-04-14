@@ -1,5 +1,7 @@
 import {vec2, vec3, vec4, mat4, quat} from 'gl-matrix';
 
+var _ = require('lodash');
+
 function weightedRandom(arr: Array<number>, random: number) {
   let sum = 0;
   for (let i = 0; i < arr.length; ++i) {
@@ -72,6 +74,8 @@ class WFC {
   sky: number;
   tileCount: number;
   periodic: boolean;
+  captureState: boolean = false;
+  states: any;
 
   actionCount: number;
   weights: Array<number>;
@@ -101,6 +105,8 @@ class WFC {
     this.ground = -1;
     this.empty = -1;
     this.sky = -1;
+
+    this.states = [];
 
     this.weights = new Array<number>();
     this.tileNames = new Array<string>();
@@ -320,6 +326,29 @@ class WFC {
     console.log('transforms', this.transforms);
   }
 
+  observedClone() {
+    let savedState: Array<Array<Array<number>>> = [];
+
+    // // Prepare Map
+    // for (let x = 0; x < this.mapX; ++x) {
+    //   let observedX = new Array<Array<number>>();
+
+    //   for (let y = 0; y < this.mapY; ++y) {
+    //     let observedY = new Array<number>(this.mapZ);
+
+    //     for (let z = 0; z < this.mapZ; ++z) {
+    //       observedY[z] = this.observed[x][y][z];
+    //     }
+
+    //     observedX.push(observedY);
+    //   }
+
+    //   savedState.push(observedX);
+    // }
+
+    this.states.push(_.cloneDeep(this.waves));
+  }
+
   observe() {
     let min = 1000;
     let sum = 0;
@@ -419,6 +448,8 @@ class WFC {
     }
 
     this.changes[selectedX][selectedY][selectedZ] = true;
+
+    this.observedClone();
 
     return null;
   }
@@ -684,6 +715,65 @@ class WFC {
     return result;
   }
 
+  transformState(state: any): any {
+    let result:any = [];
+
+    if (!state) {
+      return result;
+    }
+
+    // Iterate Start
+    for (let z = 0; z < this.mapZ; ++z) {
+      for (let y = 0; y < this.mapY; ++y) {
+        for (let x = 0; x < this.mapX; ++x) {
+          let observedTiles = state[x][this.mapY - y - 1][this.mapZ - z - 1];
+
+          let validCount = 0;
+
+          for (var t = 0; t < observedTiles.length; ++t) {
+            if (!observedTiles[t]) {
+              continue;
+            }
+
+            ++validCount;
+          }
+
+          for (var t = 0; t < observedTiles.length; ++t) {
+            if (!observedTiles[t]) {
+              continue;
+            }
+
+            let transform = this.transforms[t];
+
+            if (!transform) {
+              continue;
+            }
+
+            let xOffset = t;
+
+            let copy = new TransformVoxel(transform.mesh);
+            vec4.copy(copy.rotation, transform.rotation);
+            vec3.copy(copy.scale, transform.scale);
+
+            if (validCount > 1) {
+              vec3.scale(copy.scale, copy.scale, 0.2);
+            } else {
+              xOffset = 0;
+            }
+
+            copy.position = vec4.fromValues(x * this.voxelSize + xOffset, y * this.voxelSize, z * this.voxelSize, 1);
+
+            result.push(copy);
+          }
+
+
+        }
+      }
+    }
+
+    return result;
+  }
+
   transformOutput() {
     let result = [];
 
@@ -693,6 +783,10 @@ class WFC {
         for (let x = 0; x < this.mapX; ++x) {
           let observedTile = this.observed[x][this.mapY - y - 1][this.mapZ - z - 1];
           let transform = this.transforms[observedTile];
+
+          if (!transform) {
+            continue;
+          }
 
           let copy = new TransformVoxel(transform.mesh);
           vec4.copy(copy.rotation, transform.rotation);
