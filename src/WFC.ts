@@ -68,6 +68,8 @@ class WFC {
   mapY: number;
   mapZ: number;
   ground: number;
+  empty: number;
+  sky: number;
   tileCount: number;
   periodic: boolean;
 
@@ -90,20 +92,22 @@ class WFC {
   tileNames: Array<string>;
   transforms: Array<TransformVoxel>;
 
-  constructor(name:string, subsetName:string, width:number, height:number, depth:number, periodic:boolean, groundName:string) {
+  constructor(name:string, subsetName:string, width:number, height:number, depth:number, periodic:boolean, groundName:string, emptyName:string, skyName:string) {
     this.mapX = width;
     this.mapY = height;
     this.mapZ = depth;
 
     this.periodic = periodic;
     this.ground = -1;
+    this.empty = -1;
+    this.sky = -1;
 
     this.weights = new Array<number>();
     this.tileNames = new Array<string>();
     this.transforms = new Array<TransformVoxel>();
     this.propagator = new Array<Array<Array<boolean>>>();
 
-    let json = require('./wfc/data3.json');
+    let json = require('./wfc/data4.json');
     this.pixelSize = json.set.pixelsize;
     this.voxelSize = json.set.voxelsize;
 
@@ -156,6 +160,14 @@ class WFC {
       firstOccurence[tileName] = this.actionCount;
       if (tileName == groundName) {
         this.ground = this.actionCount;
+      }
+
+      if (tileName == emptyName) {
+        this.empty = this.actionCount;
+      }
+
+      if (tileName == skyName) {
+        this.sky = this.actionCount;
       }
 
       /*----------  Map Mirror & Rotated Tiles  ----------*/
@@ -253,6 +265,8 @@ class WFC {
       this.waves.push(waveX);
     }
 
+    console.log('Actions', actions);
+
     /*----------  Prepare Propagator which controls Adjacency  ----------*/
     let neighbors = json.set.neighbors;
     for (var itr = 0; itr < neighbors.length; ++itr) {
@@ -334,8 +348,8 @@ class WFC {
           }
 
           if (sum == 0) {
-            console.log('Wave', w);
-            console.log('XYZ', x,y,z);
+            // console.log('Wave', w);
+            // console.log('XYZ', x,y,z);
             return false;
           }
 
@@ -381,7 +395,7 @@ class WFC {
             for (let t = 0; t < this.actionCount; ++t) {
               if (this.waves[x][y][z][t]) {
                 this.observed[x][y][z] = t;
-                console.log(`Observing: ${this.tileNames[t]}`);
+                // console.log(`Observing: ${this.tileNames[t]}`);
                 break;
               }
             }
@@ -556,7 +570,7 @@ class WFC {
     this.clear();
 
     while(true) {
-      console.log(this.textOutput());
+      // console.log(this.textOutput());
       let result = this.observe();
 
       if (result != null) {
@@ -605,6 +619,50 @@ class WFC {
       }
       // Iterate End
     }
+
+    if (this.empty >= 0) {
+      for (let x = 0; x < this.mapX; ++x) {
+        for (let z = 0; z < this.mapZ; ++z) {
+          for (let t = 0; t < this.actionCount; ++t) {
+            if (t != this.empty) {
+              this.waves[x][0][z][t] = false;
+              this.waves[x][this.mapY - 1][z][t] = false;
+            }
+
+            this.changes[x][0][z] = true;
+            this.changes[x][this.mapY - 1][z] = true;
+          }
+        }
+      }
+
+      for (let y = 0; y < this.mapY; ++y) {
+        for (let z = 0; z < this.mapZ; ++z) {
+          for (let t = 0; t < this.actionCount; ++t) {
+            if (t != this.empty) {
+              this.waves[0][y][z][t] = false;
+              this.waves[this.mapX - 1][y][z][t] = false;
+            }
+          }
+
+          this.changes[0][y][z] = true;
+          this.changes[this.mapX - 1][y][z] = true;
+        }
+      }
+    }
+
+    // if (this.sky >= 0) {
+    //   for (let x = 0; x < this.mapX; ++x) {
+    //     for (let y = 0; y < this.mapY; ++y) {
+    //       for (let t = 0; t < this.actionCount; ++t) {
+    //         if (t != this.sky) {
+    //           this.waves[x][y][this.mapZ - 1][t] = false;
+    //         }
+    //       }
+
+    //       this.changes[x][y][this.mapZ - 1] = true;
+    //     }
+    //   }
+    // }
   }
 
   textOutput() {

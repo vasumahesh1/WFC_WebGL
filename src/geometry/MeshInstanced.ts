@@ -69,6 +69,8 @@ class MeshInstanced extends Drawable {
 
     let model = mat4.create();
     mat4.identity(model);
+    mat4.fromXRotation(model, -Math.PI / 2.0);
+
     this.modelMatrix = model;
 
     this.instances = 0;

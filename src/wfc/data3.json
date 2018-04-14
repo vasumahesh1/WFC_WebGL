@@ -15,10 +15,8 @@
             ["horizontal", "empty2", "empty2"],
             ["vertical", "empty2", "empty2"],
 
-            ["vertical", "wallside1", "wallside1"],
-            ["vertical", "wallside1 1", "wallside1 1"],
-            ["vertical", "wallside1 2", "wallside1 2"],
-            ["vertical", "wallside1 3", "wallside1 3"]
+            ["vertical", "empty2", "wallside1"],
+            ["vertical", "wallside1", "wallside1"]
         ],
         "pixelsize": 8,
         "voxelsize": 5

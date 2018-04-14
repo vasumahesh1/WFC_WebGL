@@ -51,7 +51,7 @@ function toggleLightColor() {
 let wfc: any;
 
 function doWFC() {
-  wfc = new WFC('Test', null, 20, 20, 6, true, "empty");
+  wfc = new WFC('Test', null, 20, 20, 6, true, "ground", "empty", "empty");
 
   for (let k = 0; k < 10; k++) {
     let result = wfc.run();
@@ -83,7 +83,7 @@ let controls = {
   skyLight: {
     color: WHITE_COLOR,
     intensity: 6,
-    direction: [15, 15, 15]
+    direction: [90, 90, 90]
   },
   godray: {
     enabled: true,
@@ -134,6 +134,7 @@ let meshes:any = {
   'pipeL' : './resources/test/pipe1.obj',
   'pipeT' : './resources/test/pipe2.obj',
   'wallside1' : './resources/test/wallside1.obj',
+  'wallroof1' : './resources/test/wallroof1.obj',
 };
 
 let textures: any = [
@@ -152,6 +153,7 @@ let textures: any = [
   ['./resources/test/pipe1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/pipe2.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wallside1.png', './resources/textures/default_emissive.png'],
+  ['./resources/test/wallroof1.png', './resources/textures/default_emissive.png'],
 ];
 
 let sceneOBJs: { [symbol: string]: string; } = { };
@@ -270,10 +272,10 @@ function setShadowMapData(shader: any, shader2: any) {
   let lightDirection =  vec3.fromValues(lightDir[0], lightDir[1], lightDir[2]);
 
   let lightSpaceOrthoProj = mat4.create();
-  mat4.ortho(lightSpaceOrthoProj, -20.0, 20.0, -20.0, 20.0, 0.1, 100.0);
+  mat4.ortho(lightSpaceOrthoProj, -100.0, 100.0, -100.0, 100.0, -75, 175.0);
 
   let lightSpaceView = mat4.create();
-  mat4.lookAt(lightSpaceView, lightDirection, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0));
+  mat4.lookAt(lightSpaceView, lightDirection, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
   let lightSpaceModel = mat4.create();
   let lightSpaceViewProj = mat4.create();
 

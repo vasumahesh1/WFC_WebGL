@@ -27,6 +27,9 @@ out vec4 fs_Col;
 out vec2 fs_UV;
 out vec4 fs_WorldPos;
 
+const float PI = 3.14159265359;
+const float TWO_PI = 6.28318530718;
+
 vec4 quatConjugate(vec4 q)
 { 
   return vec4(-q.x, -q.y, -q.z, q.w); 
@@ -53,6 +56,20 @@ vec4 rotateByQuat(vec4 position, vec4 quat)
   return vec4(quatTemp.x, quatTemp.y, quatTemp.z, 0);
 }
 
+mat4 rotationMatrix(vec3 axis, float angle) {
+  axis = normalize(axis);
+  float s = sin(angle);
+  float c = cos(angle);
+  float oc = 1.0 - c;
+
+  return mat4(
+      oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s,
+      oc * axis.z * axis.x + axis.y * s, 0.0, oc * axis.x * axis.y + axis.z * s,
+      oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,
+      oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,
+      oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);
+}
+
 void main() {
   vec4 vertexColor;
   vec4 vertexPosition = vs_Pos;
@@ -67,10 +84,11 @@ void main() {
   // mat3 invTranspose = inverse(mat3(instanceModel));
   fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);
 
-  vec4 modelposition = u_Model * vertexPosition;
+  vec4 modelposition =  vertexPosition;
   modelposition = vertexScale * vertexPosition;
+  modelposition *= u_Model;
   modelposition = rotateByQuat(modelposition, vs_InstRotation);
-  modelposition += vs_InstPos;
+  modelposition +=  vs_InstPos;
 
   fs_WorldPos = modelposition;
   fs_Pos = u_View * fs_WorldPos;
