@@ -8,6 +8,7 @@ uniform mat4 u_ModelInvTr;
 
 uniform mat4 u_View;   
 uniform mat4 u_Proj;
+uniform mat4 u_ViewProj;
 
 /*----------  Shader UI Controls  ----------*/
 
@@ -91,10 +92,11 @@ void main() {
   modelposition +=  vs_InstPos;
 
   fs_WorldPos = modelposition;
-  fs_Pos = u_View * fs_WorldPos;
+  fs_Pos = u_ViewProj * fs_WorldPos;
 
   fs_UV = vs_UV;
   fs_UV.y = 1.0 - fs_UV.y;
 
-  gl_Position = u_Proj * u_View * modelposition;
+  //gl_Position = u_Proj * u_View * modelposition;
+  gl_Position = u_ViewProj * modelposition;
 }

@@ -460,29 +460,31 @@ function main() {
     // TODO: pass any arguments you may need for shader passes
     // forward render mesh info into gbuffers
     // renderer.renderToGBuffer(camera, standardDeferred, [mesh0, mesh1, mesh2]);
-    renderer.renderToGBuffer(camera, standardDeferred, sceneMeshes, sceneTextures);
-    renderer.renderToShadowMap(camera, standardShadowMap, sceneMeshes, sceneTextures);
+      // renderer.renderToGBuffer(camera, standardDeferred, sceneMeshes, sceneTextures);
+      // renderer.renderToShadowMap(camera, standardShadowMap, sceneMeshes, sceneTextures);
     // render from gbuffers into 32-bit color buffer
-    renderer.renderFromGBuffer(camera);
+      // renderer.renderFromGBuffer(camera);
     // apply 32-bit post and tonemap from 32-bit color to 8-bit color
     // renderer.renderPostProcessHDR();
     // // apply 8-bit post and draw
     // renderer.renderPostProcessLDR();
 
-    renderer.renderPass_Bloom(controls.bloom);
-    renderer.renderPass_GodRay(camera, controls.godray);
+    // renderer.renderPass_Bloom(controls.bloom);
+    // renderer.renderPass_GodRay(camera, controls.godray);
 
-    renderer.renderPass_Composite(controls);
+    // renderer.renderPass_Composite(controls);
 
-    renderer.renderPass_DOF(camera, controls.dof);
+    // renderer.renderPass_DOF(camera, controls.dof);
 
-    renderer.renderPass_ToneMapping(controls.tonemap);
+    // renderer.renderPass_ToneMapping(controls.tonemap);
     
-    if (controls.artistic.effect == 'none') {
-      renderer.renderPass_Present(camera);
-    } else if (controls.artistic.effect == 'sketch') {
-      renderer.renderPass_PresentSketch(camera);
-    }
+    // if (controls.artistic.effect == 'none') {
+    //   renderer.renderPass_Present(camera);
+    // } else if (controls.artistic.effect == 'sketch') {
+    //   renderer.renderPass_PresentSketch(camera);
+    // }
+
+    renderer.render(camera, standardDeferred, sceneMeshes);
 
     stats.end();
 
