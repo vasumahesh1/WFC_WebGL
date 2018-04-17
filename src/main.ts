@@ -78,10 +78,18 @@ const SM_VIEWPORT_TRANSFORM:mat4 = mat4.fromValues(
   0.0, 0.0, 0.5, 0.0,
   0.5, 0.5, 0.5, 1.0);
 
+let showEmpty = false;
+
+function toggleEmpty() {
+  showEmpty = !showEmpty;
+}
+
 let controls = {
   saveImage: saveImage,
   doWFC: doWFC,
   iterateScene: iterateScene,
+  oneStep: oneStep,
+  toggleEmpty: toggleEmpty,
   toggleLightColor: toggleLightColor,
   skyLight: {
     color: WHITE_COLOR,
@@ -139,6 +147,7 @@ let meshes:any = {
   'wallside1' : './resources/test/wallside1.obj',
   'wallroof1' : './resources/test/wallroof1.obj',
   'straightwall1' : './resources/test/straightwall1.obj',
+  // 'empty' : './resources/test/empty.obj',
 };
 
 let textures: any = [
@@ -159,6 +168,7 @@ let textures: any = [
   ['./resources/test/wallside1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wallroof1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/straightwall1.png', './resources/textures/default_emissive.png'],
+  // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
 ];
 
 let sceneOBJs: { [symbol: string]: string; } = { };
@@ -220,6 +230,11 @@ function iterateScene() {
     loadScene(true);
     ++captureIndex;
   }, 500);
+}
+
+function oneStep() {
+  loadScene(true);
+  ++captureIndex;
 }
 
 function loadScene(capture:boolean = false) {
@@ -336,14 +351,16 @@ function main() {
   stats.domElement.style.top = '0px';
   document.body.appendChild(stats.domElement);
 
+  var group;
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'saveImage').name('Save Image');
-  gui.add(controls, 'doWFC').name('Do WFC');
-  gui.add(controls, 'iterateScene').name('Next Iteration');
   gui.add(controls, 'toggleLightColor').name('Toggle Sky Color');
 
-  var group;
+  group = gui.addFolder('WFC');
+  group.add(controls, 'iterateScene').name('Next Iteration');
+  group.add(controls, 'oneStep').name('One Step');
+
 
   group = gui.addFolder('Depth of Field');
   group.add(controls.dof, 'enabled').name('Enabled').listen();

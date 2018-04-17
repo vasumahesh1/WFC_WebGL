@@ -630,6 +630,38 @@ class WFC {
     }
     // Iterate End
 
+    if (this.empty >= 0) {
+      let lowZ = this.ground > 0 ? this.mapZ - 1 : this.mapZ;
+
+      for (let x = 0; x < this.mapX; ++x) {
+        for (let z = 0; z < lowZ; ++z) {
+          for (let t = 0; t < this.actionCount; ++t) {
+            if (t != this.empty) {
+              this.waves[x][0][z][t] = false;
+              this.waves[x][this.mapY - 1][z][t] = false;
+            }
+
+            this.changes[x][0][z] = true;
+            this.changes[x][this.mapY - 1][z] = true;
+          }
+        }
+      }
+
+      for (let y = 0; y < this.mapY; ++y) {
+        for (let z = 0; z < lowZ; ++z) {
+          for (let t = 0; t < this.actionCount; ++t) {
+            if (t != this.empty) {
+              this.waves[0][y][z][t] = false;
+              this.waves[this.mapX - 1][y][z][t] = false;
+            }
+          }
+
+          this.changes[0][y][z] = true;
+          this.changes[this.mapX - 1][y][z] = true;
+        }
+      }
+    }
+
     if (this.ground >= 0) {
       // Iterate Start
       for (let x = 0; x < this.mapX; ++x) {
@@ -651,46 +683,16 @@ class WFC {
       // Iterate End
     }
 
-    if (this.empty >= 0) {
-      for (let x = 0; x < this.mapX; ++x) {
-        for (let z = 0; z < this.mapZ; ++z) {
-          for (let t = 0; t < this.actionCount; ++t) {
-            if (t != this.empty) {
-              this.waves[x][0][z][t] = false;
-              this.waves[x][this.mapY - 1][z][t] = false;
-            }
-
-            this.changes[x][0][z] = true;
-            this.changes[x][this.mapY - 1][z] = true;
-          }
-        }
-      }
-
-      for (let y = 0; y < this.mapY; ++y) {
-        for (let z = 0; z < this.mapZ; ++z) {
-          for (let t = 0; t < this.actionCount; ++t) {
-            if (t != this.empty) {
-              this.waves[0][y][z][t] = false;
-              this.waves[this.mapX - 1][y][z][t] = false;
-            }
-          }
-
-          this.changes[0][y][z] = true;
-          this.changes[this.mapX - 1][y][z] = true;
-        }
-      }
-    }
-
     // if (this.sky >= 0) {
     //   for (let x = 0; x < this.mapX; ++x) {
     //     for (let y = 0; y < this.mapY; ++y) {
     //       for (let t = 0; t < this.actionCount; ++t) {
     //         if (t != this.sky) {
-    //           this.waves[x][y][this.mapZ - 1][t] = false;
+    //           this.waves[x][y][0][t] = false;
     //         }
     //       }
 
-    //       this.changes[x][y][this.mapZ - 1] = true;
+    //       this.changes[x][y][0] = true;
     //     }
     //   }
     // }
