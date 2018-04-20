@@ -144,7 +144,7 @@ vec4 calculateMainLighting(vec4 inputColor, vec3 normal) {
   vec3 lightVec = normalize(u_LightPos); // Directional Light
   
   // Ambient term.
-  ambient = vec4(vec3(1.0), 1);
+  ambient = vec4(vec3(2.0), 1);
 
   // Add diffuse and specular term
   float diffuseTerm = dot(lightVec, normal);
@@ -227,15 +227,15 @@ void main() {
 
   vec4 currentFog = vec4(0, 0, 0, 1);
 
-  if (distance > 40.0f) {
-    distance = distance - 40.0f;
-    float power = distance * 0.1f;
+  // if (distance > 40.0f) {
+  //   distance = distance - 40.0f;
+  //   float power = distance * 0.1f;
 
-    // Exponential Fog but start only some units ahead of the player
-    // 1 - exp(-length(wpos - cpos) * c)
-    float fogFactor = 1.0 - exp(-power);
-    fogFactor = clamp(fogFactor, 0.0, 1.0);
+  //   // Exponential Fog but start only some units ahead of the player
+  //   // 1 - exp(-length(wpos - cpos) * c)
+  //   float fogFactor = 1.0 - exp(-power);
+  //   fogFactor = clamp(fogFactor, 0.0, 1.0);
 
-    out_Col = mix(out_Col, currentFog, fogFactor);
-  }
+  //   out_Col = mix(out_Col, currentFog, fogFactor);
+  // }
 }

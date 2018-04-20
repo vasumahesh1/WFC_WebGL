@@ -71,6 +71,7 @@ class WFC {
   mapZ: number;
   ground: number;
   empty: number;
+  surround: number;
   sky: number;
   tileCount: number;
   periodic: boolean;
@@ -87,6 +88,7 @@ class WFC {
 
   logProb: Array<number>;
   logT: number;
+  isDebug: boolean;
 
   pixelSize: number;
   voxelSize: number;
@@ -96,7 +98,7 @@ class WFC {
   tileNames: Array<string>;
   transforms: Array<TransformVoxel>;
 
-  constructor(name:string, subsetName:string, width:number, height:number, depth:number, periodic:boolean, groundName:string, emptyName:string, skyName:string) {
+  constructor(name:string, subsetName:string, width:number, height:number, depth:number, periodic:boolean, groundName:string, emptyName:string, skyName:string, surroundName:string, isDebug: boolean) {
     this.mapX = width;
     this.mapY = height;
     this.mapZ = depth;
@@ -104,7 +106,9 @@ class WFC {
     this.periodic = periodic;
     this.ground = -1;
     this.empty = -1;
+    this.surround = -1;
     this.sky = -1;
+    this.isDebug = isDebug;
 
     this.states = [];
 
@@ -174,6 +178,10 @@ class WFC {
 
       if (tileName == skyName) {
         this.sky = this.actionCount;
+      }
+
+      if (tileName == surroundName) {
+        this.surround = this.actionCount;
       }
 
       /*----------  Map Mirror & Rotated Tiles  ----------*/
@@ -346,7 +354,9 @@ class WFC {
     //   savedState.push(observedX);
     // }
 
-    this.states.push(_.cloneDeep(this.waves));
+    if (this.isDebug) {
+      this.states.push(_.cloneDeep(this.waves));
+    }
   }
 
   observe() {
@@ -577,6 +587,8 @@ class WFC {
                   wave2[t2] = false;
                   this.changes[x2][y2][z2] = true;
                   change = true;
+
+                  this.observedClone();
                 }
               }
             }
@@ -630,13 +642,13 @@ class WFC {
     }
     // Iterate End
 
-    if (this.empty >= 0) {
+    if (this.surround >= 0) {
       let lowZ = this.ground > 0 ? this.mapZ - 1 : this.mapZ;
 
       for (let x = 0; x < this.mapX; ++x) {
         for (let z = 0; z < lowZ; ++z) {
           for (let t = 0; t < this.actionCount; ++t) {
-            if (t != this.empty) {
+            if (t != this.surround) {
               this.waves[x][0][z][t] = false;
               this.waves[x][this.mapY - 1][z][t] = false;
             }
@@ -650,7 +662,7 @@ class WFC {
       for (let y = 0; y < this.mapY; ++y) {
         for (let z = 0; z < lowZ; ++z) {
           for (let t = 0; t < this.actionCount; ++t) {
-            if (t != this.empty) {
+            if (t != this.surround) {
               this.waves[0][y][z][t] = false;
               this.waves[this.mapX - 1][y][z][t] = false;
             }
@@ -662,26 +674,26 @@ class WFC {
       }
     }
 
-    if (this.ground >= 0) {
-      // Iterate Start
-      for (let x = 0; x < this.mapX; ++x) {
-        for (let y = 0; y < this.mapY; ++y) {
-          for (let t = 0; t < this.actionCount; ++t) {
-            if (t != this.ground) {
-              this.waves[x][y][this.mapZ - 1][t] = false;
-            }
-          }
+    // if (this.ground >= 0) {
+    //   // Iterate Start
+    //   for (let x = 0; x < this.mapX; ++x) {
+    //     for (let y = 0; y < this.mapY; ++y) {
+    //       for (let t = 0; t < this.actionCount; ++t) {
+    //         if (t != this.ground) {
+    //           this.waves[x][y][this.mapZ - 1][t] = false;
+    //         }
+    //       }
 
-          this.changes[x][y][this.mapZ - 1] = true;
+    //       // this.changes[x][y][this.mapZ - 1] = true;
 
-          for (let z = 0; z < this.mapZ - 1; ++z) {
-            this.waves[x][y][z][this.ground] = false;
-            this.changes[x][y][z] = true;
-          }
-        }
-      }
-      // Iterate End
-    }
+    //       for (let z = 0; z < this.mapZ - 1; ++z) {
+    //         this.waves[x][y][z][this.ground] = false;
+    //         // this.changes[x][y][z] = true;
+    //       }
+    //     }
+    //   }
+    //   // Iterate End
+    // }
 
     // if (this.sky >= 0) {
     //   for (let x = 0; x < this.mapX; ++x) {

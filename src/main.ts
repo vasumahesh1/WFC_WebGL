@@ -54,10 +54,10 @@ function toggleLightColor() {
 let wfc: any;
 
 function doWFC(capture : boolean) {
-  wfc = new WFC('Test', null, 20, 20, 6, true, "ground", "empty", "empty");
+  wfc = new WFC('Test', null, 8, 8, 1, false, "ground", "empty", "empty", "empty", true);
   wfc.captureState = true;
 
-  for (let k = 0; k < 10; k++) {
+  for (let k = 0; k < 5; k++) {
     let result = wfc.run();
 
     if (result) {
@@ -147,6 +147,7 @@ let meshes:any = {
   'wallside1' : './resources/test/wallside1.obj',
   'wallroof1' : './resources/test/wallroof1.obj',
   'straightwall1' : './resources/test/straightwall1.obj',
+  'wall_straight_1' : './resources/test/wall_straight_1.obj',
   // 'empty' : './resources/test/empty.obj',
 };
 
@@ -168,6 +169,7 @@ let textures: any = [
   ['./resources/test/wallside1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wallroof1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/straightwall1.png', './resources/textures/default_emissive.png'],
+  ['./resources/test/wall_straight_1.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
 ];
 

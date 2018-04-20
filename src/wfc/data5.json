@@ -1,0 +1,35 @@
+{
+    "set": {
+        "tiles": [{
+             "name": "wallside1",
+             "symmetry": "L"
+         }, {
+             "name": "wallroof1",
+             "symmetry": "L"
+         }, {
+             "name": "empty",
+             "symmetry": "X",
+             "weight": 3
+         }],
+        "neighbors": [
+            ["horizontal", "wallside1 1", "empty"],
+            ["horizontal", "wallside1", "wallside1 1"],
+
+            ["horizontal", "wallroof1 1", "empty"],
+            ["horizontal", "wallroof1", "wallroof1 1"],
+
+            ["horizontal", "empty", "empty"],
+            ["vertical", "empty", "empty"],
+
+            ["vertical", "wallside1", "wallside1"],
+
+            ["vertical", "wallroof1", "wallside1"],
+
+            ["vertical", "wallside1", "wallroof1"],
+
+            ["vertical", "empty", "wallroof1"]
+        ],
+        "pixelsize": 8,
+        "voxelsize": 5
+    }
+}

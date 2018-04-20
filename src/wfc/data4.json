@@ -4,8 +4,8 @@
              "name": "wallside1",
              "symmetry": "L"
          }, {
-             "name": "wallroof1",
-             "symmetry": "L"
+             "name": "wall_straight_1",
+             "symmetry": "T"
          }, {
              "name": "empty",
              "symmetry": "X",
@@ -14,20 +14,16 @@
         "neighbors": [
             ["horizontal", "wallside1 1", "empty"],
             ["horizontal", "wallside1", "wallside1 1"],
+            
+            ["horizontal", "wallside1", "wall_straight_1"],
+            ["horizontal", "wall_straight_1", "wallside1 1"],
 
-            ["horizontal", "wallroof1 1", "empty"],
-            ["horizontal", "wallroof1", "wallroof1 1"],
+            ["horizontal", "wall_straight_1", "wall_straight_1"],
 
-            ["horizontal", "empty", "empty"],
-            ["vertical", "empty", "empty"],
+            ["horizontal", "wall_straight_1 1", "empty"],
+            ["horizontal", "empty", "wall_straight_1 1"],
 
-            ["vertical", "wallside1", "wallside1"],
-
-            ["vertical", "wallroof1", "wallside1"],
-
-            ["vertical", "wallside1", "wallroof1"],
-
-            ["vertical", "empty", "wallroof1"]
+            ["horizontal", "empty", "empty"]
         ],
         "pixelsize": 8,
         "voxelsize": 5

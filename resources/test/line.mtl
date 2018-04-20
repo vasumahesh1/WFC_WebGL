@@ -1,9 +1,8 @@
-newmtl line_palette
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
+# MagicaVoxel @ Ephtracy
+
+newmtl palette
+illum 1
+Ka 0.000 0.000 0.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
 map_Kd line.png
-Ni 1.00
-Ks 0.00 0.00 0.00
-Ns 0.06
