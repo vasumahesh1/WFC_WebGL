@@ -1,10 +1,10 @@
 # MagicaVoxel @ Ephtracy
 
 # group
-g WallJunction1
+g WallJunction_TallUpper
 
 # material
-mtllib WallJunction1.mtl
+mtllib WallJunction_TallUpper.mtl
 usemtl palette
 
 # normals
@@ -16,7 +16,7 @@ vn 0 -1 0
 vn 0 1 0
 
 # texcoords
-vt 0.919922 0.5
+vt 0.841797 0.5
 
 # verts
 v -3 0 3

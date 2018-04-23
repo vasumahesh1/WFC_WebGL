@@ -54,10 +54,14 @@ function toggleLightColor() {
 let wfc: any;
 
 function doWFC(capture : boolean) {
-  wfc = new WFC('Test', null, 32, 32, 2, false, "ground", "empty", "empty", "empty", false);
+  let isDebug = false;
+
+  wfc = new WFC('Test', null, 16, 16, 4, false, "ground", "empty", "empty", "empty", isDebug);
   wfc.captureState = true;
 
-  for (let k = 0; k < 5; k++) {
+  let limit = isDebug ? 1 : 5;
+
+  for (let k = 0; k < limit; k++) {
     let result = wfc.run();
 
     if (result) {
@@ -154,6 +158,9 @@ let meshes:any = {
   'WallCurved1' : './resources/obj/WallCurved1.obj',
   'WallGate1' : './resources/obj/WallGate1.obj',
   'WallJunction1' : './resources/obj/WallJunction1.obj',
+  'WallJunction_Tall' : './resources/obj/WallJunction_Tall.obj',
+  'WallJunction_TallUpper' : './resources/obj/WallJunction_TallUpper.obj',
+  'WallJunction_Middle' : './resources/obj/WallJunction_Middle.obj',
   'roof' : './resources/obj/roof.obj',
   // 'empty' : './resources/test/empty.obj',
   // 'sky' : './resources/test/empty.obj',
@@ -184,6 +191,9 @@ let textures: any = [
   ['./resources/obj/WallCurved1.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallGate1.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallJunction1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallJunction_Tall.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallJunction_TallUpper.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallJunction_Middle.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],

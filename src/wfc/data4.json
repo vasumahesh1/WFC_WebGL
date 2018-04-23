@@ -2,16 +2,46 @@
     "set": {
         "tiles": [{
              "name": "WallCurved1",
-             "symmetry": "L"
+             "symmetry": "L",
+             "config": {
+                 "heightRange": [0, 1]
+             }
          }, {
              "name": "WallStraight1",
-             "symmetry": "T"
+             "symmetry": "T",
+             "config": {
+                 "heightRange": [0, 1]
+             }
          }, {
              "name": "WallGate1",
-             "symmetry": "T"
+             "symmetry": "T",
+             "config": {
+                 "heightRange": [0, 1]
+             }
          }, {
              "name": "WallJunction1",
-             "symmetry": "T"
+             "symmetry": "T",
+             "config": {
+                 "heightRange": [0, 1]
+             }
+         }, {
+             "name": "WallJunction_Tall",
+             "symmetry": "T",
+             "config": {
+                 "heightRange": [0, 1]
+             }
+         }, {
+             "name": "WallJunction_Middle",
+             "symmetry": "X",
+             "config": {
+                 "heightRange": [2, 2]
+             }
+         }, {
+             "name": "WallJunction_TallUpper",
+             "symmetry": "X",
+             "config": {
+                 "heightRange": [2, 3]
+             }
          }, {
              "name": "empty",
              "symmetry": "X",
@@ -60,20 +90,50 @@
             ["horizontal", "WallJunction1 3", "WallCurved1 1"],
 
 
+            ["horizontal", "WallJunction_Tall", "WallStraight1"],
+            ["horizontal", "WallJunction_Tall", "WallGate1"],
+            ["horizontal", "WallJunction_Tall", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction_Tall 1", "empty"],
+            ["horizontal", "WallJunction_Tall 1", "WallStraight1"],
+            ["horizontal", "WallJunction_Tall 1", "WallGate1"],
+            ["horizontal", "WallJunction_Tall 1", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction_Tall 2", "WallStraight1"],
+            ["horizontal", "WallJunction_Tall 2", "WallGate1"],
+            ["horizontal", "WallJunction_Tall 2", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction_Tall 3", "empty"],
+            ["horizontal", "WallJunction_Tall 3", "WallStraight1"],
+            ["horizontal", "WallJunction_Tall 3", "WallGate1"],
+            ["horizontal", "WallJunction_Tall 3", "WallCurved1 1"],
+
 
             ["horizontal", "empty", "empty"],
+
+            ["horizontal", "empty", "WallJunction_TallUpper"],
+            ["horizontal", "WallJunction_TallUpper", "empty"],
+
+            ["horizontal", "empty", "WallJunction_Middle"],
+            ["horizontal", "WallJunction_Middle", "empty"],
+            
+            ["vertical", "WallJunction_TallUpper", "WallJunction_Tall"],
+            ["vertical", "WallJunction_TallUpper", "WallJunction_Middle"],
+            ["vertical", "WallJunction_Middle", "WallJunction_Middle"],
+            ["vertical", "WallJunction_Middle", "WallJunction_Tall"],
 
             ["vertical", "empty", "empty"],
             ["vertical", "empty", "WallCurved1"],
             ["vertical", "empty", "WallStraight1"],
             ["vertical", "empty", "WallJunction1"],
+            ["vertical", "empty", "WallJunction_TallUpper"],
             ["vertical", "empty", "WallGate1"],
-
 
             ["vertical", "empty", "ground"],
             ["vertical", "WallCurved1", "ground"],
             ["vertical", "WallStraight1",  "ground"],
             ["vertical", "WallJunction1",  "ground"],
+            ["vertical", "WallJunction_Tall",  "ground"],
             ["vertical", "WallGate1", "ground"]
         ],
         "pixelsize": 8,

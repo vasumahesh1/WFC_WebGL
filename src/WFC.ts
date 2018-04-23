@@ -77,6 +77,7 @@ class WFC {
   periodic: boolean;
   captureState: boolean = false;
   states: any;
+  tileConfigs : any;
 
   actionCount: number;
   weights: Array<number>;
@@ -114,6 +115,7 @@ class WFC {
     this.isDebug = isDebug;
 
     this.states = [];
+    this.tileConfigs = [];
 
     this.weights = new Array<number>();
     this.tileNames = new Array<string>();
@@ -140,6 +142,7 @@ class WFC {
       let sym = tile["symmetry"] || "X";
       let weight = tile["weight"] >= 0.0 ? tile["weight"] : 1.0;
       let cardinality = 0;
+      let tileConfig = tile.config || null;
 
       let funcA, funcB;
 
@@ -216,6 +219,7 @@ class WFC {
 
         map.push(arr);
         actions.push(arr);
+        this.tileConfigs.push(tileConfig);
       }
 
       this.tileNames.push(`${tileName} 0`);
@@ -641,7 +645,26 @@ class WFC {
       for (let y = 0; y < this.mapY; ++y) {
         for (let z = 0; z < this.mapZ; ++z) {
           for (let t = 0; t < this.actionCount; ++t) {
-            this.waves[x][y][z][t] = true;
+
+            if (this.tileConfigs[t]) {
+              if (this.tileConfigs[t].heightRange) {
+                let start = this.tileConfigs[t].heightRange[0];
+                let end = this.tileConfigs[t].heightRange[1];
+
+                let height = this.mapZ - 1 - z;
+                if (height >= start && height <= end) {
+                  this.waves[x][y][z][t] = true;
+                  this.changes[x][y][z] = true;
+                }
+                else {
+                  this.waves[x][y][z][t] = false;
+                }
+              }
+
+
+            } else {
+              this.waves[x][y][z][t] = true;
+            }
           }
 
           this.changes[x][y][z] = false;
