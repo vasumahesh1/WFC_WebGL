@@ -54,7 +54,7 @@ function toggleLightColor() {
 let wfc: any;
 
 function doWFC(capture : boolean) {
-  wfc = new WFC('Test', null, 8, 8, 1, false, "ground", "empty", "empty", "empty", true);
+  wfc = new WFC('Test', null, 32, 32, 2, false, "ground", "empty", "empty", "empty", false);
   wfc.captureState = true;
 
   for (let k = 0; k < 5; k++) {
@@ -148,7 +148,15 @@ let meshes:any = {
   'wallroof1' : './resources/test/wallroof1.obj',
   'straightwall1' : './resources/test/straightwall1.obj',
   'wall_straight_1' : './resources/test/wall_straight_1.obj',
+  'roof_straight_1' : './resources/test/roof_straight_1.obj',
+  'roof_curved_1' : './resources/test/roof_curved_1.obj',
+  'WallStraight1' : './resources/obj/WallStraight1.obj',
+  'WallCurved1' : './resources/obj/WallCurved1.obj',
+  'WallGate1' : './resources/obj/WallGate1.obj',
+  'WallJunction1' : './resources/obj/WallJunction1.obj',
+  'roof' : './resources/obj/roof.obj',
   // 'empty' : './resources/test/empty.obj',
+  // 'sky' : './resources/test/empty.obj',
 };
 
 let textures: any = [
@@ -170,6 +178,14 @@ let textures: any = [
   ['./resources/test/wallroof1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/straightwall1.png', './resources/textures/default_emissive.png'],
   ['./resources/test/wall_straight_1.png', './resources/textures/default_emissive.png'],
+  ['./resources/test/roof_straight_1.png', './resources/textures/default_emissive.png'],
+  ['./resources/test/roof_curved_1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallStraight1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallGate1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallJunction1.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
+  // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
 ];
 

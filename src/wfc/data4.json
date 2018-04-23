@@ -1,31 +1,82 @@
 {
     "set": {
         "tiles": [{
-             "name": "wallside1",
+             "name": "WallCurved1",
              "symmetry": "L"
          }, {
-             "name": "wall_straight_1",
+             "name": "WallStraight1",
+             "symmetry": "T"
+         }, {
+             "name": "WallGate1",
+             "symmetry": "T"
+         }, {
+             "name": "WallJunction1",
              "symmetry": "T"
          }, {
              "name": "empty",
              "symmetry": "X",
              "weight": 3
+         }, {
+             "name": "ground",
+             "symmetry": "X"
          }],
         "neighbors": [
-            ["horizontal", "wallside1 1", "empty"],
-            ["horizontal", "wallside1", "wallside1 1"],
+            ["horizontal", "WallCurved1 1", "empty"],
+            ["horizontal", "WallCurved1", "WallCurved1 1"],
             
-            ["horizontal", "wallside1", "wall_straight_1"],
-            ["horizontal", "wall_straight_1", "wallside1 1"],
+            ["horizontal", "WallCurved1", "WallStraight1"],
+            ["horizontal", "WallStraight1", "WallCurved1 1"],
 
-            ["horizontal", "wall_straight_1", "wall_straight_1"],
+            ["horizontal", "WallStraight1", "WallStraight1"],
 
-            ["horizontal", "wall_straight_1 1", "empty"],
-            ["horizontal", "empty", "wall_straight_1 1"],
+            ["horizontal", "WallStraight1 1", "empty"],
+            ["horizontal", "empty", "WallStraight1 1"],
 
-            ["horizontal", "empty", "empty"]
+            ["horizontal", "WallCurved1", "WallGate1"],
+            ["horizontal", "WallGate1", "WallCurved1 1"],
+
+            ["horizontal", "WallGate1 1", "empty"],
+            ["horizontal", "empty", "WallGate1 1"],
+            
+            ["horizontal", "WallStraight1", "WallGate1"],
+
+
+            ["horizontal", "WallJunction1", "WallStraight1"],
+            ["horizontal", "WallJunction1", "WallGate1"],
+            ["horizontal", "WallJunction1", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction1 1", "empty"],
+            ["horizontal", "WallJunction1 1", "WallStraight1"],
+            ["horizontal", "WallJunction1 1", "WallGate1"],
+            ["horizontal", "WallJunction1 1", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction1 2", "WallStraight1"],
+            ["horizontal", "WallJunction1 2", "WallGate1"],
+            ["horizontal", "WallJunction1 2", "WallCurved1 1"],
+
+            ["horizontal", "WallJunction1 3", "empty"],
+            ["horizontal", "WallJunction1 3", "WallStraight1"],
+            ["horizontal", "WallJunction1 3", "WallGate1"],
+            ["horizontal", "WallJunction1 3", "WallCurved1 1"],
+
+
+
+            ["horizontal", "empty", "empty"],
+
+            ["vertical", "empty", "empty"],
+            ["vertical", "empty", "WallCurved1"],
+            ["vertical", "empty", "WallStraight1"],
+            ["vertical", "empty", "WallJunction1"],
+            ["vertical", "empty", "WallGate1"],
+
+
+            ["vertical", "empty", "ground"],
+            ["vertical", "WallCurved1", "ground"],
+            ["vertical", "WallStraight1",  "ground"],
+            ["vertical", "WallJunction1",  "ground"],
+            ["vertical", "WallGate1", "ground"]
         ],
         "pixelsize": 8,
-        "voxelsize": 5
+        "voxelsize": 6
     }
 }

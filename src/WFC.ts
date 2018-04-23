@@ -95,6 +95,8 @@ class WFC {
 
   firstOccurence: any;
 
+  debugNumber: number;
+
   tileNames: Array<string>;
   transforms: Array<TransformVoxel>;
 
@@ -108,6 +110,7 @@ class WFC {
     this.empty = -1;
     this.surround = -1;
     this.sky = -1;
+    this.debugNumber = -1;
     this.isDebug = isDebug;
 
     this.states = [];
@@ -183,6 +186,11 @@ class WFC {
       if (tileName == surroundName) {
         this.surround = this.actionCount;
       }
+
+      if (tileName == 'roof_straight_1') {
+        this.debugNumber = this.actionCount;
+      }
+
 
       /*----------  Map Mirror & Rotated Tiles  ----------*/
       let map = new Array<Array<number>>();
@@ -674,26 +682,36 @@ class WFC {
       }
     }
 
-    // if (this.ground >= 0) {
-    //   // Iterate Start
-    //   for (let x = 0; x < this.mapX; ++x) {
-    //     for (let y = 0; y < this.mapY; ++y) {
-    //       for (let t = 0; t < this.actionCount; ++t) {
-    //         if (t != this.ground) {
-    //           this.waves[x][y][this.mapZ - 1][t] = false;
-    //         }
-    //       }
-
-    //       // this.changes[x][y][this.mapZ - 1] = true;
-
-    //       for (let z = 0; z < this.mapZ - 1; ++z) {
-    //         this.waves[x][y][z][this.ground] = false;
-    //         // this.changes[x][y][z] = true;
-    //       }
-    //     }
+    // for (let t = 0; t < this.actionCount; ++t) {
+    //   if (t == this.debugNumber) {
+    //     continue;
     //   }
-    //   // Iterate End
+
+    //   this.waves[3][3][0][t] = false;
     // }
+
+    // this.changes[3][3][0] = true;
+
+    if (this.ground >= 0) {
+      // Iterate Start
+      for (let x = 0; x < this.mapX; ++x) {
+        for (let y = 0; y < this.mapY; ++y) {
+          for (let t = 0; t < this.actionCount; ++t) {
+            if (t != this.ground) {
+              this.waves[x][y][this.mapZ - 1][t] = false;
+            }
+          }
+
+          // this.changes[x][y][this.mapZ - 1] = true;
+
+          for (let z = 0; z < this.mapZ - 1; ++z) {
+            this.waves[x][y][z][this.ground] = false;
+            // this.changes[x][y][z] = true;
+          }
+        }
+      }
+      // Iterate End
+    }
 
     // if (this.sky >= 0) {
     //   for (let x = 0; x < this.mapX; ++x) {
@@ -705,9 +723,16 @@ class WFC {
     //       }
 
     //       this.changes[x][y][0] = true;
+
+    //       // for (let z = 1; z < this.mapZ - 1; ++z) {
+    //       //   // this.waves[x][y][z][this.sky] = false;
+    //       //   this.changes[x][y][z] = true;
+    //       // }
     //     }
     //   }
     // }
+
+    this.observedClone();
   }
 
   textOutput() {
