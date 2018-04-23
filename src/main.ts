@@ -59,7 +59,7 @@ function doWFC(capture : boolean) {
   wfc = new WFC('Test', null, 16, 16, 4, false, "ground", "empty", "empty", "empty", isDebug);
   wfc.captureState = true;
 
-  let limit = isDebug ? 1 : 5;
+  let limit = isDebug ? 1 : 15;
 
   for (let k = 0; k < limit; k++) {
     let result = wfc.run();
@@ -161,6 +161,9 @@ let meshes:any = {
   'WallJunction_Tall' : './resources/obj/WallJunction_Tall.obj',
   'WallJunction_TallUpper' : './resources/obj/WallJunction_TallUpper.obj',
   'WallJunction_Middle' : './resources/obj/WallJunction_Middle.obj',
+  'WallCurved_Tall' : './resources/obj/WallCurved_Tall.obj',
+  'WallCurved_Middle' : './resources/obj/WallCurved_Middle.obj',
+  'WallCurved_TallUpper' : './resources/obj/WallCurved_TallUpper.obj',
   'roof' : './resources/obj/roof.obj',
   // 'empty' : './resources/test/empty.obj',
   // 'sky' : './resources/test/empty.obj',
@@ -194,6 +197,9 @@ let textures: any = [
   ['./resources/obj/WallJunction_Tall.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallJunction_TallUpper.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallJunction_Middle.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved_Tall.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved_Middle.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],

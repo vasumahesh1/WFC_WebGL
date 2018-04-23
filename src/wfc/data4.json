@@ -7,6 +7,12 @@
                  "heightRange": [0, 1]
              }
          }, {
+             "name": "WallCurved_Tall",
+             "symmetry": "L",
+             "config": {
+                 "heightRange": [0, 1]
+             }
+         }, {
              "name": "WallStraight1",
              "symmetry": "T",
              "config": {
@@ -31,16 +37,22 @@
                  "heightRange": [0, 1]
              }
          }, {
-             "name": "WallJunction_Middle",
+             "name": "WallJunction_TallUpper",
              "symmetry": "X",
              "config": {
                  "heightRange": [2, 2]
              }
          }, {
-             "name": "WallJunction_TallUpper",
-             "symmetry": "X",
+             "name": "WallCurved_TallUpper",
+             "symmetry": "L",
              "config": {
                  "heightRange": [2, 3]
+             }
+         }, {
+             "name": "WallCurved_Middle",
+             "symmetry": "L",
+             "config": {
+                 "heightRange": [2, 2]
              }
          }, {
              "name": "empty",
@@ -53,9 +65,15 @@
         "neighbors": [
             ["horizontal", "WallCurved1 1", "empty"],
             ["horizontal", "WallCurved1", "WallCurved1 1"],
+
+            ["horizontal", "WallCurved_Tall 1", "empty"],
+            ["horizontal", "WallCurved_Tall", "WallCurved_Tall 1"],
             
             ["horizontal", "WallCurved1", "WallStraight1"],
             ["horizontal", "WallStraight1", "WallCurved1 1"],
+
+            ["horizontal", "WallCurved_Tall", "WallStraight1"],
+            ["horizontal", "WallStraight1", "WallCurved_Tall 1"],
 
             ["horizontal", "WallStraight1", "WallStraight1"],
 
@@ -65,72 +83,123 @@
             ["horizontal", "WallCurved1", "WallGate1"],
             ["horizontal", "WallGate1", "WallCurved1 1"],
 
+            ["horizontal", "WallCurved_Tall", "WallGate1"],
+            ["horizontal", "WallGate1", "WallCurved_Tall 1"],
+
             ["horizontal", "WallGate1 1", "empty"],
             ["horizontal", "empty", "WallGate1 1"],
             
             ["horizontal", "WallStraight1", "WallGate1"],
 
 
+            ["horizontal", "WallCurved1 1", "WallCurved_Tall"],
+
+
             ["horizontal", "WallJunction1", "WallStraight1"],
             ["horizontal", "WallJunction1", "WallGate1"],
             ["horizontal", "WallJunction1", "WallCurved1 1"],
+            ["horizontal", "WallJunction1", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction1 1", "empty"],
             ["horizontal", "WallJunction1 1", "WallStraight1"],
             ["horizontal", "WallJunction1 1", "WallGate1"],
             ["horizontal", "WallJunction1 1", "WallCurved1 1"],
+            ["horizontal", "WallJunction1 1", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction1 2", "WallStraight1"],
             ["horizontal", "WallJunction1 2", "WallGate1"],
             ["horizontal", "WallJunction1 2", "WallCurved1 1"],
+            ["horizontal", "WallJunction1 2", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction1 3", "empty"],
             ["horizontal", "WallJunction1 3", "WallStraight1"],
             ["horizontal", "WallJunction1 3", "WallGate1"],
             ["horizontal", "WallJunction1 3", "WallCurved1 1"],
+            ["horizontal", "WallJunction1 3", "WallCurved_Tall 1"],
 
 
             ["horizontal", "WallJunction_Tall", "WallStraight1"],
             ["horizontal", "WallJunction_Tall", "WallGate1"],
             ["horizontal", "WallJunction_Tall", "WallCurved1 1"],
+            ["horizontal", "WallJunction_Tall", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction_Tall 1", "empty"],
             ["horizontal", "WallJunction_Tall 1", "WallStraight1"],
             ["horizontal", "WallJunction_Tall 1", "WallGate1"],
             ["horizontal", "WallJunction_Tall 1", "WallCurved1 1"],
+            ["horizontal", "WallJunction_Tall 1", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction_Tall 2", "WallStraight1"],
             ["horizontal", "WallJunction_Tall 2", "WallGate1"],
             ["horizontal", "WallJunction_Tall 2", "WallCurved1 1"],
+            ["horizontal", "WallJunction_Tall 2", "WallCurved_Tall 1"],
 
             ["horizontal", "WallJunction_Tall 3", "empty"],
             ["horizontal", "WallJunction_Tall 3", "WallStraight1"],
             ["horizontal", "WallJunction_Tall 3", "WallGate1"],
             ["horizontal", "WallJunction_Tall 3", "WallCurved1 1"],
+            ["horizontal", "WallJunction_Tall 3", "WallCurved_Tall 1"],
 
 
             ["horizontal", "empty", "empty"],
-
             ["horizontal", "empty", "WallJunction_TallUpper"],
             ["horizontal", "WallJunction_TallUpper", "empty"],
 
-            ["horizontal", "empty", "WallJunction_Middle"],
-            ["horizontal", "WallJunction_Middle", "empty"],
-            
+            ["horizontal", "WallCurved_TallUpper", "empty"],
+            ["horizontal", "WallCurved_TallUpper", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_TallUpper 1", "empty"],
+            ["horizontal", "WallCurved_TallUpper 1", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_TallUpper 2", "empty"],
+            ["horizontal", "WallCurved_TallUpper 2", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_TallUpper 3", "empty"],
+            ["horizontal", "WallCurved_TallUpper 3", "WallJunction_TallUpper"],
+
+
+            ["horizontal", "WallCurved_Middle", "empty"],
+            ["horizontal", "WallCurved_Middle", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_Middle 1", "empty"],
+            ["horizontal", "WallCurved_Middle 1", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_Middle 2", "empty"],
+            ["horizontal", "WallCurved_Middle 2", "WallJunction_TallUpper"],
+
+            ["horizontal", "WallCurved_Middle 3", "empty"],
+            ["horizontal", "WallCurved_Middle 3", "WallJunction_TallUpper"],
+
+
+            ["horizontal", "WallCurved_Middle", "WallCurved_Middle 1"],
+            ["horizontal", "WallCurved_Middle 1", "WallCurved_Middle"],
+
+            ["horizontal", "WallCurved_Middle", "WallCurved_TallUpper 1"],
+            ["horizontal", "WallCurved_Middle 1", "WallCurved_TallUpper"],
+
+            ["horizontal", "WallCurved_TallUpper", "WallCurved_Middle 1"],
+            ["horizontal", "WallCurved_TallUpper 1", "WallCurved_Middle"],
+
+            ["horizontal", "WallCurved_TallUpper", "WallCurved_TallUpper 1"],
+            ["horizontal", "WallCurved_TallUpper 1", "WallCurved_TallUpper"],
+
             ["vertical", "WallJunction_TallUpper", "WallJunction_Tall"],
-            ["vertical", "WallJunction_TallUpper", "WallJunction_Middle"],
-            ["vertical", "WallJunction_Middle", "WallJunction_Middle"],
-            ["vertical", "WallJunction_Middle", "WallJunction_Tall"],
+            ["vertical", "WallCurved_TallUpper", "WallCurved_Tall"],
+            ["vertical", "WallCurved_Middle", "WallCurved_Tall"],
+            ["vertical", "WallCurved_TallUpper", "WallCurved_Middle"],
+            ["vertical", "WallCurved_Middle", "WallCurved_Middle"],
 
             ["vertical", "empty", "empty"],
             ["vertical", "empty", "WallCurved1"],
             ["vertical", "empty", "WallStraight1"],
             ["vertical", "empty", "WallJunction1"],
             ["vertical", "empty", "WallJunction_TallUpper"],
+            ["vertical", "empty", "WallCurved_TallUpper"],
             ["vertical", "empty", "WallGate1"],
 
             ["vertical", "empty", "ground"],
             ["vertical", "WallCurved1", "ground"],
+            ["vertical", "WallCurved_Tall", "ground"],
             ["vertical", "WallStraight1",  "ground"],
             ["vertical", "WallJunction1",  "ground"],
             ["vertical", "WallJunction_Tall",  "ground"],
