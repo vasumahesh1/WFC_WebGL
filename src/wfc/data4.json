@@ -21,7 +21,8 @@
                     ["WallStraight1", 50],
                     ["WallStraight2", 50]
                  ]
-             }
+             },
+             "weight": 10
          }, {
              "name": "WallGate1",
              "symmetry": "T",
@@ -52,8 +53,8 @@
              "config": {
                  "heightRange": [2, 3],
                  "meshes": [
-                    ["WallCurved_TallUpper", 90],
-                    ["WallCurved_TallUpper1", 10]
+                    ["WallCurved_TallUpper", 10],
+                    ["WallCurved_TallUpper1", 90]
                  ]
              }
          }, {
