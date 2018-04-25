@@ -211,7 +211,7 @@ vec4 calculateMainLighting(vec4 inputColor, vec3 normal) {
   vec3 lightVec = normalize(u_LightPos); // Directional Light
   
   // Ambient term.
-  ambient = vec4(vec3(0.2), 1);
+  ambient = vec4(vec3(0.3), 1);
 
   // Add diffuse and specular term
   float diffuseTerm = dot(lightVec, normal);
@@ -271,12 +271,13 @@ void main() {
 
 	vec4 diffuseColor = gb2;
 
-  // vec4 finalColor = calculateMainLighting(diffuseColor, normal);
+  vec4 finalColor = calculateMainLighting(diffuseColor, normal);
 
-  vec4 ambient = vec4((diffuseColor.rgb * 0.1), diffuseColor.a);
-  vec4 finalColor = calculatePointLightContribution(diffuseColor, normal, gb1.xyz);
+  // vec4 finalColor = calculatePointLightContribution(diffuseColor, normal, gb1.xyz);
 
-  finalColor += ambient;
+  // out_Col = vec4((normal + vec3(1,1,1)) / 2.0, 1);
+  // return;
+
   // finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);
   // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);
 
