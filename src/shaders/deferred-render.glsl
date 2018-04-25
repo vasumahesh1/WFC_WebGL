@@ -288,10 +288,10 @@ void main() {
   vec4 lightSpace = u_LightSpaceMatrix * worldPos;
   float shadowDepth = texture(u_sm, vec2((lightSpace.x + 1.0) * 0.5, (lightSpace.y + 1.0) * 0.5)).z;
 
-  // float bias = 0.005;
-  // if (shadowDepth < lightSpace.z  - bias) {
-  //     finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);
-  // }
+  float bias = 0.005;
+  if (shadowDepth < lightSpace.z  - bias) {
+      finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);
+  }
 
 	out_Col = finalColor;
 

@@ -62,16 +62,23 @@ void main() {
 
   fs_Col = vs_Col;
 
-  vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);
+  vec4 rot = vec4(0.707, 0, 0, 0.707); // hardcoded.
+
+  // vertexNormal = transpose(inverse(mat3(u_Model))) * vertexNormal;
+
+  // vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);
+  vertexNormal = rotateByQuat(vertexNormal, rot);
   vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);
+  // vertexNormal = vec4(mat3(m) * vec3(vertexNormal), 0.0);
 
   // mat3 invTranspose = inverse(mat3(instanceModel));
   fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);
 
-  vec4 modelposition = u_Model * vertexPosition;
+  vec4 modelposition =  vertexPosition;
   modelposition = vertexScale * vertexPosition;
+  modelposition *= u_Model;
   modelposition = rotateByQuat(modelposition, vs_InstRotation);
-  modelposition += vs_InstPos;
+  modelposition +=  vs_InstPos;
 
   fs_WorldPos = modelposition;
   fs_Pos = u_View * fs_WorldPos;

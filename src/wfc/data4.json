@@ -50,7 +50,11 @@
              "name": "WallCurved_TallUpper",
              "symmetry": "L",
              "config": {
-                 "heightRange": [2, 3]
+                 "heightRange": [2, 3],
+                 "meshes": [
+                    ["WallCurved_TallUpper", 90],
+                    ["WallCurved_TallUpper1", 10]
+                 ]
              }
          }, {
              "name": "WallCurved_Middle",

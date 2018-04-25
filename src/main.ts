@@ -80,7 +80,7 @@ let controls = {
   skyLight: {
     color: WHITE_COLOR,
     intensity: 1.5,
-    direction: [-40, 90, 40]
+    direction: [12, 6, 10]
   },
   wfc: {
     gridX: 8,
@@ -178,6 +178,7 @@ let meshes:any = {
   'WallCurved_Tall' : './resources/obj/WallCurved_Tall.obj',
   'WallCurved_Middle' : './resources/obj/WallCurved_Middle.obj',
   'WallCurved_TallUpper' : './resources/obj/WallCurved_TallUpper.obj',
+  'WallCurved_TallUpper1' : './resources/obj/WallCurved_TallUpper1.obj',
   'roof' : './resources/obj/roof.obj',
   'WallStraight2' : './resources/obj/WallStraight2.obj',
   // 'empty' : './resources/test/empty.obj',
@@ -215,6 +216,7 @@ let textures: any = [
   ['./resources/obj/WallCurved_Tall.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_Middle.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved_TallUpper1.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallStraight2.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/Ground.png', './resources/textures/default_emissive.png'],
@@ -384,7 +386,7 @@ function setShadowMapData(shader: any, shader2: any) {
   let lightDirection =  vec3.fromValues(lightDir[0], lightDir[1], lightDir[2]);
 
   let lightSpaceOrthoProj = mat4.create();
-  mat4.ortho(lightSpaceOrthoProj, -100.0, 100.0, -100.0, 100.0, -75, 175.0);
+  mat4.ortho(lightSpaceOrthoProj, -150.0, 150.0, -150.0, 150.0, -500, 200.0);
 
   let lightSpaceView = mat4.create();
   mat4.lookAt(lightSpaceView, lightDirection, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
