@@ -79,7 +79,7 @@ let controls = {
   toggleLightColor: toggleLightColor,
   skyLight: {
     color: WHITE_COLOR,
-    intensity: 6,
+    intensity: 1,
     direction: [90, 90, 90]
   },
   wfc: {

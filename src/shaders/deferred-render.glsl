@@ -174,7 +174,6 @@ vec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosi
 
     float diffuseTerm = dot(lightVec, normal);
 
-    // Flatten to avoid dynamic branching.
     if( diffuseTerm > 0.0f ) {
       vec3 v         = reflect(-lightVec, normal);
       float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0); // TODO: Material
@@ -189,7 +188,7 @@ vec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosi
     diffuse *= att;
     spec    *= att;
 
-    totalLightContrib += light.contrib * (diffuse + spec); // + ambient
+    totalLightContrib += light.contrib * (diffuse + spec);
   }
 
   inputColor = inputColor * totalLightContrib;
@@ -213,7 +212,7 @@ vec4 calculateMainLighting(vec4 inputColor, vec3 normal) {
   vec3 lightVec = normalize(u_LightPos); // Directional Light
   
   // Ambient term.
-  ambient = vec4(vec3(2.0), 1);
+  ambient = vec4(vec3(0.2), 1);
 
   // Add diffuse and specular term
   float diffuseTerm = dot(lightVec, normal);
@@ -275,7 +274,7 @@ void main() {
 
   vec4 finalColor = calculateMainLighting(diffuseColor, normal);
 
-  // finalColor = calculatePointLightContribution(finalColor, normal, gb1.xyz);
+  // finalColor += calculatePointLightContribution(finalColor, normal, gb1.xyz);
   // finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);
   // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);
 
@@ -286,10 +285,10 @@ void main() {
   vec4 lightSpace = u_LightSpaceMatrix * worldPos;
   float shadowDepth = texture(u_sm, vec2((lightSpace.x + 1.0) * 0.5, (lightSpace.y + 1.0) * 0.5)).z;
 
-  float bias = 0.005;
-  if (shadowDepth < lightSpace.z  - bias) {
-      finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);
-  }
+  // float bias = 0.005;
+  // if (shadowDepth < lightSpace.z  - bias) {
+  //     finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);
+  // }
 
 	out_Col = finalColor;
 
