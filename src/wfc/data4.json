@@ -22,13 +22,18 @@
                     ["WallStraight2", 50]
                  ]
              },
-             "weight": 10
+             "weight": 20
          }, {
              "name": "WallGate1",
              "symmetry": "T",
              "config": {
-                 "heightRange": [0, 1]
-             }
+                 "heightRange": [0, 1],
+                 "meshes": [
+                    ["WallGate1", 75],
+                    ["WallGate2", 25]
+                 ]
+             },
+             "weight": 2
          }, {
              "name": "WallJunction1",
              "symmetry": "T",
