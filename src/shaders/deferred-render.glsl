@@ -23,7 +23,7 @@ uniform mat4 u_View;
 uniform mat4 u_Proj;
 uniform mat4 u_LightSpaceMatrix;
 uniform mat4 u_LightViewportMatrix;
-uniform vec4 u_CamPos;
+uniform vec3 u_Eye;
 
 #define MAX_POINT_LIGHTS 20
 #define MAX_SPOT_LIGHTS 20
@@ -103,7 +103,7 @@ uniform uint u_NumPointLights;
 //     // Flatten to avoid dynamic branching.
 //     if( diffuseTerm > 0.0f ) {
 //       vec3 v         = reflect(-lightVec, normal);
-//       float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0); // TODO: Material
+//       float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0); // TODO: Material
             
 //       diffuse = diffuseTerm * light.diffuse;
 //       spec    = specFactor * light.specular;
@@ -158,9 +158,8 @@ vec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosi
     float d = length(lightVec);
   
     // Range test.
-    // if( d > light.range ) {
-    //   totalLightContrib += ambient;
-    //   continue;
+    // if( d < light.range ) {
+    //   return vec4(1,0,0,1);
     // }
     
     // Normalize the light vector.
@@ -176,7 +175,7 @@ vec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosi
 
     if( diffuseTerm > 0.0f ) {
       vec3 v         = reflect(-lightVec, normal);
-      float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0); // TODO: Material
+      float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0); // TODO: Material
             
       diffuse = diffuseTerm * light.diffuse;
       spec    = specFactor * light.specular;
@@ -219,7 +218,7 @@ vec4 calculateMainLighting(vec4 inputColor, vec3 normal) {
 
   if( diffuseTerm > 0.0f ) {
     vec3 v         = reflect(-lightVec, normal);
-    float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0);
+    float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0);
           
     diffuse = diffuseTerm * vec4(u_LightColor, 1.0);
     spec    = specFactor * vec4(u_LightColor, 1.0);
@@ -272,9 +271,12 @@ void main() {
 
 	vec4 diffuseColor = gb2;
 
-  vec4 finalColor = calculateMainLighting(diffuseColor, normal);
+  // vec4 finalColor = calculateMainLighting(diffuseColor, normal);
 
-  // finalColor += calculatePointLightContribution(finalColor, normal, gb1.xyz);
+  vec4 ambient = vec4((diffuseColor.rgb * 0.1), diffuseColor.a);
+  vec4 finalColor = calculatePointLightContribution(diffuseColor, normal, gb1.xyz);
+
+  finalColor += ambient;
   // finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);
   // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);
 
@@ -292,7 +294,7 @@ void main() {
 
 	out_Col = finalColor;
 
-  float distance = length(worldPos - u_CamPos);
+  // float distance = length(worldPos - u_Eye);
 
   vec4 currentFog = vec4(0, 0, 0, 1);
 

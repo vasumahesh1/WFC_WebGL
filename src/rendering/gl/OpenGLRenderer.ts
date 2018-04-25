@@ -355,6 +355,7 @@ class OpenGLRenderer {
     let proj = camera.projectionMatrix;
     this.deferredShader.setViewMatrix(view);
     this.deferredShader.setProjMatrix(proj);
+    this.deferredShader.setEye(camera.getPosition());
 
     this.deferredShader.setScreenSize(this.canvas.width, this.canvas.height);
 

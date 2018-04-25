@@ -70,6 +70,28 @@ mat4 rotationMatrix(vec3 axis, float angle) {
       oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);
 }
 
+mat4 rotationMatrixFromQuat(vec4 quat) {
+  float qx = quat.x;
+  float qy = quat.y;
+  float qz = quat.z;
+  float qw = quat.w;
+
+  return transpose(mat4(
+    1.0f - 2.0f*qy*qy - 2.0f*qz*qz, 2.0f*qx*qy - 2.0f*qz*qw, 2.0f*qx*qz + 2.0f*qy*qw, 0.0f,
+    2.0f*qx*qy + 2.0f*qz*qw, 1.0f - 2.0f*qx*qx - 2.0f*qz*qz, 2.0f*qy*qz - 2.0f*qx*qw, 0.0f,
+    2.0f*qx*qz - 2.0f*qy*qw, 2.0f*qy*qz + 2.0f*qx*qw, 1.0f - 2.0f*qx*qx - 2.0f*qy*qy, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f));
+}
+
+mat4 translationMatrix(vec4 trans) {
+  return mat4(
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    trans.x, trans.y, trans.z, 1
+    );
+}
+
 void main() {
   vec4 vertexColor;
   vec4 vertexPosition = vs_Pos;
@@ -77,9 +99,14 @@ void main() {
   vec4 vertexScale = vs_InstScale;
 
   fs_Col = vs_Col;
+  vec4 rot = vec4(0.707, 0, 0, 0.707); // hardcoded.
 
-  vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);
+  // vertexNormal = transpose(inverse(mat3(u_Model))) * vertexNormal;
+
+  // vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);
+  vertexNormal = rotateByQuat(vertexNormal, rot);
   vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);
+  // vertexNormal = vec4(mat3(m) * vec3(vertexNormal), 0.0);
 
   // mat3 invTranspose = inverse(mat3(instanceModel));
   fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);

@@ -252,13 +252,11 @@ function getPointLight(config: any) {
   light.diffuse = config.diffuse ? arrayToVec4(config.diffuse) : vec4.fromValues(15, 15, 15, 1);
   light.specular = config.specular ? arrayToVec4(config.specular) : vec4.fromValues(5.0, 5.0, 5.0, 1);
   light.position = vec3.fromValues(config.position[0], config.position[1], config.position[2]);
-  light.range = config.range || 5;
-  light.attn = config.attn ? arrayToVec3(config.attn) : vec3.fromValues(1, 1, 10);
+  light.range = config.range || 20;
+  light.attn = config.attn ? arrayToVec3(config.attn) : vec3.fromValues(1, 1, 4);
 
   return light;
 }
-
-lights.push(getPointLight({ position: [0, 20, 10] }));
 
 function loadOBJText() {
   obj0 = readTextFile('../resources/obj/wahoo.obj');
@@ -286,6 +284,17 @@ function oneStep() {
   ++captureIndex;
 }
 
+function computeLightingForVoxel(voxel: any) {
+  if (voxel.mesh == "WallGate1") {
+
+    let config:any = {};
+    config.position = vec3.create();
+    vec3.add(config.position, config.position, vec3.fromValues(voxel.position[0], voxel.position[1], voxel.position[2]));
+
+    lights.push(getPointLight(config));
+  }
+}
+
 function loadScene(capture:boolean = false) {
   let transforms = [];
   if (!capture) {
@@ -300,6 +309,8 @@ function loadScene(capture:boolean = false) {
       transforms = wfc.transformOutput();
     }
   }
+
+  lights = [];
 
   for (var i = 0; i < sceneMeshes.length; ++i) {
     sceneMeshes[i].destory();
@@ -326,10 +337,14 @@ function loadScene(capture:boolean = false) {
 
     let mesh = sceneMeshMap[voxel.mesh];
 
+    computeLightingForVoxel(voxel);
+
     if (mesh) {
       mesh.addInstance(voxel.position, vec4.fromValues(voxel.rotation[0], voxel.rotation[1], voxel.rotation[2], voxel.rotation[3]), voxel.scale);
     }
   }
+
+  mainAppLogInfo(`Created ${lights.length} Lights`);
 
   for (var itr = 0; itr < sceneMeshes.length; ++itr) {
     sceneMeshes[itr].create();
@@ -486,9 +501,6 @@ function main() {
   standardDeferred.setupTexUnits(["tex_Color", "emi_Color"]);
   standardShadowMap.setupTexUnits(["tex_Color", "emi_Color"]);
 
-  renderer.deferredShader.setPointLights(lights);
-  renderer.post32Passes[6].setPointLights(lights);
-
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -498,6 +510,9 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     timer.updateTime();
     renderer.updateTime(timer.deltaTime, timer.currentTime);
+
+    renderer.deferredShader.setPointLights(lights);
+    renderer.post32Passes[6].setPointLights(lights);
 
     // standardDeferred.bindTexToUnit("tex_Color", tex0, 0);
 
