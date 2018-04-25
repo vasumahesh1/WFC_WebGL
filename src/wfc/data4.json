@@ -16,7 +16,11 @@
              "name": "WallStraight1",
              "symmetry": "T",
              "config": {
-                 "heightRange": [0, 1]
+                 "heightRange": [0, 1],
+                 "meshes": [
+                    ["WallStraight1", 50],
+                    ["WallStraight2", 50]
+                 ]
              }
          }, {
              "name": "WallGate1",

@@ -56,10 +56,10 @@ let wfc: any;
 function doWFC(capture : boolean) {
   let isDebug = false;
 
-  wfc = new WFC('Test', null, 16, 16, 4, false, "ground", "empty", "empty", "empty", isDebug);
+  wfc = new WFC('Test', null, 8, 8, 4, false, "ground", "empty", "empty", "empty", isDebug);
   wfc.captureState = true;
 
-  let limit = isDebug ? 1 : 15;
+  let limit = isDebug ? 15 : 15;
 
   for (let k = 0; k < limit; k++) {
     let result = wfc.run();
@@ -165,6 +165,7 @@ let meshes:any = {
   'WallCurved_Middle' : './resources/obj/WallCurved_Middle.obj',
   'WallCurved_TallUpper' : './resources/obj/WallCurved_TallUpper.obj',
   'roof' : './resources/obj/roof.obj',
+  'WallStraight2' : './resources/obj/WallStraight2.obj',
   // 'empty' : './resources/test/empty.obj',
   // 'sky' : './resources/test/empty.obj',
 };
@@ -201,6 +202,7 @@ let textures: any = [
   ['./resources/obj/WallCurved_Middle.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallStraight2.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
 ];
@@ -263,7 +265,7 @@ function iterateScene() {
   interval = setInterval(function() {
     loadScene(true);
     ++captureIndex;
-  }, 500);
+  }, 50);
 }
 
 function oneStep() {
@@ -282,7 +284,7 @@ function loadScene(capture:boolean = false) {
 
     if (captureIndex > wfc.states.length) {
       clearInterval(interval);
-      loadScene(false);
+      transforms = wfc.transformState(wfc.states[wfc.states.length - 1]);
       return;
     }
   }

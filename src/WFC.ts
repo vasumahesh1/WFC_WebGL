@@ -53,6 +53,7 @@ function axisAngleToQuaternion(axis: vec3, angle: number) {
 
 class TransformVoxel {
   mesh: string;
+  tileName: string;
   position: vec4;
   rotation: vec4;
   scale: vec3;
@@ -736,6 +737,10 @@ class WFC {
       // Iterate End
     }
 
+    if (this.isDebug) {
+      this.states = [];
+    }
+
     // if (this.sky >= 0) {
     //   for (let x = 0; x < this.mapX; ++x) {
     //     for (let y = 0; y < this.mapY; ++y) {
@@ -850,7 +855,26 @@ class WFC {
             continue;
           }
 
-          let copy = new TransformVoxel(transform.mesh);
+          let config = this.tileConfigs[observedTile];
+
+          let meshName = transform.mesh;
+
+          if (config && config.meshes) {
+            let rng = Math.random() * 100; // 0 - 99
+
+            for (var itr = 0; itr < config.meshes.length; ++itr) {
+              let mesh = config.meshes[itr];
+
+              if (rng < mesh[1]) {
+                meshName = mesh[0];
+                break;
+              }
+
+              rng -= mesh[1];
+            }
+          }
+
+          let copy = new TransformVoxel(meshName);
           vec4.copy(copy.rotation, transform.rotation);
           vec3.copy(copy.scale, transform.scale);
           copy.position = vec4.fromValues(x * this.voxelSize, y * this.voxelSize, z * this.voxelSize, 1);
