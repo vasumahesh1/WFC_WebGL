@@ -100,12 +100,12 @@ function readTextFile(file) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gl_matrix_common__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__gl_matrix_mat2__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gl_matrix_mat2d__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gl_matrix_mat3__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gl_matrix_mat3__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gl_matrix_quat__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__ = __webpack_require__(9);
 /* unused harmony reexport glMatrix */
 /* unused harmony reexport mat2 */
 /* unused harmony reexport mat2d */
@@ -294,6 +294,208 @@ function invert(out, a) {
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * This is the web browser implementation of `debug()`.
+ *
+ * Expose `debug()` as the module.
+ */
+
+exports = module.exports = __webpack_require__(35);
+exports.log = log;
+exports.formatArgs = formatArgs;
+exports.save = save;
+exports.load = load;
+exports.useColors = useColors;
+exports.storage = 'undefined' != typeof chrome
+               && 'undefined' != typeof chrome.storage
+                  ? chrome.storage.local
+                  : localstorage();
+
+/**
+ * Colors.
+ */
+
+exports.colors = [
+  '#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC',
+  '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF',
+  '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC',
+  '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF',
+  '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC',
+  '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033',
+  '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366',
+  '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933',
+  '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC',
+  '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF',
+  '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'
+];
+
+/**
+ * Currently only WebKit-based Web Inspectors, Firefox >= v31,
+ * and the Firebug extension (any Firefox version) are known
+ * to support "%c" CSS customizations.
+ *
+ * TODO: add a `localStorage` variable to explicitly enable/disable colors
+ */
+
+function useColors() {
+  // NB: In an Electron preload script, document will be defined but not fully
+  // initialized. Since we know we're in Chrome, we'll just detect this case
+  // explicitly
+  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
+    return true;
+  }
+
+  // Internet Explorer and Edge do not support colors.
+  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
+    return false;
+  }
+
+  // is webkit? http://stackoverflow.com/a/16459606/376773
+  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
+  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+    // is firebug? http://stackoverflow.com/a/398120/376773
+    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+    // is firefox >= v31?
+    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
+    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
+    // double check webkit in userAgent just in case we are in a worker
+    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+}
+
+/**
+ * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
+ */
+
+exports.formatters.j = function(v) {
+  try {
+    return JSON.stringify(v);
+  } catch (err) {
+    return '[UnexpectedJSONParseError]: ' + err.message;
+  }
+};
+
+
+/**
+ * Colorize log arguments if enabled.
+ *
+ * @api public
+ */
+
+function formatArgs(args) {
+  var useColors = this.useColors;
+
+  args[0] = (useColors ? '%c' : '')
+    + this.namespace
+    + (useColors ? ' %c' : ' ')
+    + args[0]
+    + (useColors ? '%c ' : ' ')
+    + '+' + exports.humanize(this.diff);
+
+  if (!useColors) return;
+
+  var c = 'color: ' + this.color;
+  args.splice(1, 0, c, 'color: inherit')
+
+  // the final "%c" is somewhat tricky, because there could be other
+  // arguments passed either before or after the %c, so we need to
+  // figure out the correct index to insert the CSS into
+  var index = 0;
+  var lastC = 0;
+  args[0].replace(/%[a-zA-Z%]/g, function(match) {
+    if ('%%' === match) return;
+    index++;
+    if ('%c' === match) {
+      // we only are interested in the *last* %c
+      // (the user may have provided their own)
+      lastC = index;
+    }
+  });
+
+  args.splice(lastC, 0, c);
+}
+
+/**
+ * Invokes `console.log()` when available.
+ * No-op when `console.log` is not a "function".
+ *
+ * @api public
+ */
+
+function log() {
+  // this hackery is required for IE8/9, where
+  // the `console.log` function doesn't have 'apply'
+  return 'object' === typeof console
+    && console.log
+    && Function.prototype.apply.call(console.log, console, arguments);
+}
+
+/**
+ * Save `namespaces`.
+ *
+ * @param {String} namespaces
+ * @api private
+ */
+
+function save(namespaces) {
+  try {
+    if (null == namespaces) {
+      exports.storage.removeItem('debug');
+    } else {
+      exports.storage.debug = namespaces;
+    }
+  } catch(e) {}
+}
+
+/**
+ * Load `namespaces`.
+ *
+ * @return {String} returns the previously persisted debug modes
+ * @api private
+ */
+
+function load() {
+  var r;
+  try {
+    r = exports.storage.debug;
+  } catch(e) {}
+
+  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
+  if (!r && typeof process !== 'undefined' && 'env' in process) {
+    r = process.env.DEBUG;
+  }
+
+  return r;
+}
+
+/**
+ * Enable namespaces listed in `localStorage.debug` initially.
+ */
+
+exports.enable(load());
+
+/**
+ * Localstorage attempts to return the localstorage.
+ *
+ * This is necessary because safari throws
+ * when a user disables cookies/localstorage
+ * and you attempt to access it.
+ *
+ * @return {LocalStorage}
+ * @api private
+ */
+
+function localstorage() {
+  try {
+    return window.localStorage;
+  } catch (e) {}
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -512,7 +714,7 @@ class ShaderProgram {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = normalize;
@@ -540,7 +742,7 @@ function normalize(out, a) {
 }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1347,7 +1549,7 @@ const sub = subtract;
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2187,7 +2389,7 @@ const forEach = (function() {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2849,7 +3051,7 @@ const forEach = (function() {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2981,208 +3183,6 @@ class Drawable {
 ;
 /* harmony default export */ __webpack_exports__["a"] = (Drawable);
 
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * This is the web browser implementation of `debug()`.
- *
- * Expose `debug()` as the module.
- */
-
-exports = module.exports = __webpack_require__(35);
-exports.log = log;
-exports.formatArgs = formatArgs;
-exports.save = save;
-exports.load = load;
-exports.useColors = useColors;
-exports.storage = 'undefined' != typeof chrome
-               && 'undefined' != typeof chrome.storage
-                  ? chrome.storage.local
-                  : localstorage();
-
-/**
- * Colors.
- */
-
-exports.colors = [
-  '#0000CC', '#0000FF', '#0033CC', '#0033FF', '#0066CC', '#0066FF', '#0099CC',
-  '#0099FF', '#00CC00', '#00CC33', '#00CC66', '#00CC99', '#00CCCC', '#00CCFF',
-  '#3300CC', '#3300FF', '#3333CC', '#3333FF', '#3366CC', '#3366FF', '#3399CC',
-  '#3399FF', '#33CC00', '#33CC33', '#33CC66', '#33CC99', '#33CCCC', '#33CCFF',
-  '#6600CC', '#6600FF', '#6633CC', '#6633FF', '#66CC00', '#66CC33', '#9900CC',
-  '#9900FF', '#9933CC', '#9933FF', '#99CC00', '#99CC33', '#CC0000', '#CC0033',
-  '#CC0066', '#CC0099', '#CC00CC', '#CC00FF', '#CC3300', '#CC3333', '#CC3366',
-  '#CC3399', '#CC33CC', '#CC33FF', '#CC6600', '#CC6633', '#CC9900', '#CC9933',
-  '#CCCC00', '#CCCC33', '#FF0000', '#FF0033', '#FF0066', '#FF0099', '#FF00CC',
-  '#FF00FF', '#FF3300', '#FF3333', '#FF3366', '#FF3399', '#FF33CC', '#FF33FF',
-  '#FF6600', '#FF6633', '#FF9900', '#FF9933', '#FFCC00', '#FFCC33'
-];
-
-/**
- * Currently only WebKit-based Web Inspectors, Firefox >= v31,
- * and the Firebug extension (any Firefox version) are known
- * to support "%c" CSS customizations.
- *
- * TODO: add a `localStorage` variable to explicitly enable/disable colors
- */
-
-function useColors() {
-  // NB: In an Electron preload script, document will be defined but not fully
-  // initialized. Since we know we're in Chrome, we'll just detect this case
-  // explicitly
-  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
-    return true;
-  }
-
-  // Internet Explorer and Edge do not support colors.
-  if (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/(edge|trident)\/(\d+)/)) {
-    return false;
-  }
-
-  // is webkit? http://stackoverflow.com/a/16459606/376773
-  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
-    // is firebug? http://stackoverflow.com/a/398120/376773
-    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
-    // is firefox >= v31?
-    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-    // double check webkit in userAgent just in case we are in a worker
-    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
-}
-
-/**
- * Map %j to `JSON.stringify()`, since no Web Inspectors do that by default.
- */
-
-exports.formatters.j = function(v) {
-  try {
-    return JSON.stringify(v);
-  } catch (err) {
-    return '[UnexpectedJSONParseError]: ' + err.message;
-  }
-};
-
-
-/**
- * Colorize log arguments if enabled.
- *
- * @api public
- */
-
-function formatArgs(args) {
-  var useColors = this.useColors;
-
-  args[0] = (useColors ? '%c' : '')
-    + this.namespace
-    + (useColors ? ' %c' : ' ')
-    + args[0]
-    + (useColors ? '%c ' : ' ')
-    + '+' + exports.humanize(this.diff);
-
-  if (!useColors) return;
-
-  var c = 'color: ' + this.color;
-  args.splice(1, 0, c, 'color: inherit')
-
-  // the final "%c" is somewhat tricky, because there could be other
-  // arguments passed either before or after the %c, so we need to
-  // figure out the correct index to insert the CSS into
-  var index = 0;
-  var lastC = 0;
-  args[0].replace(/%[a-zA-Z%]/g, function(match) {
-    if ('%%' === match) return;
-    index++;
-    if ('%c' === match) {
-      // we only are interested in the *last* %c
-      // (the user may have provided their own)
-      lastC = index;
-    }
-  });
-
-  args.splice(lastC, 0, c);
-}
-
-/**
- * Invokes `console.log()` when available.
- * No-op when `console.log` is not a "function".
- *
- * @api public
- */
-
-function log() {
-  // this hackery is required for IE8/9, where
-  // the `console.log` function doesn't have 'apply'
-  return 'object' === typeof console
-    && console.log
-    && Function.prototype.apply.call(console.log, console, arguments);
-}
-
-/**
- * Save `namespaces`.
- *
- * @param {String} namespaces
- * @api private
- */
-
-function save(namespaces) {
-  try {
-    if (null == namespaces) {
-      exports.storage.removeItem('debug');
-    } else {
-      exports.storage.debug = namespaces;
-    }
-  } catch(e) {}
-}
-
-/**
- * Load `namespaces`.
- *
- * @return {String} returns the previously persisted debug modes
- * @api private
- */
-
-function load() {
-  var r;
-  try {
-    r = exports.storage.debug;
-  } catch(e) {}
-
-  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-  if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
-  }
-
-  return r;
-}
-
-/**
- * Enable namespaces listed in `localStorage.debug` initially.
- */
-
-exports.enable(load());
-
-/**
- * Localstorage attempts to return the localstorage.
- *
- * This is necessary because safari throws
- * when a user disables cookies/localstorage
- * and you attempt to access it.
- *
- * @return {LocalStorage}
- * @api private
- */
-
-function localstorage() {
-  try {
-    return window.localStorage;
-  } catch (e) {}
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
 
 /***/ }),
 /* 11 */
@@ -3905,7 +3905,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rendering_gl_OpenGLRenderer__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Camera__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__globals__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__rendering_gl_ShaderProgram__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__rendering_gl_ShaderProgram__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__WFC__ = __webpack_require__(95);
 
@@ -3919,9 +3919,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-var Logger = __webpack_require__(10);
+var Logger = __webpack_require__(4);
 var mainAppLog = Logger("mainApp:WFC:trace");
 var mainAppLogInfo = Logger("mainApp:WFC:info");
+var mainAppLogError = Logger("mainApp:WFC:error");
 function axisAngleToQuaternion(axis, angle) {
     let quat = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].create();
     let cos = Math.cos(angle / 2.0);
@@ -3949,23 +3950,6 @@ function toggleLightColor() {
     useMoonlight = !useMoonlight;
 }
 let wfc;
-function doWFC(capture) {
-    let isDebug = false;
-    wfc = new __WEBPACK_IMPORTED_MODULE_9__WFC__["a" /* default */]('Test', null, 8, 8, 4, false, "ground", "empty", "empty", "empty", isDebug);
-    wfc.captureState = true;
-    let limit = isDebug ? 15 : 15;
-    for (let k = 0; k < limit; k++) {
-        let result = wfc.run();
-        if (result) {
-            mainAppLogInfo('DONE WFC!');
-            break;
-        }
-        else {
-            mainAppLogInfo('CONTRADICTION!');
-        }
-    }
-    return wfc.transformOutput();
-}
 const SM_VIEWPORT_TRANSFORM = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].fromValues(0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.5, 1.0);
 let showEmpty = false;
 function toggleEmpty() {
@@ -3973,6 +3957,7 @@ function toggleEmpty() {
 }
 let controls = {
     saveImage: saveImage,
+    newScene: newScene,
     doWFC: doWFC,
     iterateScene: iterateScene,
     oneStep: oneStep,
@@ -3982,6 +3967,15 @@ let controls = {
         color: WHITE_COLOR,
         intensity: 6,
         direction: [90, 90, 90]
+    },
+    wfc: {
+        gridX: 8,
+        gridY: 8,
+        gridZ: 4,
+        isDebug: false
+    },
+    camera: {
+        isOrtho: true
     },
     godray: {
         enabled: true,
@@ -4002,7 +3996,7 @@ let controls = {
         enabled: true
     },
     bloom: {
-        enabled: true,
+        enabled: false,
         blend: 1.0,
         iterations: 1
     },
@@ -4010,6 +4004,23 @@ let controls = {
         effect: 'none'
     }
 };
+function doWFC(capture) {
+    let isDebug = controls.wfc.isDebug;
+    wfc = new __WEBPACK_IMPORTED_MODULE_9__WFC__["a" /* default */]('Test', null, controls.wfc.gridX, controls.wfc.gridY, controls.wfc.gridZ, false, "ground", "empty", "empty", "empty", isDebug);
+    wfc.captureState = true;
+    let limit = isDebug ? 15 : 15;
+    for (let k = 0; k < limit; k++) {
+        let result = wfc.run();
+        if (result) {
+            mainAppLogInfo('Generated Scene');
+            break;
+        }
+        else {
+            mainAppLogError('Failed to Generate Scene: Contradiction');
+        }
+    }
+    return wfc.transformOutput();
+}
 let obj0;
 let tex0;
 let lights = [];
@@ -4121,6 +4132,9 @@ function testUV(camera) {
     mainAppLogInfo('Light Direction in UV Space is: ', dir[0], dir[1]);
 }
 let interval;
+function newScene() {
+    loadScene(false);
+}
 function iterateScene() {
     interval = setInterval(function () {
         loadScene(true);
@@ -4142,8 +4156,7 @@ function loadScene(capture = false) {
         transforms = wfc.transformState(wfc.states[captureIndex]);
         if (captureIndex > wfc.states.length) {
             clearInterval(interval);
-            transforms = wfc.transformState(wfc.states[wfc.states.length - 1]);
-            return;
+            transforms = wfc.transformOutput();
         }
     }
     for (var i = 0; i < sceneMeshes.length; ++i) {
@@ -4225,8 +4238,13 @@ function main() {
     gui.add(controls, 'saveImage').name('Save Image');
     gui.add(controls, 'toggleLightColor').name('Toggle Sky Color');
     group = gui.addFolder('WFC');
-    group.add(controls, 'iterateScene').name('Next Iteration');
-    group.add(controls, 'oneStep').name('One Step');
+    group.add(controls, 'iterateScene').name('Show States');
+    group.add(controls, 'oneStep').name('Jump One State');
+    group.add(controls, 'newScene').name('New WFC Scene');
+    group.add(controls.wfc, 'gridX', 4, 16).step(1).name('Size X');
+    group.add(controls.wfc, 'gridY', 4, 16).step(1).name('Size Y');
+    group.add(controls.wfc, 'isDebug').name('Capture States');
+    group.open();
     group = gui.addFolder('Depth of Field');
     group.add(controls.dof, 'enabled').name('Enabled').listen();
     group.add(controls.dof, 'blend', 0, 1.0).step(0.05).name('Blend Amount').listen();
@@ -4245,6 +4263,9 @@ function main() {
     group.add(controls.bloom, 'blend', 0, 1.0).step(0.05).name('Blend Amount').listen();
     group.add(controls.bloom, 'iterations', 1.0, 10.0).step(1.0).name('Iterations').listen();
     group.add(controls.bloom, 'enabled').name('Enabled').listen();
+    group = gui.addFolder('Camera');
+    group.add(controls.camera, 'isOrtho').name('Is Static').listen();
+    group.open();
     group = gui.addFolder('God Rays');
     group.add(controls.godray, 'blend', 0, 1.0).step(0.05).name('GR Blend Amount').listen();
     group.add(controls.godray, 'iterations', 1.0, 10.0).step(1.0).name('Iterations').listen();
@@ -4285,7 +4306,7 @@ function main() {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     function tick() {
-        camera.update();
+        camera.update(controls.camera);
         stats.begin();
         gl.viewport(0, 0, window.innerWidth, window.innerHeight);
         timer.updateTime();
@@ -4329,13 +4350,17 @@ function main() {
         }
         requestAnimationFrame(tick);
     }
-    window.addEventListener('resize', function () {
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        camera.setAspectRatio(window.innerWidth / window.innerHeight);
-        camera.updateProjectionMatrix();
-    }, false);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.setAspectRatio(window.innerWidth / window.innerHeight);
+    // window.addEventListener('resize', function() {
+    //   renderer.setSize(window.innerWidth, window.innerHeight);
+    //   camera.setAspectRatio(window.innerWidth / window.innerHeight);
+    //   camera.updateProjectionMatrix();
+    // }, false);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    width = window.innerHeight;
+    height = window.innerHeight;
+    renderer.setSize(width, height);
+    camera.setAspectRatio(width / height);
     camera.updateProjectionMatrix();
     // Start the render loop
     tick();
@@ -7077,9 +7102,9 @@ const sub = subtract;
 /* unused harmony export fromEuler */
 /* unused harmony export str */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mat3__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vec3__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vec4__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mat3__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vec3__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vec4__ = __webpack_require__(9);
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12839,13 +12864,13 @@ dat.utils.common);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(0);
 
 
 
 var Loader = __webpack_require__(33);
-var Logger = __webpack_require__(10);
+var Logger = __webpack_require__(4);
 var dCreate = Logger("mainApp:meshInstanced:trace");
 var dCreateInfo = Logger("mainApp:meshInstanced:info");
 let CHUNK_SIZE = 200;
@@ -13584,7 +13609,7 @@ function plural(ms, n, name) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ShaderProgram__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ShaderProgram__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PostProcess__ = __webpack_require__(38);
 
 
@@ -14258,7 +14283,7 @@ class OpenGLRenderer {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ShaderProgram__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ShaderProgram__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lights_PointLight__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lights_SpotLight__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__geometry_Square__ = __webpack_require__(41);
@@ -14542,7 +14567,7 @@ class SpotLight {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__globals__ = __webpack_require__(0);
 
 
@@ -14755,12 +14780,15 @@ class Camera {
     getPosition() {
         return this.controls.eye;
     }
-    update() {
+    update(cameraControls) {
         this.controls.tick();
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].add(this.target, this.position, this.direction);
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
-        // mat4.ortho(this.projectionMatrix, -75.0, 75.0, -75.0, 75.0, -100, 200.0);
-        // mat4.lookAt(this.viewMatrix, [15,15,15], vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
+        this.updateProjectionMatrix();
+        if (cameraControls && cameraControls.isOrtho) {
+            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].ortho(this.projectionMatrix, -50.0, 50.0, -50.0, 50.0, -100, 200.0);
+            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, [15, 15, 15], __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1));
+        }
     }
 }
 ;
@@ -15156,7 +15184,7 @@ var filterVector = __webpack_require__(12)
 var invert44     = __webpack_require__(3)
 var rotateM      = __webpack_require__(68)
 var cross        = __webpack_require__(14)
-var normalize3   = __webpack_require__(5)
+var normalize3   = __webpack_require__(6)
 var dot3         = __webpack_require__(15)
 
 function len3(x, y, z) {
@@ -16349,7 +16377,7 @@ var rotateZ   = __webpack_require__(87)
 var lookAt    = __webpack_require__(16)
 var translate = __webpack_require__(18)
 var scale     = __webpack_require__(20)
-var normalize = __webpack_require__(5)
+var normalize = __webpack_require__(6)
 
 var DEFAULT_CENTER = [0,0,0]
 
@@ -16820,7 +16848,7 @@ var invert = __webpack_require__(3)
 var transpose = __webpack_require__(81)
 var vec3 = {
     length: __webpack_require__(82),
-    normalize: __webpack_require__(5),
+    normalize: __webpack_require__(6),
     dot: __webpack_require__(15),
     cross: __webpack_require__(14)
 }
@@ -17799,6 +17827,10 @@ class Texture {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
 
 var _ = __webpack_require__(96);
+var Logger = __webpack_require__(4);
+var wfcLog = Logger("mainApp:Core:trace");
+var wfcLogInfo = Logger("mainApp:Core:info");
+var wfcLogError = Logger("mainApp:Core:error");
 function weightedRandom(arr, random) {
     let sum = 0;
     for (let i = 0; i < arr.length; ++i) {
@@ -17997,7 +18029,7 @@ class WFC {
             this.changes.push(changesX);
             this.waves.push(waveX);
         }
-        console.log('Actions', actions);
+        wfcLog('Actions', actions);
         /*----------  Prepare Propagator which controls Adjacency  ----------*/
         let neighbors = json.set.neighbors;
         for (var itr = 0; itr < neighbors.length; ++itr) {
@@ -18038,9 +18070,9 @@ class WFC {
                 this.propagator[5][t2][t1] = this.propagator[4][t1][t2];
             }
         }
-        console.log('Propagator', this.propagator);
-        console.log('firstOccurence', firstOccurence);
-        console.log('transforms', this.transforms);
+        wfcLogInfo('Propagator', this.propagator);
+        wfcLog('firstOccurence', firstOccurence);
+        wfcLog('transforms', this.transforms);
     }
     observedClone() {
         let savedState = [];
@@ -18083,8 +18115,8 @@ class WFC {
                         }
                     }
                     if (sum == 0) {
-                        // console.log('Wave', w);
-                        // console.log('XYZ', x,y,z);
+                        // wfcLog('Wave', w);
+                        // wfcLog('XYZ', x,y,z);
                         return false;
                     }
                     noise = 1E-6 * Math.random();
@@ -18123,7 +18155,7 @@ class WFC {
                         for (let t = 0; t < this.actionCount; ++t) {
                             if (this.waves[x][y][z][t]) {
                                 this.observed[x][y][z] = t;
-                                // console.log(`Observing: ${this.tileNames[t]}`);
+                                // wfcLog(`Observing: ${this.tileNames[t]}`);
                                 break;
                             }
                         }
@@ -18280,10 +18312,11 @@ class WFC {
         }
         this.clear();
         while (true) {
-            // console.log(this.textOutput());
+            // wfcLog(this.textOutput());
             let result = this.observe();
             if (result != null) {
                 // Either Sucess or Contradiction
+                this.observedClone();
                 return result;
             }
             // Some Low Entropy Voxel might have been selected
@@ -18433,7 +18466,7 @@ class WFC {
                         if (!transform) {
                             continue;
                         }
-                        let xOffset = t;
+                        let xOffset = t * (this.voxelSize / observedTiles.length);
                         let copy = new TransformVoxel(transform.mesh);
                         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].copy(copy.rotation, transform.rotation);
                         __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].copy(copy.scale, transform.scale);
