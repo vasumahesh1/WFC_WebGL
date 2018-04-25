@@ -15,6 +15,7 @@ import WFC from './WFC';
 var Logger = require('debug');
 var mainAppLog = Logger("mainApp:WFC:trace");
 var mainAppLogInfo = Logger("mainApp:WFC:info");
+var mainAppLogError = Logger("mainApp:WFC:error");
 
 
 function axisAngleToQuaternion(axis: vec3, angle: number) {
@@ -53,28 +54,7 @@ function toggleLightColor() {
 
 let wfc: any;
 
-function doWFC(capture : boolean) {
-  let isDebug = false;
 
-  wfc = new WFC('Test', null, 8, 8, 4, false, "ground", "empty", "empty", "empty", isDebug);
-  wfc.captureState = true;
-
-  let limit = isDebug ? 15 : 15;
-
-  for (let k = 0; k < limit; k++) {
-    let result = wfc.run();
-
-    if (result) {
-      mainAppLogInfo('DONE WFC!');
-      break;
-
-    } else {
-      mainAppLogInfo('CONTRADICTION!');
-    }
-  }
-
-  return wfc.transformOutput();
-}
 
 const SM_VIEWPORT_TRANSFORM:mat4 = mat4.fromValues(
   0.5, 0.0, 0.0, 0.0,
@@ -90,6 +70,7 @@ function toggleEmpty() {
 
 let controls = {
   saveImage: saveImage,
+  newScene: newScene,
   doWFC: doWFC,
   iterateScene: iterateScene,
   oneStep: oneStep,
@@ -99,6 +80,15 @@ let controls = {
     color: WHITE_COLOR,
     intensity: 6,
     direction: [90, 90, 90]
+  },
+  wfc: {
+    gridX: 8,
+    gridY: 8,
+    gridZ: 4,
+    isDebug: false
+  },
+  camera: {
+    isOrtho: true
   },
   godray: {
     enabled: true,
@@ -119,7 +109,7 @@ let controls = {
     enabled: true
   },
   bloom: {
-    enabled: true,
+    enabled: false,
     blend: 1.0,
     iterations: 1
   },
@@ -127,6 +117,29 @@ let controls = {
     effect: 'none'
   }
 };
+
+function doWFC(capture : boolean) {
+  let isDebug = controls.wfc.isDebug;
+
+  wfc = new WFC('Test', null, controls.wfc.gridX, controls.wfc.gridY, controls.wfc.gridZ, false, "ground", "empty", "empty", "empty", isDebug);
+  wfc.captureState = true;
+
+  let limit = isDebug ? 15 : 15;
+
+  for (let k = 0; k < limit; k++) {
+    let result = wfc.run();
+
+    if (result) {
+      mainAppLogInfo('Generated Scene');
+      break;
+
+    } else {
+      mainAppLogError('Failed to Generate Scene: Contradiction');
+    }
+  }
+
+  return wfc.transformOutput();
+}
 
 let obj0: string;
 
@@ -261,6 +274,10 @@ function testUV(camera: Camera) {
 
 let interval:any;
 
+function newScene() {
+  loadScene(false);
+}
+
 function iterateScene() {
   interval = setInterval(function() {
     loadScene(true);
@@ -284,8 +301,7 @@ function loadScene(capture:boolean = false) {
 
     if (captureIndex > wfc.states.length) {
       clearInterval(interval);
-      transforms = wfc.transformState(wfc.states[wfc.states.length - 1]);
-      return;
+      transforms = wfc.transformOutput();
     }
   }
 
@@ -394,8 +410,13 @@ function main() {
   gui.add(controls, 'toggleLightColor').name('Toggle Sky Color');
 
   group = gui.addFolder('WFC');
-  group.add(controls, 'iterateScene').name('Next Iteration');
-  group.add(controls, 'oneStep').name('One Step');
+  group.add(controls, 'iterateScene').name('Show States');
+  group.add(controls, 'oneStep').name('Jump One State');
+  group.add(controls, 'newScene').name('New WFC Scene');
+  group.add(controls.wfc, 'gridX', 4, 16).step(1).name('Size X');
+  group.add(controls.wfc, 'gridY', 4, 16).step(1).name('Size Y');
+  group.add(controls.wfc, 'isDebug').name('Capture States');
+  group.open();
 
 
   group = gui.addFolder('Depth of Field');
@@ -420,6 +441,10 @@ function main() {
   group.add(controls.bloom, 'blend', 0, 1.0).step(0.05).name('Blend Amount').listen();
   group.add(controls.bloom, 'iterations', 1.0, 10.0).step(1.0).name('Iterations').listen();
   group.add(controls.bloom, 'enabled').name('Enabled').listen();
+
+  group = gui.addFolder('Camera');
+  group.add(controls.camera, 'isOrtho').name('Is Static').listen();
+  group.open();
 
   group = gui.addFolder('God Rays');
   group.add(controls.godray, 'blend', 0, 1.0).step(0.05).name('GR Blend Amount').listen();
@@ -472,7 +497,7 @@ function main() {
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   function tick() {
-    camera.update();
+    camera.update(controls.camera);
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     timer.updateTime();
@@ -530,14 +555,20 @@ function main() {
     requestAnimationFrame(tick);
   }
 
-  window.addEventListener('resize', function() {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.setAspectRatio(window.innerWidth / window.innerHeight);
-    camera.updateProjectionMatrix();
-  }, false);
+  // window.addEventListener('resize', function() {
+  //   renderer.setSize(window.innerWidth, window.innerHeight);
+  //   camera.setAspectRatio(window.innerWidth / window.innerHeight);
+  //   camera.updateProjectionMatrix();
+  // }, false);
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.setAspectRatio(window.innerWidth / window.innerHeight);
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+
+  width = window.innerHeight;
+  height = window.innerHeight;
+
+  renderer.setSize(width, height);
+  camera.setAspectRatio(width / height);
   camera.updateProjectionMatrix();
 
   // Start the render loop

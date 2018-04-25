@@ -2,6 +2,11 @@ import {vec2, vec3, vec4, mat4, quat} from 'gl-matrix';
 
 var _ = require('lodash');
 
+var Logger = require('debug');
+var wfcLog = Logger("mainApp:Core:trace");
+var wfcLogInfo = Logger("mainApp:Core:info");
+var wfcLogError = Logger("mainApp:Core:error");
+
 function weightedRandom(arr: Array<number>, random: number) {
   let sum = 0;
   for (let i = 0; i < arr.length; ++i) {
@@ -292,7 +297,7 @@ class WFC {
       this.waves.push(waveX);
     }
 
-    console.log('Actions', actions);
+    wfcLog('Actions', actions);
 
     /*----------  Prepare Propagator which controls Adjacency  ----------*/
     let neighbors = json.set.neighbors;
@@ -342,9 +347,9 @@ class WFC {
       }
     }
 
-    console.log('Propagator', this.propagator);
-    console.log('firstOccurence', firstOccurence);
-    console.log('transforms', this.transforms);
+    wfcLogInfo('Propagator', this.propagator);
+    wfcLog('firstOccurence', firstOccurence);
+    wfcLog('transforms', this.transforms);
   }
 
   observedClone() {
@@ -400,8 +405,8 @@ class WFC {
           }
 
           if (sum == 0) {
-            // console.log('Wave', w);
-            // console.log('XYZ', x,y,z);
+            // wfcLog('Wave', w);
+            // wfcLog('XYZ', x,y,z);
             return false;
           }
 
@@ -447,7 +452,7 @@ class WFC {
             for (let t = 0; t < this.actionCount; ++t) {
               if (this.waves[x][y][z][t]) {
                 this.observed[x][y][z] = t;
-                // console.log(`Observing: ${this.tileNames[t]}`);
+                // wfcLog(`Observing: ${this.tileNames[t]}`);
                 break;
               }
             }
@@ -626,11 +631,12 @@ class WFC {
     this.clear();
 
     while(true) {
-      // console.log(this.textOutput());
+      // wfcLog(this.textOutput());
       let result = this.observe();
 
       if (result != null) {
         // Either Sucess or Contradiction
+        this.observedClone();
         return result;
       }
 
@@ -816,7 +822,7 @@ class WFC {
               continue;
             }
 
-            let xOffset = t;
+            let xOffset = t * (this.voxelSize / observedTiles.length);
 
             let copy = new TransformVoxel(transform.mesh);
             vec4.copy(copy.rotation, transform.rotation);

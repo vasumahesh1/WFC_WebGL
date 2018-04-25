@@ -36,14 +36,18 @@ class Camera {
     return this.controls.eye;
   }
 
-  update() {
+  update(cameraControls? : any) {
     this.controls.tick();
 
     vec3.add(this.target, this.position, this.direction);
     mat4.lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
+    this.updateProjectionMatrix();
 
-    // mat4.ortho(this.projectionMatrix, -75.0, 75.0, -75.0, 75.0, -100, 200.0);
-    // mat4.lookAt(this.viewMatrix, [15,15,15], vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
+    if (cameraControls && cameraControls.isOrtho) {  
+      mat4.ortho(this.projectionMatrix, -50.0, 50.0, -50.0, 50.0, -100, 200.0);
+      mat4.lookAt(this.viewMatrix, [15, 15, 15], vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
+    }
+
   }
 };
 
