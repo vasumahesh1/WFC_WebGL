@@ -210,6 +210,6 @@
             ["vertical", "WallGate1", "ground"]
         ],
         "pixelsize": 8,
-        "voxelsize": 6
+        "voxelsize": 16
     }
 }

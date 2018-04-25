@@ -44,8 +44,8 @@ class Camera {
     this.updateProjectionMatrix();
 
     if (cameraControls && cameraControls.isOrtho) {  
-      mat4.ortho(this.projectionMatrix, -50.0, 50.0, -50.0, 50.0, -100, 200.0);
-      mat4.lookAt(this.viewMatrix, [15, 15, 15], vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
+      mat4.ortho(this.projectionMatrix, -100.0, 100.0, -100.0, 100.0, -100, 200.0);
+      mat4.lookAt(this.viewMatrix, [30, 40, 30], vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 1));
     }
 
   }

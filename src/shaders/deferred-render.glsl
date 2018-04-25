@@ -55,11 +55,85 @@ struct SpotLight {
     vec3 attn;
 };
 
-uniform SpotLight u_SpotLights[MAX_SPOT_LIGHTS];
-uniform uint u_NumSpotLights;
+uniform PointLight u_PointLights[MAX_POINT_LIGHTS];
+uniform uint u_NumPointLights;
 
-vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {
-  if (u_NumSpotLights <= uint(0)) {
+// vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {
+//   if (u_NumSpotLights <= uint(0)) {
+//     return inputColor;
+//   }
+
+//   float alpha = inputColor.a;
+
+//   vec4 ambient, diffuse, spec;
+
+//   vec4 totalLightContrib = vec4(0, 0, 0, 0);
+
+//   for (uint i = uint(0); i < u_NumSpotLights; i++) {
+//     SpotLight light = u_SpotLights[i];
+
+//     // Initialize outputs.
+//     ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+//     diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+//     spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    
+//     // The vector from the surface to the light.
+//     vec3 lightVec = vec3(u_View * vec4(light.position, 1.0)) - fragPosition;
+    
+//     // The distance from surface to light.
+//     float d = length(lightVec);
+  
+//     // Range test.
+//     // if( d > light.range ) {
+//     //   totalLightContrib += ambient;
+//     //   continue;
+//     // }
+    
+//     // Normalize the light vector.
+//     lightVec /= d; 
+  
+//     // Ambient term.
+//     // ambient = light.ambient;  // TODO: Material
+
+//     // Add diffuse and specular term, provided the surface is in 
+//     // the line of site of the light.
+
+//     float diffuseTerm = dot(lightVec, normal);
+
+//     // Flatten to avoid dynamic branching.
+//     if( diffuseTerm > 0.0f ) {
+//       vec3 v         = reflect(-lightVec, normal);
+//       float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0); // TODO: Material
+            
+//       diffuse = diffuseTerm * light.diffuse;
+//       spec    = specFactor * light.specular;
+//     }
+
+//     float spot = pow(max(dot(-lightVec, normalize(vec3(u_View * vec4(light.direction, 0.0)))), 0.0), light.kSpot);
+
+//     // Attenuate
+//     float att = spot / dot(light.attn, vec3(1.0f, d, d * d));
+
+//     diffuse *= att;
+//     spec    *= att;
+//     // ambient *= spot;
+
+//     totalLightContrib += light.contrib * (diffuse + spec) + ambient;
+//   }
+
+//   totalLightContrib += vec4(0.1, 0.1, 0.1, 0);
+
+//   inputColor = inputColor * totalLightContrib;
+
+//   inputColor.a = alpha;
+
+//   // TODO: Material alhpa
+
+//   return inputColor;
+// }
+
+vec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {
+  if (u_NumPointLights <= uint(0)) {
     return inputColor;
   }
 
@@ -69,16 +143,16 @@ vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosit
 
   vec4 totalLightContrib = vec4(0, 0, 0, 0);
 
-  for (uint i = uint(0); i < u_NumSpotLights; i++) {
-    SpotLight light = u_SpotLights[i];
+  for (uint i = uint(0); i < u_NumPointLights; i++) {
+    PointLight light = u_PointLights[i];
 
     // Initialize outputs.
     ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);
     diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);
     spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-    
+
     // The vector from the surface to the light.
-    vec3 lightVec = vec3(u_View * vec4(light.position, 1.0)) - fragPosition;
+    vec3 lightVec = light.position - fragPosition;
     
     // The distance from surface to light.
     float d = length(lightVec);
@@ -93,7 +167,7 @@ vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosit
     lightVec /= d; 
   
     // Ambient term.
-    // ambient = light.ambient;  // TODO: Material
+    ambient = light.ambient;  // TODO: Material
 
     // Add diffuse and specular term, provided the surface is in 
     // the line of site of the light.
@@ -109,19 +183,14 @@ vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosit
       spec    = specFactor * light.specular;
     }
 
-    float spot = pow(max(dot(-lightVec, normalize(vec3(u_View * vec4(light.direction, 0.0)))), 0.0), light.kSpot);
-
     // Attenuate
-    float att = spot / dot(light.attn, vec3(1.0f, d, d * d));
+    float att = 1.0f / dot(light.attn, vec3(1.0f, d, d * d));
 
     diffuse *= att;
     spec    *= att;
-    // ambient *= spot;
 
-    totalLightContrib += light.contrib * (diffuse + spec) + ambient;
+    totalLightContrib += light.contrib * (diffuse + spec); // + ambient
   }
-
-  totalLightContrib += vec4(0.1, 0.1, 0.1, 0);
 
   inputColor = inputColor * totalLightContrib;
 
@@ -206,7 +275,8 @@ void main() {
 
   vec4 finalColor = calculateMainLighting(diffuseColor, normal);
 
-  finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);
+  // finalColor = calculatePointLightContribution(finalColor, normal, gb1.xyz);
+  // finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);
   // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);
 
   finalColor += (vec4(gb3.xyz, 0.0f) * 5.0);

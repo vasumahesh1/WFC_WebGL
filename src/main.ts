@@ -9,6 +9,7 @@ import {readTextFile} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 import Texture from './rendering/gl/Texture';
 import SpotLight from './lights/SpotLight';
+import PointLight from './lights/PointLight';
 import WFC from './WFC';
 
 
@@ -144,7 +145,7 @@ function doWFC(capture : boolean) {
 let obj0: string;
 
 let tex0: Texture;
-let lights: Array<SpotLight> = [];
+let lights: Array<PointLight> = [];
 
 let meshes:any = {
   'down' : './resources/test/down.obj',
@@ -237,6 +238,27 @@ var timer = {
   },
 }
 
+function arrayToVec4(arr: any) {
+  return vec4.fromValues(arr[0], arr[1], arr[2], arr[3]);
+}
+
+function arrayToVec3(arr: any) {
+  return vec3.fromValues(arr[0], arr[1], arr[2]);
+}
+
+function getPointLight(config: any) {
+  let light = new PointLight();
+  light.ambient =  vec4.fromValues(0.2, 0.2, 0.2, 1);
+  light.diffuse = config.diffuse ? arrayToVec4(config.diffuse) : vec4.fromValues(15, 15, 15, 1);
+  light.specular = config.specular ? arrayToVec4(config.specular) : vec4.fromValues(5.0, 5.0, 5.0, 1);
+  light.position = vec3.fromValues(config.position[0], config.position[1], config.position[2]);
+  light.range = config.range || 5;
+  light.attn = config.attn ? arrayToVec3(config.attn) : vec3.fromValues(1, 1, 10);
+
+  return light;
+}
+
+lights.push(getPointLight({ position: [0, 20, 10] }));
 
 function loadOBJText() {
   obj0 = readTextFile('../resources/obj/wahoo.obj');
@@ -244,32 +266,6 @@ function loadOBJText() {
   for(var key in meshes) {
     sceneOBJs[key] = readTextFile(meshes[key]);
   }
-}
-
-function testUV(camera: Camera) {
-  let light = lights[0];
-  let p1 = vec4.fromValues(0, 0, 0, 1.0);
-  let p2 = vec4.fromValues(light.direction[0], light.direction[1], light.direction[2], 1.0);
-
-  let viewProj = mat4.create();
-  mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
-
-  vec4.transformMat4(p1, p1, viewProj);
-  vec4.transformMat4(p2, p2, viewProj);
-
-  vec4.scale(p1, p1, 1.0 / p1[3]);
-  vec4.scale(p2, p2, 1.0 / p2[3]);
-
-  p1[0] = (p1[0] + 1.0) * 0.5;
-  p2[0] = (p2[0] + 1.0) * 0.5;
-
-  p1[1] = (1.0 - p1[1]) * 0.5;
-  p2[1] = (1.0 - p2[1]) * 0.5;
-
-  let dir = vec2.fromValues(p2[0] - p1[0], p2[1] - p1[1]);
-  // vec2.normalize(dir, dir);
-
-  mainAppLogInfo('Light Direction in UV Space is: ', dir[0], dir[1]);
 }
 
 let interval:any;
@@ -490,8 +486,8 @@ function main() {
   standardDeferred.setupTexUnits(["tex_Color", "emi_Color"]);
   standardShadowMap.setupTexUnits(["tex_Color", "emi_Color"]);
 
-  renderer.deferredShader.setSpotLights(lights);
-  renderer.post32Passes[6].setSpotLights(lights);
+  renderer.deferredShader.setPointLights(lights);
+  renderer.post32Passes[6].setPointLights(lights);
 
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
