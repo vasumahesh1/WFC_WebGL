@@ -152,7 +152,7 @@ let meshes:any = {
   'line' : './resources/test/line.obj',
   'turn' : './resources/test/turn.obj',
   'up' : './resources/test/up.obj',
-  'ground' : './resources/test/ground.obj',
+  'ground' : './resources/obj/Ground.obj',
   'vertical' : './resources/test/vertical.obj',
   'wall1' : './resources/test/wall1.obj',
   'gate1' : './resources/test/gate1.obj',
@@ -217,6 +217,7 @@ let textures: any = [
   ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallStraight2.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/Ground.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
   // ['./resources/test/empty.png', './resources/textures/default_emissive.png'],
 ];
