@@ -85,7 +85,7 @@ GIF:
 
 ## Tiles / Voxels used:
 
-The following voxels were used by us for making the scene. We created them on MagicaVoxel. And they look janky af.
+The following voxels were used by us for making the scene. We created them on MagicaVoxel. And they look janky af. Some of these voxels are 3 voxels mixed together (stacked on top of each other). But in the algorithm they are individual entities.
 
 | - | - | - |
 |:-------------:|:-----:|:-----:|
