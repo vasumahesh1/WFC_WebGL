@@ -18,6 +18,11 @@ We defined a set of constraints (a lot of them) to generate such structures. The
 Only runs on Windows. There is an issue with macOS running opengl instancing with deferred renderer.
 
 
+## Demo Link:
+
+[Click Here](https://vasumahesh1.github.io/WFC_WebGL/)
+
+
 ## Navigating the UI
 
 - New WFC Scene:
@@ -31,7 +36,7 @@ Only runs on Windows. There is an issue with macOS running opengl instancing wit
 
 
 
-## How the it works
+## How it works
 
 The following states are Captured by our algorithm's implementation for debugging a scene's creation. Note: avoid using "Capture Scene" for large scenes.
 
