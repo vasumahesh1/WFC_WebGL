@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,12 +98,12 @@ function readTextFile(file) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__gl_matrix_common__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__gl_matrix_mat2__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gl_matrix_mat2d__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__gl_matrix_mat2__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__gl_matrix_mat2d__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__gl_matrix_mat3__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gl_matrix_quat__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__gl_matrix_mat4__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__gl_matrix_quat__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__gl_matrix_vec2__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__gl_matrix_vec3__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__gl_matrix_vec4__ = __webpack_require__(9);
 /* unused harmony reexport glMatrix */
@@ -302,7 +302,7 @@ function invert(out, a) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(35);
+exports = module.exports = __webpack_require__(36);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -492,7 +492,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)))
 
 /***/ }),
 /* 5 */
@@ -3186,6 +3186,52 @@ class Drawable {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(0);
+
+class PointLight {
+    constructor() {
+        this.contrib = 1;
+    }
+    static markLocations(program, container, numLights, variableName) {
+        let attrLocations = [
+            "ambient",
+            "diffuse",
+            "specular",
+            "position",
+            "range",
+            "contrib",
+            "attn"
+        ];
+        for (var lightItr = 0; lightItr < numLights; ++lightItr) {
+            var uniformMap = {};
+            for (var locItr = 0; locItr < attrLocations.length; ++locItr) {
+                var name = attrLocations[locItr];
+                uniformMap[name] = __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].getUniformLocation(program, variableName + "[" + lightItr + "]." + name);
+            }
+            container[lightItr] = uniformMap;
+        }
+    }
+    setPointLightData(uniformMap) {
+        if (uniformMap.ambient == -1) {
+            return;
+        }
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.ambient, this.ambient);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.diffuse, this.diffuse);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.specular, this.specular);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform3fv(uniformMap.position, this.position);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform1f(uniformMap.range, this.range);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform1f(uniformMap.contrib, this.contrib);
+        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform3fv(uniformMap.attn, this.attn);
+    }
+}
+/* harmony default export */ __webpack_exports__["a"] = (PointLight);
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 var g;
@@ -3212,7 +3258,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3221,7 +3267,7 @@ module.exports = g;
 module.exports = createFilteredVector
 
 var cubicHermite = __webpack_require__(67)
-var bsearch = __webpack_require__(13)
+var bsearch = __webpack_require__(14)
 
 function clamp(lo, hi, x) {
   return Math.min(hi, Math.max(lo, x))
@@ -3510,7 +3556,7 @@ function createFilteredVector(initState, initVelocity, initTime) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3577,7 +3623,7 @@ module.exports = {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = cross;
@@ -3601,7 +3647,7 @@ function cross(out, a, b) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = dot;
@@ -3618,10 +3664,10 @@ function dot(a, b) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var identity = __webpack_require__(17);
+var identity = __webpack_require__(18);
 
 module.exports = lookAt;
 
@@ -3713,7 +3759,7 @@ function lookAt(out, eye, center, up) {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = identity;
@@ -3745,7 +3791,7 @@ function identity(out) {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = translate;
@@ -3788,7 +3834,7 @@ function translate(out, a, v) {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = create;
@@ -3820,7 +3866,7 @@ function create() {
 };
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = scale;
@@ -3856,7 +3902,7 @@ function scale(out, a, v) {
 };
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = determinant;
@@ -3891,23 +3937,25 @@ function determinant(a) {
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_stats_js__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_stats_js__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_stats_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_stats_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dat_gui__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dat_gui__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_dat_gui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_dat_gui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__geometry_MeshInstanced__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rendering_gl_OpenGLRenderer__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__geometry_MeshInstanced__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__rendering_gl_OpenGLRenderer__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Camera__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__globals__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__rendering_gl_ShaderProgram__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__rendering_gl_Texture__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__WFC__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__lights_PointLight__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__WFC__ = __webpack_require__(95);
+
 
 
 
@@ -3965,8 +4013,8 @@ let controls = {
     toggleLightColor: toggleLightColor,
     skyLight: {
         color: WHITE_COLOR,
-        intensity: 6,
-        direction: [90, 90, 90]
+        intensity: 1.5,
+        direction: [12, 6, 10]
     },
     wfc: {
         gridX: 8,
@@ -4006,7 +4054,7 @@ let controls = {
 };
 function doWFC(capture) {
     let isDebug = controls.wfc.isDebug;
-    wfc = new __WEBPACK_IMPORTED_MODULE_9__WFC__["a" /* default */]('Test', null, controls.wfc.gridX, controls.wfc.gridY, controls.wfc.gridZ, false, "ground", "empty", "empty", "empty", isDebug);
+    wfc = new __WEBPACK_IMPORTED_MODULE_10__WFC__["a" /* default */]('Test', null, controls.wfc.gridX, controls.wfc.gridY, controls.wfc.gridZ, false, "ground", "empty", "empty", "empty", isDebug);
     wfc.captureState = true;
     let limit = isDebug ? 15 : 15;
     for (let k = 0; k < limit; k++) {
@@ -4029,7 +4077,7 @@ let meshes = {
     'line': './resources/test/line.obj',
     'turn': './resources/test/turn.obj',
     'up': './resources/test/up.obj',
-    'ground': './resources/test/ground.obj',
+    'ground': './resources/obj/Ground.obj',
     'vertical': './resources/test/vertical.obj',
     'wall1': './resources/test/wall1.obj',
     'gate1': './resources/test/gate1.obj',
@@ -4048,6 +4096,7 @@ let meshes = {
     'WallStraight1': './resources/obj/WallStraight1.obj',
     'WallCurved1': './resources/obj/WallCurved1.obj',
     'WallGate1': './resources/obj/WallGate1.obj',
+    'WallGate2': './resources/obj/WallGate2.obj',
     'WallJunction1': './resources/obj/WallJunction1.obj',
     'WallJunction_Tall': './resources/obj/WallJunction_Tall.obj',
     'WallJunction_TallUpper': './resources/obj/WallJunction_TallUpper.obj',
@@ -4055,6 +4104,7 @@ let meshes = {
     'WallCurved_Tall': './resources/obj/WallCurved_Tall.obj',
     'WallCurved_Middle': './resources/obj/WallCurved_Middle.obj',
     'WallCurved_TallUpper': './resources/obj/WallCurved_TallUpper.obj',
+    'WallCurved_TallUpper1': './resources/obj/WallCurved_TallUpper1.obj',
     'roof': './resources/obj/roof.obj',
     'WallStraight2': './resources/obj/WallStraight2.obj',
 };
@@ -4082,6 +4132,7 @@ let textures = [
     ['./resources/obj/WallStraight1.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallCurved1.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallGate1.png', './resources/textures/default_emissive.png'],
+    ['./resources/obj/WallGate2.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallJunction1.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallJunction_Tall.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallJunction_TallUpper.png', './resources/textures/default_emissive.png'],
@@ -4089,8 +4140,10 @@ let textures = [
     ['./resources/obj/WallCurved_Tall.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallCurved_Middle.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
+    ['./resources/obj/WallCurved_TallUpper1.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
     ['./resources/obj/WallStraight2.png', './resources/textures/default_emissive.png'],
+    ['./resources/obj/Ground.png', './resources/textures/default_emissive.png'],
 ];
 let sceneOBJs = {};
 let sceneMeshMap = {};
@@ -4107,29 +4160,27 @@ var timer = {
         timer.currentTime = t;
     },
 };
+function arrayToVec4(arr) {
+    return __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(arr[0], arr[1], arr[2], arr[3]);
+}
+function arrayToVec3(arr) {
+    return __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(arr[0], arr[1], arr[2]);
+}
+function getPointLight(config) {
+    let light = new __WEBPACK_IMPORTED_MODULE_9__lights_PointLight__["a" /* default */]();
+    light.ambient = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(0.2, 0.2, 0.2, 1);
+    light.diffuse = config.diffuse ? arrayToVec4(config.diffuse) : __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(15, 15, 15, 1);
+    light.specular = config.specular ? arrayToVec4(config.specular) : __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(5.0, 5.0, 5.0, 1);
+    light.position = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(config.position[0], config.position[1], config.position[2]);
+    light.range = config.range || 20;
+    light.attn = config.attn ? arrayToVec3(config.attn) : __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(1, 1, 4);
+    return light;
+}
 function loadOBJText() {
     obj0 = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["b" /* readTextFile */])('../resources/obj/wahoo.obj');
     for (var key in meshes) {
         sceneOBJs[key] = Object(__WEBPACK_IMPORTED_MODULE_6__globals__["b" /* readTextFile */])(meshes[key]);
     }
-}
-function testUV(camera) {
-    let light = lights[0];
-    let p1 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(0, 0, 0, 1.0);
-    let p2 = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(light.direction[0], light.direction[1], light.direction[2], 1.0);
-    let viewProj = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].transformMat4(p1, p1, viewProj);
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].transformMat4(p2, p2, viewProj);
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].scale(p1, p1, 1.0 / p1[3]);
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].scale(p2, p2, 1.0 / p2[3]);
-    p1[0] = (p1[0] + 1.0) * 0.5;
-    p2[0] = (p2[0] + 1.0) * 0.5;
-    p1[1] = (1.0 - p1[1]) * 0.5;
-    p2[1] = (1.0 - p2[1]) * 0.5;
-    let dir = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["b" /* vec2 */].fromValues(p2[0] - p1[0], p2[1] - p1[1]);
-    // vec2.normalize(dir, dir);
-    mainAppLogInfo('Light Direction in UV Space is: ', dir[0], dir[1]);
 }
 let interval;
 function newScene() {
@@ -4145,6 +4196,14 @@ function oneStep() {
     loadScene(true);
     ++captureIndex;
 }
+function computeLightingForVoxel(voxel) {
+    if (voxel.mesh == "WallGate1") {
+        let config = {};
+        config.position = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].create();
+        __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].add(config.position, config.position, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(voxel.position[0], voxel.position[1], voxel.position[2]));
+        lights.push(getPointLight(config));
+    }
+}
 function loadScene(capture = false) {
     let transforms = [];
     if (!capture) {
@@ -4159,6 +4218,7 @@ function loadScene(capture = false) {
             transforms = wfc.transformOutput();
         }
     }
+    lights = [];
     for (var i = 0; i < sceneMeshes.length; ++i) {
         sceneMeshes[i].destory();
     }
@@ -4177,10 +4237,12 @@ function loadScene(capture = false) {
     for (var itr = 0; itr < transforms.length; ++itr) {
         let voxel = transforms[itr];
         let mesh = sceneMeshMap[voxel.mesh];
+        computeLightingForVoxel(voxel);
         if (mesh) {
             mesh.addInstance(voxel.position, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["d" /* vec4 */].fromValues(voxel.rotation[0], voxel.rotation[1], voxel.rotation[2], voxel.rotation[3]), voxel.scale);
         }
     }
+    mainAppLogInfo(`Created ${lights.length} Lights`);
     for (var itr = 0; itr < sceneMeshes.length; ++itr) {
         sceneMeshes[itr].create();
     }
@@ -4209,7 +4271,7 @@ function setShadowMapData(shader, shader2) {
     let lightDir = controls.skyLight.direction;
     let lightDirection = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(lightDir[0], lightDir[1], lightDir[2]);
     let lightSpaceOrthoProj = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
-    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].ortho(lightSpaceOrthoProj, -100.0, 100.0, -100.0, 100.0, -75, 175.0);
+    __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].ortho(lightSpaceOrthoProj, -150.0, 150.0, -150.0, 150.0, -500, 200.0);
     let lightSpaceView = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
     __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].lookAt(lightSpaceView, lightDirection, __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1));
     let lightSpaceModel = __WEBPACK_IMPORTED_MODULE_0_gl_matrix__["a" /* mat4 */].create();
@@ -4301,8 +4363,6 @@ function main() {
     ]);
     standardDeferred.setupTexUnits(["tex_Color", "emi_Color"]);
     standardShadowMap.setupTexUnits(["tex_Color", "emi_Color"]);
-    renderer.deferredShader.setSpotLights(lights);
-    renderer.post32Passes[6].setSpotLights(lights);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     function tick() {
@@ -4311,6 +4371,8 @@ function main() {
         gl.viewport(0, 0, window.innerWidth, window.innerHeight);
         timer.updateTime();
         renderer.updateTime(timer.deltaTime, timer.currentTime);
+        renderer.deferredShader.setPointLights(lights);
+        renderer.post32Passes[6].setPointLights(lights);
         // standardDeferred.bindTexToUnit("tex_Color", tex0, 0);
         // testUV(camera);
         let lightDirection = controls.skyLight.direction;
@@ -4374,7 +4436,7 @@ setup();
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4843,7 +4905,7 @@ const sub = subtract;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5344,7 +5406,7 @@ const sub = subtract;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7082,7 +7144,7 @@ const sub = subtract;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7772,7 +7834,7 @@ const setAxes = (function() {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8415,7 +8477,7 @@ const forEach = (function() {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // stats.js - http://github.com/mrdoob/stats.js
@@ -8427,14 +8489,14 @@ a+"px",m=b,r=0);return b},update:function(){l=this.end()}}};"object"===typeof mo
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(30)
-module.exports.color = __webpack_require__(31)
+module.exports = __webpack_require__(31)
+module.exports.color = __webpack_require__(32)
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 /**
@@ -12099,7 +12161,7 @@ dat.dom.dom,
 dat.utils.common);
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -12859,7 +12921,7 @@ dat.color.toString,
 dat.utils.common);
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12869,7 +12931,7 @@ dat.utils.common);
 
 
 
-var Loader = __webpack_require__(33);
+var Loader = __webpack_require__(34);
 var Logger = __webpack_require__(4);
 var dCreate = Logger("mainApp:meshInstanced:trace");
 var dCreateInfo = Logger("mainApp:meshInstanced:info");
@@ -13018,13 +13080,13 @@ class MeshInstanced extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("OBJ",[],t):"object"==typeof exports?exports.OBJ=t():e.OBJ=t()}(this,function(){return function(e){function t(a){if(r[a])return r[a].exports;var i=r[a]={i:a,l:!1,exports:{}};return e[a].call(i.exports,i,i.exports,t),i.l=!0,i.exports}var r={};return t.m=e,t.c=r,t.d=function(exports,e,r){t.o(exports,e)||Object.defineProperty(exports,e,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var r=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(r,"a",r),r},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/",t(t.s=3)}([function(e,exports,t){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e){switch(e){case"BYTE":case"UNSIGNED_BYTE":return 1;case"SHORT":case"UNSIGNED_SHORT":return 2;case"FLOAT":return 4}}Object.defineProperty(exports,"__esModule",{value:!0});var i=exports.Layout=function e(){r(this,e);for(var t=arguments.length,a=Array(t),i=0;i<t;i++)a[i]=arguments[i];this.attributes=a;var s=0,l=0,o=!0,u=!1,f=void 0;try{for(var c,p=a[Symbol.iterator]();!(o=(c=p.next()).done);o=!0){var h=c.value;if(this[h.key])throw new n(h);s%h.sizeOfType!=0&&(s+=h.sizeOfType-s%h.sizeOfType),this[h.key]={attribute:h,size:h.size,type:h.type,normalized:h.normalized,offset:s},s+=h.sizeInBytes,l=Math.max(l,h.sizeOfType)}}catch(e){u=!0,f=e}finally{try{!o&&p.return&&p.return()}finally{if(u)throw f}}s%l!=0&&(s+=l-s%l),this.stride=s;var v=!0,m=!1,y=void 0;try{for(var d,M=a[Symbol.iterator]();!(v=(d=M.next()).done);v=!0){this[d.value.key].stride=this.stride}}catch(e){m=!0,y=e}finally{try{!v&&M.return&&M.return()}finally{if(m)throw y}}},n=function e(t){r(this,e),this.message="found duplicate attribute: "+t.key},s=function e(t,i,n){arguments.length>3&&void 0!==arguments[3]&&arguments[3];r(this,e),this.key=t,this.size=i,this.type=n,this.normalized=!1,this.sizeOfType=a(n),this.sizeInBytes=this.sizeOfType*i};i.POSITION=new s("position",3,"FLOAT"),i.NORMAL=new s("normal",3,"FLOAT"),i.TANGENT=new s("tangent",3,"FLOAT"),i.BITANGENT=new s("bitangent",3,"FLOAT"),i.UV=new s("uv",2,"FLOAT"),i.MATERIAL_INDEX=new s("materialIndex",1,"SHORT"),i.MATERIAL_ENABLED=new s("materialEnabled",1,"UNSIGNED_SHORT"),i.AMBIENT=new s("ambient",3,"FLOAT"),i.DIFFUSE=new s("diffuse",3,"FLOAT"),i.SPECULAR=new s("specular",3,"FLOAT"),i.SPECULAR_EXPONENT=new s("specularExponent",3,"FLOAT"),i.EMISSIVE=new s("emissive",3,"FLOAT"),i.TRANSMISSION_FILTER=new s("transmissionFilter",3,"FLOAT"),i.DISSOLVE=new s("dissolve",1,"FLOAT"),i.ILLUMINATION=new s("illumination",1,"UNSIGNED_SHORT"),i.REFRACTION_INDEX=new s("refractionIndex",1,"FLOAT"),i.SHARPNESS=new s("sharpness",1,"FLOAT"),i.MAP_DIFFUSE=new s("mapDiffuse",1,"SHORT"),i.MAP_AMBIENT=new s("mapAmbient",1,"SHORT"),i.MAP_SPECULAR=new s("mapSpecular",1,"SHORT"),i.MAP_SPECULAR_EXPONENT=new s("mapSpecularExponent",1,"SHORT"),i.MAP_DISSOLVE=new s("mapDissolve",1,"SHORT"),i.ANTI_ALIASING=new s("antiAliasing",1,"UNSIGNED_SHORT"),i.MAP_BUMP=new s("mapBump",1,"SHORT"),i.MAP_DISPLACEMENT=new s("mapDisplacement",1,"SHORT"),i.MAP_DECAL=new s("mapDecal",1,"SHORT"),i.MAP_EMISSIVE=new s("mapEmissive",1,"SHORT")},function(e,exports,t){"use strict";function r(e){if(Array.isArray(e)){for(var t=0,r=Array(e.length);t<e.length;t++)r[t]=e[t];return r}return Array.from(e)}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var i=function(){function e(e,t){for(var r=0;r<t.length;r++){var a=t[r];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,r,a){return r&&e(t.prototype,r),a&&e(t,a),t}}(),n=t(0),s=function(){function e(t,i){a(this,e),i=i||{},i.materials=i.materials||[];var n=this;n.has_materials=!!i.materials,n.materials={},n.vertices=[],n.vertexNormals=[],n.textures=[],n.indices=[],this.name="";var s=[],l=[],o=[],u={},f=[],c={},p=-1;u.verts=[],u.norms=[],u.textures=[],u.hashindices={},u.indices=[],u.materialIndices=[],u.index=0;for(var h=/^v\s/,v=/^vn\s/,m=/^vt\s/,y=/^f\s/,d=/\s+/,M=/^usemtl/,b=t.split("\n"),I=0;I<b.length;I++){var _=b[I].trim();if(_&&!_.startsWith("#")){var x=_.split(d);if(x.shift(),h.test(_))s.push.apply(s,r(x));else if(v.test(_))l.push.apply(l,r(x));else if(m.test(_))o.push.apply(o,r(x));else if(M.test(_)){var k=x[0];k in c||(f.push(k),c[k]=f.length-1),p=c[k]}else if(y.test(_))for(var A=!1,w=0,F=x.length;w<F;w++){3!==w||A||(w=2,A=!0);var E=x[0]+","+p,S=x[w]+","+p;if(S in u.hashindices)u.indices.push(u.hashindices[S]);else{var T=x[w].split("/"),O=T.length-1;u.verts.push(+s[3*(T[0]-1)+0]),u.verts.push(+s[3*(T[0]-1)+1]),u.verts.push(+s[3*(T[0]-1)+2]),o.length&&(u.textures.push(+o[2*(T[1]-1)+0]),u.textures.push(+o[2*(T[1]-1)+1])),u.norms.push(+l[3*(T[O]-1)+0]),u.norms.push(+l[3*(T[O]-1)+1]),u.norms.push(+l[3*(T[O]-1)+2]),u.materialIndices.push(p),u.hashindices[S]=u.index,u.indices.push(u.index),u.index+=1}3===w&&A&&u.indices.push(u.hashindices[E])}}}n.vertices=u.verts,n.vertexNormals=u.norms,n.textures=u.textures,n.vertexMaterialIndices=u.materialIndices,n.indices=u.indices,n.materialNames=f,n.materialIndices=c,n.materialsByIndex={}}return i(e,[{key:"makeBufferData",value:function(e){var t=this.vertices.length/3,r=new ArrayBuffer(e.stride*t);r.numItems=t;for(var a=new DataView(r),i=0,s=0;i<t;i++){s=i*e.stride;var l=!0,o=!1,u=void 0;try{for(var f,c=e.attributes[Symbol.iterator]();!(l=(f=c.next()).done);l=!0){var p=f.value,h=s+e[p.key].offset;switch(p.key){case n.Layout.POSITION.key:a.setFloat32(h,this.vertices[3*i],!0),a.setFloat32(h+4,this.vertices[3*i+1],!0),a.setFloat32(h+8,this.vertices[3*i+2],!0);break;case n.Layout.UV.key:a.setFloat32(h,this.textures[2*i],!0),a.setFloat32(h+4,this.vertices[2*i+1],!0);break;case n.Layout.NORMAL.key:a.setFloat32(h,this.vertexNormals[3*i],!0),a.setFloat32(h+4,this.vertexNormals[3*i+1],!0),a.setFloat32(h+8,this.vertexNormals[3*i+2],!0);break;case n.Layout.MATERIAL_INDEX.key:a.setInt16(h,this.vertexMaterialIndices[i],!0);break;case n.Layout.AMBIENT.key:var v=this.vertexMaterialIndices[i],m=this.materialsByIndex[v];if(!m)break;a.setFloat32(h,m.ambient[0],!0),a.setFloat32(h+4,m.ambient[1],!0),a.setFloat32(h+8,m.ambient[2],!0);break;case n.Layout.DIFFUSE.key:var y=this.vertexMaterialIndices[i],d=this.materialsByIndex[y];if(!d)break;a.setFloat32(h,d.diffuse[0],!0),a.setFloat32(h+4,d.diffuse[1],!0),a.setFloat32(h+8,d.diffuse[2],!0);break;case n.Layout.SPECULAR.key:var M=this.vertexMaterialIndices[i],b=this.materialsByIndex[M];if(!b)break;a.setFloat32(h,b.specular[0],!0),a.setFloat32(h+4,b.specular[1],!0),a.setFloat32(h+8,b.specular[2],!0);break;case n.Layout.SPECULAR_EXPONENT.key:var I=this.vertexMaterialIndices[i],_=this.materialsByIndex[I];if(!_)break;a.setFloat32(h,_.specularExponent,!0);break;case n.Layout.EMISSIVE.key:var x=this.vertexMaterialIndices[i],k=this.materialsByIndex[x];if(!k)break;a.setFloat32(h,k.emissive[0],!0),a.setFloat32(h+4,k.emissive[1],!0),a.setFloat32(h+8,k.emissive[2],!0);break;case n.Layout.TRANSMISSION_FILTER.key:var A=this.vertexMaterialIndices[i],w=this.materialsByIndex[A];if(!w)break;a.setFloat32(h,w.transmissionFilter[0],!0),a.setFloat32(h+4,w.transmissionFilter[1],!0),a.setFloat32(h+8,w.transmissionFilter[2],!0);break;case n.Layout.DISSOLVE.key:var F=this.vertexMaterialIndices[i],E=this.materialsByIndex[F];if(!E)break;a.setFloat32(h,E.dissolve,!0);break;case n.Layout.ILLUMINATION.key:var S=this.vertexMaterialIndices[i],T=this.materialsByIndex[S];if(!T)break;a.setInt16(h,T.illumination,!0);break;case n.Layout.REFRACTION_INDEX.key:var O=this.vertexMaterialIndices[i],L=this.materialsByIndex[O];if(!L)break;a.setFloat32(h,L.refractionIndex,!0);break;case n.Layout.SHARPNESS.key:var B=this.vertexMaterialIndices[i],N=this.materialsByIndex[B];if(!N)break;a.setFloat32(h,N.sharpness,!0);break;case n.Layout.ANTI_ALIASING.key:var R=this.vertexMaterialIndices[i],P=this.materialsByIndex[R];if(!P)break;a.setInt16(h,P.antiAliasing,!0)}}}catch(e){o=!0,u=e}finally{try{!l&&c.return&&c.return()}finally{if(o)throw u}}}return r}},{key:"makeIndexBufferData",value:function(){var e=new Uint16Array(this.indices);return e.numItems=this.indices.length,e}},{key:"addMaterialLibrary",value:function(e){for(var t in e.materials)if(t in this.materialIndices){var r=e.materials[t],a=this.materialIndices[r.name];this.materialsByIndex[a]=r}}}]),e}();exports.default=s},function(e,exports,t){"use strict";function r(e){return Array.isArray(e)?e:Array.from(e)}function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(exports,"__esModule",{value:!0});var i=function(){function e(e,t){for(var r=0;r<t.length;r++){var a=t[r];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,r,a){return r&&e(t.prototype,r),a&&e(t,a),t}}(),n=exports.Material=function e(t){a(this,e),this.name=t,this.ambient=[0,0,0],this.diffuse=[0,0,0],this.specular=[0,0,0],this.emissive=[0,0,0],this.transmissionFilter=[0,0,0],this.dissolve=0,this.specularExponent=0,this.transparency=0,this.illumination=0,this.refractionIndex=1,this.sharpness=0,this.mapDiffuse=null,this.mapAmbient=null,this.mapSpecular=null,this.mapSpecularExponent=null,this.mapDissolve=null,this.antiAliasing=!1,this.mapBump=null,this.mapDisplacement=null,this.mapDecal=null,this.mapEmissive=null,this.mapReflections=[]};exports.MaterialLibrary=function(){function e(t){a(this,e),this.data=t,this.currentMaterial=null,this.materials={},this.parse()}return i(e,[{key:"parse_newmtl",value:function(e){var t=e[0];this.currentMaterial=new n(t),this.materials[t]=this.currentMaterial}},{key:"parseColor",value:function(e){if("spectral"!=e[0]&&"xyz"!=e[0]){if(3==e.length)return e.map(parseFloat);var t=parseFloat(e[0]);return[t,t,t]}}},{key:"parse_Ka",value:function(e){this.currentMaterial.ambient=this.parseColor(e)}},{key:"parse_Kd",value:function(e){this.currentMaterial.diffuse=this.parseColor(e)}},{key:"parse_Ks",value:function(e){this.currentMaterial.specular=this.parseColor(e)}},{key:"parse_Ke",value:function(e){this.currentMaterial.emissive=this.parseColor(e)}},{key:"parse_Tf",value:function(e){this.currentMaterial.transmissionFilter=this.parseColor(e)}},{key:"parse_d",value:function(e){this.currentMaterial.dissolve=parseFloat(e.pop())}},{key:"parse_illum",value:function(e){this.currentMaterial.illumination=parseInt(e[0])}},{key:"parse_Ni",value:function(e){this.currentMaterial.refractionIndex=parseFloat(e[0])}},{key:"parse_Ns",value:function(e){this.currentMaterial.specularExponent=parseInt(e[0])}},{key:"parse_sharpness",value:function(e){this.currentMaterial.sharpness=parseInt(e[0])}},{key:"parse_cc",value:function(e,t){t.colorCorrection="on"==e[0]}},{key:"parse_blendu",value:function(e,t){t.horizontalBlending="on"==e[0]}},{key:"parse_blendv",value:function(e,t){t.verticalBlending="on"==e[0]}},{key:"parse_boost",value:function(e,t){t.boostMipMapSharpness=parseFloat(e[0])}},{key:"parse_mm",value:function(e,t){t.modifyTextureMap.brightness=parseFloat(e[0]),t.modifyTextureMap.contrast=parseFloat(e[1])}},{key:"parse_ost",value:function(e,t,r){for(;e.length<3;)e.push(r);t.u=parseFloat(e[0]),t.v=parseFloat(e[1]),t.w=parseFloat(e[2])}},{key:"parse_o",value:function(e,t){this.parse_ost(e,t.offset,0)}},{key:"parse_s",value:function(e,t){this.parse_ost(e,t.scale,1)}},{key:"parse_t",value:function(e,t){this.parse_ost(e,t.turbulence,0)}},{key:"parse_texres",value:function(e,t){t.textureResolution=parseFloat(e[0])}},{key:"parse_clamp",value:function(e,t){t.clamp="on"==e[0]}},{key:"parse_bm",value:function(e,t){t.bumpMultiplier=parseFloat(e[0])}},{key:"parse_imfchan",value:function(e,t){t.imfChan=e[0]}},{key:"parse_type",value:function(e,t){t.reflectionType=e[0]}},{key:"parseOptions",value:function(e){var t={colorCorrection:!1,horizontalBlending:!0,verticalBlending:!0,boostMipMapSharpness:0,modifyTextureMap:{brightness:0,contrast:1},offset:{u:0,v:0,w:0},scale:{u:1,v:1,w:1},turbulence:{u:0,v:0,w:0},clamp:!1,textureResolution:null,bumpMultiplier:1,imfChan:null},r=void 0,a=void 0,i={};for(e.reverse();e.length;){var n=e.pop();n.startsWith("-")?(r=n.substr(1),i[r]=[]):i[r].push(n)}for(r in i)if(i.hasOwnProperty(r)){a=i[r];var s=this["parse_"+r];s&&s.bind(this)(a,t)}return t}},{key:"parseMap",value:function(e){var t=void 0,a=void 0;if(e[0].startsWith("-"))t=e.pop(),a=e;else{var i=r(e);t=i[0],a=i.slice(1)}return a=this.parseOptions(a),a.filename=t,a}},{key:"parse_map_Ka",value:function(e){this.currentMaterial.mapAmbient=this.parseMap(e)}},{key:"parse_map_Kd",value:function(e){this.currentMaterial.mapDiffuse=this.parseMap(e)}},{key:"parse_map_Ks",value:function(e){this.currentMaterial.mapSpecular=this.parseMap(e)}},{key:"parse_map_Ke",value:function(e){this.currentMaterial.mapEmissive=this.parseMap(e)}},{key:"parse_map_Ns",value:function(e){this.currentMaterial.mapSpecularExponent=this.parseMap(e)}},{key:"parse_map_d",value:function(e){this.currentMaterial.mapDissolve=this.parseMap(e)}},{key:"parse_map_aat",value:function(e){this.currentMaterial.antiAliasing="on"==e[0]}},{key:"parse_map_bump",value:function(e){this.currentMaterial.mapBump=this.parseMap(e)}},{key:"parse_bump",value:function(e){this.parse_map_bump(e)}},{key:"parse_disp",value:function(e){this.currentMaterial.mapDisplacement=this.parseMap(e)}},{key:"parse_decal",value:function(e){this.currentMaterial.mapDecal=this.parseMap(e)}},{key:"parse_refl",value:function(e){this.currentMaterial.mapReflections.push(this.parseMap(e))}},{key:"parse",value:function(){var e=this.data.split(/\r?\n/),t=!0,a=!1,i=void 0;try{for(var n,s=e[Symbol.iterator]();!(t=(n=s.next()).done);t=!0){var l=n.value;if((l=l.trim())&&!l.startsWith("#")){var o=l.split(/\s/),u=void 0,f=o,c=r(f);u=c[0],o=c.slice(1);var p=this["parse_"+u];p&&p.bind(this)(o)}}}catch(e){a=!0,i=e}finally{try{!t&&s.return&&s.return()}finally{if(a)throw i}}delete this.data,this.currentMaterial=null}}]),e}()},function(e,exports,t){e.exports=t(4)},function(e,exports,t){"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.deleteMeshBuffers=exports.initMeshBuffers=exports.downloadMeshes=exports.downloadModels=exports.Layout=exports.MaterialLibrary=exports.Material=exports.Mesh=void 0;var r=t(1),a=function(e){return e&&e.__esModule?e:{default:e}}(r),i=t(2),n=t(0),s=t(5);exports.Mesh=a.default,exports.Material=i.Material,exports.MaterialLibrary=i.MaterialLibrary,exports.Layout=n.Layout,exports.downloadModels=s.downloadModels,exports.downloadMeshes=s.downloadMeshes,exports.initMeshBuffers=s.initMeshBuffers,exports.deleteMeshBuffers=s.deleteMeshBuffers},function(e,exports,t){"use strict";function r(e,t){var r=["mapDiffuse","mapAmbient","mapSpecular","mapDissolve","mapBump","mapDisplacement","mapDecal","mapEmissive"];t.endsWith("/")||(t+="/");var a=[];for(var i in e.materials)if(e.materials.hasOwnProperty(i)){i=e.materials[i];var n=!0,s=!1,l=void 0;try{for(var o,u=r[Symbol.iterator]();!(n=(o=u.next()).done);n=!0){var f=o.value;(function(e){var r=i[e];if(!r)return"continue";var n=t+r.filename;a.push(fetch(n).then(function(e){if(!e.ok)throw new Error;return e.blob()}).then(function(e){var t=new Image;t.src=URL.createObjectURL(e),r.texture=t}).catch(function(){}))})(f)}}catch(e){s=!0,l=e}finally{try{!n&&u.return&&u.return()}finally{if(s)throw l}}}return Promise.all(a)}function a(e){var t=[],a=!0,i=!1,n=void 0;try{for(var s,o=e[Symbol.iterator]();!(a=(s=o.next()).done);a=!0){var c=s.value;!function(e){var a=[];if(!e.obj)throw new Error('"obj" attribute of model object not set. The .obj file is required to be set in order to use downloadModels()');var i=e.name;if(!i){var n=e.obj.split("/");i=n[n.length-1].replace(".obj","")}if(a.push(Promise.resolve(i)),a.push(fetch(e.obj).then(function(e){return e.text()}).then(function(e){return new u.default(e)})),e.mtl){var s=e.mtl;"boolean"==typeof s&&(s=e.obj.replace(/\.obj$/,".mtl")),a.push(fetch(s).then(function(e){return e.text()}).then(function(t){var a=new f.MaterialLibrary(t);if(!1!==e.downloadMtlTextures){var i=e.mtlTextureRoot;return i||(i=s.substr(0,s.lastIndexOf("/"))),Promise.all([Promise.resolve(a),r(a,i)])}return Promise.all(Promise.resolve(a))}).then(function(e){return e[0]}))}t.push(Promise.all(a))}(c)}}catch(e){i=!0,n=e}finally{try{!a&&o.return&&o.return()}finally{if(i)throw n}}return Promise.all(t).then(function(e){var t={},r=!0,a=!1,i=void 0;try{for(var n,s=e[Symbol.iterator]();!(r=(n=s.next()).done);r=!0){var o=n.value,u=l(o,3),f=u[0],c=u[1],p=u[2];c.name=f,p&&c.addMaterialLibrary(p),t[f]=c}}catch(e){a=!0,i=e}finally{try{!r&&s.return&&s.return()}finally{if(a)throw i}}return t})}function i(e,t,r){void 0===r&&(r={});var a=[];for(var i in e){(function(t){if(!e.hasOwnProperty(t))return"continue";var r=e[t];a.push(fetch(r).then(function(e){return e.text()}).then(function(e){return[t,new u.default(e)]}))})(i)}Promise.all(a).then(function(e){var a=!0,i=!1,n=void 0;try{for(var s,o=e[Symbol.iterator]();!(a=(s=o.next()).done);a=!0){var u=s.value,f=l(u,2),c=f[0],p=f[1];r[c]=p}}catch(e){i=!0,n=e}finally{try{!a&&o.return&&o.return()}finally{if(i)throw n}}return t(r)})}function n(e,t){t.normalBuffer=c(e,e.ARRAY_BUFFER,t.vertexNormals,3),t.textureBuffer=c(e,e.ARRAY_BUFFER,t.textures,2),t.vertexBuffer=c(e,e.ARRAY_BUFFER,t.vertices,3),t.indexBuffer=c(e,e.ELEMENT_ARRAY_BUFFER,t.indices,1)}function s(e,t){e.deleteBuffer(t.normalBuffer),e.deleteBuffer(t.textureBuffer),e.deleteBuffer(t.vertexBuffer),e.deleteBuffer(t.indexBuffer)}Object.defineProperty(exports,"__esModule",{value:!0});var l=function(){function e(e,t){var r=[],a=!0,i=!1,n=void 0;try{for(var s,l=e[Symbol.iterator]();!(a=(s=l.next()).done)&&(r.push(s.value),!t||r.length!==t);a=!0);}catch(e){i=!0,n=e}finally{try{!a&&l.return&&l.return()}finally{if(i)throw n}}return r}return function(t,r){if(Array.isArray(t))return t;if(Symbol.iterator in Object(t))return e(t,r);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}();exports.downloadModels=a,exports.downloadMeshes=i,exports.initMeshBuffers=n,exports.deleteMeshBuffers=s;var o=t(1),u=function(e){return e&&e.__esModule?e:{default:e}}(o),f=t(2),c=(t(0),function(e,t,r,a){var i=e.createBuffer(),n=t===e.ARRAY_BUFFER?Float32Array:Uint16Array;return e.bindBuffer(t,i),e.bufferData(t,new n(r),e.STATIC_DRAW),i.itemSize=a,i.numItems=r.length/a,i})}])});
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -13214,7 +13276,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -13230,7 +13292,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(36);
+exports.humanize = __webpack_require__(37);
 
 /**
  * Active `debug` instances.
@@ -13445,7 +13507,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 /**
@@ -13603,14 +13665,14 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_gl_matrix__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ShaderProgram__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PostProcess__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PostProcess__ = __webpack_require__(39);
 
 
 
@@ -13872,6 +13934,7 @@ class OpenGLRenderer {
         let proj = camera.projectionMatrix;
         this.deferredShader.setViewMatrix(view);
         this.deferredShader.setProjMatrix(proj);
+        this.deferredShader.setEye(camera.getPosition());
         this.deferredShader.setScreenSize(this.canvas.width, this.canvas.height);
         for (let i = 0; i < this.gbTargets.length; i++) {
             __WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].activeTexture(__WEBPACK_IMPORTED_MODULE_1__globals__["a" /* gl */].TEXTURE0 + i);
@@ -14278,13 +14341,13 @@ class OpenGLRenderer {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ShaderProgram__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lights_PointLight__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lights_PointLight__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lights_SpotLight__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__geometry_Square__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_gl_matrix__ = __webpack_require__(1);
@@ -14466,52 +14529,6 @@ PostProcess.screenQuad = undefined; // Quadrangle onto which we draw the frame t
 
 
 /***/ }),
-/* 39 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__globals__ = __webpack_require__(0);
-
-class PointLight {
-    constructor() {
-        this.contrib = 1;
-    }
-    static markLocations(program, container, numLights, variableName) {
-        let attrLocations = [
-            "ambient",
-            "diffuse",
-            "specular",
-            "position",
-            "range",
-            "contrib",
-            "attn"
-        ];
-        for (var lightItr = 0; lightItr < numLights; ++lightItr) {
-            var uniformMap = {};
-            for (var locItr = 0; locItr < attrLocations.length; ++locItr) {
-                var name = attrLocations[locItr];
-                uniformMap[name] = __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].getUniformLocation(program, variableName + "[" + lightItr + "]." + name);
-            }
-            container[lightItr] = uniformMap;
-        }
-    }
-    setPointLightData(uniformMap) {
-        if (uniformMap.ambient == -1) {
-            return;
-        }
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.ambient, this.ambient);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.diffuse, this.diffuse);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform4fv(uniformMap.specular, this.specular);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform3fv(uniformMap.position, this.position);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform1f(uniformMap.range, this.range);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform1f(uniformMap.contrib, this.contrib);
-        __WEBPACK_IMPORTED_MODULE_0__globals__["a" /* gl */].uniform3fv(uniformMap.attn, this.attn);
-    }
-}
-/* harmony default export */ __webpack_exports__["a"] = (PointLight);
-
-
-/***/ }),
 /* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14625,13 +14642,13 @@ class Square extends __WEBPACK_IMPORTED_MODULE_1__rendering_gl_Drawable__["a" /*
 /* 42 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n// A vertex shader used by all post-process shaders to simply pass UV data\n// to the fragment shader, and to position the vertices of the screen-space quad \n\nprecision highp float;\n\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\nin vec2 vs_UV;\n\nout vec2 fs_UV;\n\nvoid main() {\n\tfs_UV = vs_UV;\n\tgl_Position = vs_Pos;\n}\n"
+module.exports = "#version 300 es\r\n\r\n// A vertex shader used by all post-process shaders to simply pass UV data\r\n// to the fragment shader, and to position the vertices of the screen-space quad \r\n\r\nprecision highp float;\r\n\r\nin vec4 vs_Pos;\r\nin vec4 vs_Nor;\r\nin vec4 vs_Col;\r\nin vec2 vs_UV;\r\n\r\nout vec2 fs_UV;\r\n\r\nvoid main() {\r\n\tfs_UV = vs_UV;\r\n\tgl_Position = vs_Pos;\r\n}\r\n"
 
 /***/ }),
 /* 43 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\n#define EPS 0.0001\n#define PI 3.1415962\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform sampler2D u_gb0;\nuniform sampler2D u_gb1;\nuniform sampler2D u_gb2;\nuniform sampler2D u_gb3;\nuniform sampler2D u_sm;\n\nuniform float u_Time;\n\nuniform vec3 u_LightPos;\nuniform vec3 u_LightColor;\nuniform ivec2 u_Dimensions;\n\nuniform mat4 u_View;\nuniform mat4 u_Proj;\nuniform mat4 u_LightSpaceMatrix;\nuniform mat4 u_LightViewportMatrix;\nuniform vec4 u_CamPos;\n\n#define MAX_POINT_LIGHTS 20\n#define MAX_SPOT_LIGHTS 20\n\nstruct PointLight {\n    vec4 ambient;\n    vec4 diffuse;\n    vec4 specular;\n\n    vec3 position;\n    float range;\n    float contrib;\n\n    vec3 attn;\n};\n\nstruct SpotLight {\n    vec4 ambient;\n    vec4 diffuse;\n    vec4 specular;\n\n    vec3 position;\n    float range;\n    float contrib;\n\n    vec3 direction;\n    float kSpot;\n\n    vec3 attn;\n};\n\nuniform SpotLight u_SpotLights[MAX_SPOT_LIGHTS];\nuniform uint u_NumSpotLights;\n\nvec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {\n  if (u_NumSpotLights <= uint(0)) {\n    return inputColor;\n  }\n\n  float alpha = inputColor.a;\n\n  vec4 ambient, diffuse, spec;\n\n  vec4 totalLightContrib = vec4(0, 0, 0, 0);\n\n  for (uint i = uint(0); i < u_NumSpotLights; i++) {\n    SpotLight light = u_SpotLights[i];\n\n    // Initialize outputs.\n    ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n    diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n    spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n    \n    // The vector from the surface to the light.\n    vec3 lightVec = vec3(u_View * vec4(light.position, 1.0)) - fragPosition;\n    \n    // The distance from surface to light.\n    float d = length(lightVec);\n  \n    // Range test.\n    // if( d > light.range ) {\n    //   totalLightContrib += ambient;\n    //   continue;\n    // }\n    \n    // Normalize the light vector.\n    lightVec /= d; \n  \n    // Ambient term.\n    // ambient = light.ambient;  // TODO: Material\n\n    // Add diffuse and specular term, provided the surface is in \n    // the line of site of the light.\n\n    float diffuseTerm = dot(lightVec, normal);\n\n    // Flatten to avoid dynamic branching.\n    if( diffuseTerm > 0.0f ) {\n      vec3 v         = reflect(-lightVec, normal);\n      float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0); // TODO: Material\n            \n      diffuse = diffuseTerm * light.diffuse;\n      spec    = specFactor * light.specular;\n    }\n\n    float spot = pow(max(dot(-lightVec, normalize(vec3(u_View * vec4(light.direction, 0.0)))), 0.0), light.kSpot);\n\n    // Attenuate\n    float att = spot / dot(light.attn, vec3(1.0f, d, d * d));\n\n    diffuse *= att;\n    spec    *= att;\n    // ambient *= spot;\n\n    totalLightContrib += light.contrib * (diffuse + spec) + ambient;\n  }\n\n  totalLightContrib += vec4(0.1, 0.1, 0.1, 0);\n\n  inputColor = inputColor * totalLightContrib;\n\n  inputColor.a = alpha;\n\n  // TODO: Material alhpa\n\n  return inputColor;\n}\n\nvec4 calculateMainLighting(vec4 inputColor, vec3 normal) {\n  float alpha = inputColor.a;\n  \n  // Initialize outputs.\n  vec4 ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n  vec4 diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n  vec4 spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);\n\n  // The vector from the surface to the light.\n  vec3 lightVec = normalize(u_LightPos); // Directional Light\n  \n  // Ambient term.\n  ambient = vec4(vec3(2.0), 1);\n\n  // Add diffuse and specular term\n  float diffuseTerm = dot(lightVec, normal);\n\n  if( diffuseTerm > 0.0f ) {\n    vec3 v         = reflect(-lightVec, normal);\n    float specFactor = pow(max(dot(v, normalize(vec3(u_CamPos))), 0.0f), 128.0);\n          \n    diffuse = diffuseTerm * vec4(u_LightColor, 1.0);\n    spec    = specFactor * vec4(u_LightColor, 1.0);\n  }\n\n  vec4 totalLightContrib = diffuse + spec + ambient;\n\n  inputColor = inputColor * totalLightContrib;\n  // inputColor = (inputColor * diffuse) + spec + ambient;\n\n  inputColor.a = alpha;\n\n  return inputColor;\n}\n\nvoid main() { \n\t// read from GBuffers\n\n  vec4 gb0 = texture(u_gb0, fs_UV);\n  vec4 gb1 = texture(u_gb1, fs_UV);\n  vec4 gb2 = texture(u_gb2, fs_UV);\n  vec4 gb3 = texture(u_gb3, fs_UV);\n\t\n  vec3 normal = gb0.xyz;\n  float cameraDepth = gb0.w;\n\n  float posX = (fs_UV.x / float(u_Dimensions.x)) * 2.0 - 1.0;\n  float posY = 1.0 - (fs_UV.y / float(u_Dimensions.y)) * 2.0;\n\n  vec2 ndcVec2 = vec2(posX, posY);\n\n  float t = (cameraDepth - 0.1) / (100.0 - 0.1);\n  // t = t * 2.0 - 1.0;\n  // t = clamp(t, 0.0, 1.0);\n\n  vec4 ndc = vec4(ndcVec2, t, 1.0) * cameraDepth;\n  vec4 cameraSpacePos = inverse(u_Proj) * ndc;\n  // cameraSpacePos /= cameraSpacePos.w;\n\n  // float aspect = float(u_Dimensions.x) / float(u_Dimensions.y);\n\n  // float fovy = 45.0 * 3.1415962 / 180.0;\n\n  // vec3 ref =  vec3(0.0) + t * vec3(0, 0, 1);\n  // float len = length(ref - vec3(0.0));\n  // vec3 V = vec3(0,1,0) * len * tan(fovy / 2.0);\n  // vec3 H = vec3(1,0,0) * aspect * len * tan(fovy / 2.0);\n\n  // vec3 cameraSpacePos = ref + (ndc.x * H) + (ndc.y * V);\n\n\tvec4 diffuseColor = gb2;\n\n  vec4 finalColor = calculateMainLighting(diffuseColor, normal);\n\n  finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);\n  // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);\n\n  finalColor += (vec4(gb3.xyz, 0.0f) * 5.0);\n\n  vec4 worldPos = inverse(u_View) * vec4(gb1.xyz, 1.0f);\n\n  vec4 lightSpace = u_LightSpaceMatrix * worldPos;\n  float shadowDepth = texture(u_sm, vec2((lightSpace.x + 1.0) * 0.5, (lightSpace.y + 1.0) * 0.5)).z;\n\n  float bias = 0.005;\n  if (shadowDepth < lightSpace.z  - bias) {\n      finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);\n  }\n\n\tout_Col = finalColor;\n\n  float distance = length(worldPos - u_CamPos);\n\n  vec4 currentFog = vec4(0, 0, 0, 1);\n\n  // if (distance > 40.0f) {\n  //   distance = distance - 40.0f;\n  //   float power = distance * 0.1f;\n\n  //   // Exponential Fog but start only some units ahead of the player\n  //   // 1 - exp(-length(wpos - cpos) * c)\n  //   float fogFactor = 1.0 - exp(-power);\n  //   fogFactor = clamp(fogFactor, 0.0, 1.0);\n\n  //   out_Col = mix(out_Col, currentFog, fogFactor);\n  // }\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\n#define EPS 0.0001\r\n#define PI 3.1415962\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform sampler2D u_gb0;\r\nuniform sampler2D u_gb1;\r\nuniform sampler2D u_gb2;\r\nuniform sampler2D u_gb3;\r\nuniform sampler2D u_sm;\r\n\r\nuniform float u_Time;\r\n\r\nuniform vec3 u_LightPos;\r\nuniform vec3 u_LightColor;\r\nuniform ivec2 u_Dimensions;\r\n\r\nuniform mat4 u_View;\r\nuniform mat4 u_Proj;\r\nuniform mat4 u_LightSpaceMatrix;\r\nuniform mat4 u_LightViewportMatrix;\r\nuniform vec3 u_Eye;\r\n\r\n#define MAX_POINT_LIGHTS 20\r\n#define MAX_SPOT_LIGHTS 20\r\n\r\nstruct PointLight {\r\n    vec4 ambient;\r\n    vec4 diffuse;\r\n    vec4 specular;\r\n\r\n    vec3 position;\r\n    float range;\r\n    float contrib;\r\n\r\n    vec3 attn;\r\n};\r\n\r\nstruct SpotLight {\r\n    vec4 ambient;\r\n    vec4 diffuse;\r\n    vec4 specular;\r\n\r\n    vec3 position;\r\n    float range;\r\n    float contrib;\r\n\r\n    vec3 direction;\r\n    float kSpot;\r\n\r\n    vec3 attn;\r\n};\r\n\r\nuniform PointLight u_PointLights[MAX_POINT_LIGHTS];\r\nuniform uint u_NumPointLights;\r\n\r\n// vec4 calculateSpotLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {\r\n//   if (u_NumSpotLights <= uint(0)) {\r\n//     return inputColor;\r\n//   }\r\n\r\n//   float alpha = inputColor.a;\r\n\r\n//   vec4 ambient, diffuse, spec;\r\n\r\n//   vec4 totalLightContrib = vec4(0, 0, 0, 0);\r\n\r\n//   for (uint i = uint(0); i < u_NumSpotLights; i++) {\r\n//     SpotLight light = u_SpotLights[i];\r\n\r\n//     // Initialize outputs.\r\n//     ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n//     diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n//     spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n    \r\n//     // The vector from the surface to the light.\r\n//     vec3 lightVec = vec3(u_View * vec4(light.position, 1.0)) - fragPosition;\r\n    \r\n//     // The distance from surface to light.\r\n//     float d = length(lightVec);\r\n  \r\n//     // Range test.\r\n//     // if( d > light.range ) {\r\n//     //   totalLightContrib += ambient;\r\n//     //   continue;\r\n//     // }\r\n    \r\n//     // Normalize the light vector.\r\n//     lightVec /= d; \r\n  \r\n//     // Ambient term.\r\n//     // ambient = light.ambient;  // TODO: Material\r\n\r\n//     // Add diffuse and specular term, provided the surface is in \r\n//     // the line of site of the light.\r\n\r\n//     float diffuseTerm = dot(lightVec, normal);\r\n\r\n//     // Flatten to avoid dynamic branching.\r\n//     if( diffuseTerm > 0.0f ) {\r\n//       vec3 v         = reflect(-lightVec, normal);\r\n//       float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0); // TODO: Material\r\n            \r\n//       diffuse = diffuseTerm * light.diffuse;\r\n//       spec    = specFactor * light.specular;\r\n//     }\r\n\r\n//     float spot = pow(max(dot(-lightVec, normalize(vec3(u_View * vec4(light.direction, 0.0)))), 0.0), light.kSpot);\r\n\r\n//     // Attenuate\r\n//     float att = spot / dot(light.attn, vec3(1.0f, d, d * d));\r\n\r\n//     diffuse *= att;\r\n//     spec    *= att;\r\n//     // ambient *= spot;\r\n\r\n//     totalLightContrib += light.contrib * (diffuse + spec) + ambient;\r\n//   }\r\n\r\n//   totalLightContrib += vec4(0.1, 0.1, 0.1, 0);\r\n\r\n//   inputColor = inputColor * totalLightContrib;\r\n\r\n//   inputColor.a = alpha;\r\n\r\n//   // TODO: Material alhpa\r\n\r\n//   return inputColor;\r\n// }\r\n\r\nvec4 calculatePointLightContribution(vec4 inputColor, vec3 normal, vec3 fragPosition) {\r\n  if (u_NumPointLights <= uint(0)) {\r\n    return inputColor;\r\n  }\r\n\r\n  float alpha = inputColor.a;\r\n\r\n  vec4 ambient, diffuse, spec;\r\n\r\n  vec4 totalLightContrib = vec4(0, 0, 0, 0);\r\n\r\n  for (uint i = uint(0); i < u_NumPointLights; i++) {\r\n    PointLight light = u_PointLights[i];\r\n\r\n    // Initialize outputs.\r\n    ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n    diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n    spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n\r\n    // The vector from the surface to the light.\r\n    vec3 lightVec = light.position - fragPosition;\r\n    \r\n    // The distance from surface to light.\r\n    float d = length(lightVec);\r\n  \r\n    // Range test.\r\n    // if( d < light.range ) {\r\n    //   return vec4(1,0,0,1);\r\n    // }\r\n    \r\n    // Normalize the light vector.\r\n    lightVec /= d; \r\n  \r\n    // Ambient term.\r\n    ambient = light.ambient;  // TODO: Material\r\n\r\n    // Add diffuse and specular term, provided the surface is in \r\n    // the line of site of the light.\r\n\r\n    float diffuseTerm = dot(lightVec, normal);\r\n\r\n    if( diffuseTerm > 0.0f ) {\r\n      vec3 v         = reflect(-lightVec, normal);\r\n      float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0); // TODO: Material\r\n            \r\n      diffuse = diffuseTerm * light.diffuse;\r\n      spec    = specFactor * light.specular;\r\n    }\r\n\r\n    // Attenuate\r\n    float att = 1.0f / dot(light.attn, vec3(1.0f, d, d * d));\r\n\r\n    diffuse *= att;\r\n    spec    *= att;\r\n\r\n    totalLightContrib += light.contrib * (diffuse + spec);\r\n  }\r\n\r\n  inputColor = inputColor * totalLightContrib;\r\n\r\n  inputColor.a = alpha;\r\n\r\n  // TODO: Material alhpa\r\n\r\n  return inputColor;\r\n}\r\n\r\nvec4 calculateMainLighting(vec4 inputColor, vec3 normal) {\r\n  float alpha = inputColor.a;\r\n  \r\n  // Initialize outputs.\r\n  vec4 ambient = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n  vec4 diffuse = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n  vec4 spec    = vec4(0.0f, 0.0f, 0.0f, 0.0f);\r\n\r\n  // The vector from the surface to the light.\r\n  vec3 lightVec = normalize(u_LightPos); // Directional Light\r\n  \r\n  // Ambient term.\r\n  ambient = vec4(vec3(0.3), 1);\r\n\r\n  // Add diffuse and specular term\r\n  float diffuseTerm = dot(lightVec, normal);\r\n\r\n  if( diffuseTerm > 0.0f ) {\r\n    vec3 v         = reflect(-lightVec, normal);\r\n    float specFactor = pow(max(dot(v, normalize(vec3(u_Eye))), 0.0f), 128.0);\r\n          \r\n    diffuse = diffuseTerm * vec4(u_LightColor, 1.0);\r\n    spec    = specFactor * vec4(u_LightColor, 1.0);\r\n  }\r\n\r\n  vec4 totalLightContrib = diffuse + spec + ambient;\r\n\r\n  inputColor = inputColor * totalLightContrib;\r\n  // inputColor = (inputColor * diffuse) + spec + ambient;\r\n\r\n  inputColor.a = alpha;\r\n\r\n  return inputColor;\r\n}\r\n\r\nvoid main() { \r\n\t// read from GBuffers\r\n\r\n  vec4 gb0 = texture(u_gb0, fs_UV);\r\n  vec4 gb1 = texture(u_gb1, fs_UV);\r\n  vec4 gb2 = texture(u_gb2, fs_UV);\r\n  vec4 gb3 = texture(u_gb3, fs_UV);\r\n\t\r\n  vec3 normal = gb0.xyz;\r\n  float cameraDepth = gb0.w;\r\n\r\n  float posX = (fs_UV.x / float(u_Dimensions.x)) * 2.0 - 1.0;\r\n  float posY = 1.0 - (fs_UV.y / float(u_Dimensions.y)) * 2.0;\r\n\r\n  vec2 ndcVec2 = vec2(posX, posY);\r\n\r\n  float t = (cameraDepth - 0.1) / (100.0 - 0.1);\r\n  // t = t * 2.0 - 1.0;\r\n  // t = clamp(t, 0.0, 1.0);\r\n\r\n  vec4 ndc = vec4(ndcVec2, t, 1.0) * cameraDepth;\r\n  vec4 cameraSpacePos = inverse(u_Proj) * ndc;\r\n  // cameraSpacePos /= cameraSpacePos.w;\r\n\r\n  // float aspect = float(u_Dimensions.x) / float(u_Dimensions.y);\r\n\r\n  // float fovy = 45.0 * 3.1415962 / 180.0;\r\n\r\n  // vec3 ref =  vec3(0.0) + t * vec3(0, 0, 1);\r\n  // float len = length(ref - vec3(0.0));\r\n  // vec3 V = vec3(0,1,0) * len * tan(fovy / 2.0);\r\n  // vec3 H = vec3(1,0,0) * aspect * len * tan(fovy / 2.0);\r\n\r\n  // vec3 cameraSpacePos = ref + (ndc.x * H) + (ndc.y * V);\r\n\r\n\tvec4 diffuseColor = gb2;\r\n\r\n  vec4 finalColor = calculateMainLighting(diffuseColor, normal);\r\n\r\n  // vec4 finalColor = calculatePointLightContribution(diffuseColor, normal, gb1.xyz);\r\n\r\n  // out_Col = vec4((normal + vec3(1,1,1)) / 2.0, 1);\r\n  // return;\r\n\r\n  // finalColor = calculateSpotLightContribution(finalColor, normal, gb1.xyz);\r\n  // finalColor = calculateSpotLightContribution(finalColor, normal, cameraSpacePos.xyz);\r\n\r\n  finalColor += (vec4(gb3.xyz, 0.0f) * 5.0);\r\n\r\n  vec4 worldPos = inverse(u_View) * vec4(gb1.xyz, 1.0f);\r\n\r\n  vec4 lightSpace = u_LightSpaceMatrix * worldPos;\r\n  float shadowDepth = texture(u_sm, vec2((lightSpace.x + 1.0) * 0.5, (lightSpace.y + 1.0) * 0.5)).z;\r\n\r\n  float bias = 0.005;\r\n  if (shadowDepth < lightSpace.z  - bias) {\r\n      finalColor = vec4(finalColor.xyz * 0.5, finalColor.a);\r\n  }\r\n\r\n\tout_Col = finalColor;\r\n\r\n  // float distance = length(worldPos - u_Eye);\r\n\r\n  vec4 currentFog = vec4(0, 0, 0, 1);\r\n\r\n  // if (distance > 40.0f) {\r\n  //   distance = distance - 40.0f;\r\n  //   float power = distance * 0.1f;\r\n\r\n  //   // Exponential Fog but start only some units ahead of the player\r\n  //   // 1 - exp(-length(wpos - cpos) * c)\r\n  //   float fogFactor = 1.0 - exp(-power);\r\n  //   fogFactor = clamp(fogFactor, 0.0, 1.0);\r\n\r\n  //   out_Col = mix(out_Col, currentFog, fogFactor);\r\n  // }\r\n}"
 
 /***/ }),
 /* 44 */
@@ -14643,7 +14660,7 @@ module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nconst float P
 /* 45 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform sampler2D u_frame;\nuniform int u_UseTonemap;\n\n// Uncharted 2 Tonemapping made by John Hable, filmicworlds.com\nvec3 uc2Tonemap(vec3 x)\n{\n   return ((x*(0.15*x+0.1*0.5)+0.2*0.02)/(x*(0.15*x+0.5)+0.2*0.3))-0.02/0.3;\n}\n\nvec3 tonemap(vec3 x, float exposure, float invGamma, float whiteBalance) {\n    vec3 white = vec3(whiteBalance);\n    vec3 color = uc2Tonemap(exposure * x);\n    vec3 whitemap = 1.0 / uc2Tonemap(white);\n    color *= whitemap;\n    return pow(color, vec3(invGamma));\n}\n\nvoid main() {\n\tvec3 fragColor = texture(u_frame, fs_UV).xyz;\n\n  if (u_UseTonemap > 0) {\n    float whiteBalance = 9.2;\n    float exposure = 10.0;\n    float invGamma = 1.0 / 0.8;\n\n    fragColor = tonemap(fragColor , exposure, invGamma, whiteBalance);\n  }\n\n  out_Col = vec4(fragColor, 1.0);\n}\n"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform sampler2D u_frame;\r\nuniform int u_UseTonemap;\r\n\r\n// Uncharted 2 Tonemapping made by John Hable, filmicworlds.com\r\nvec3 uc2Tonemap(vec3 x)\r\n{\r\n   return ((x*(0.15*x+0.1*0.5)+0.2*0.02)/(x*(0.15*x+0.5)+0.2*0.3))-0.02/0.3;\r\n}\r\n\r\nvec3 tonemap(vec3 x, float exposure, float invGamma, float whiteBalance) {\r\n    vec3 white = vec3(whiteBalance);\r\n    vec3 color = uc2Tonemap(exposure * x);\r\n    vec3 whitemap = 1.0 / uc2Tonemap(white);\r\n    color *= whitemap;\r\n    return pow(color, vec3(invGamma));\r\n}\r\n\r\nvoid main() {\r\n\tvec3 fragColor = texture(u_frame, fs_UV).xyz;\r\n\r\n  if (u_UseTonemap > 0) {\r\n    float whiteBalance = 9.2;\r\n    float exposure = 10.0;\r\n    float invGamma = 1.0 / 0.8;\r\n\r\n    fragColor = tonemap(fragColor , exposure, invGamma, whiteBalance);\r\n  }\r\n\r\n  out_Col = vec4(fragColor, 1.0);\r\n}\r\n"
 
 /***/ }),
 /* 46 */
@@ -14661,85 +14678,85 @@ module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV
 /* 48 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform float u_DOF_Blend;\nuniform float u_DOF_Focal;\nuniform sampler2D u_frame;\nuniform sampler2D u_gb0;\nuniform ivec2 u_Dimensions;\n\nconst int FILTER_SIZE = 11;\nconst float BLUR_MATRIX[121] = float[](\n    0.006849, 0.007239, 0.007559, 0.007795, 0.007941, 0.00799, 0.007941,\n    0.007795, 0.007559, 0.007239, 0.006849, 0.007239, 0.007653, 0.00799,\n    0.00824, 0.008394, 0.008446, 0.008394, 0.00824, 0.00799, 0.007653, 0.007239,\n    0.007559, 0.00799, 0.008342, 0.008604, 0.008764, 0.008819, 0.008764,\n    0.008604, 0.008342, 0.00799, 0.007559, 0.007795, 0.00824, 0.008604,\n    0.008873, 0.009039, 0.009095, 0.009039, 0.008873, 0.008604, 0.00824,\n    0.007795, 0.007941, 0.008394, 0.008764, 0.009039, 0.009208, 0.009265,\n    0.009208, 0.009039, 0.008764, 0.008394, 0.007941, 0.00799, 0.008446,\n    0.008819, 0.009095, 0.009265, 0.009322, 0.009265, 0.009095, 0.008819,\n    0.008446, 0.00799, 0.007941, 0.008394, 0.008764, 0.009039, 0.009208,\n    0.009265, 0.009208, 0.009039, 0.008764, 0.008394, 0.007941, 0.007795,\n    0.00824, 0.008604, 0.008873, 0.009039, 0.009095, 0.009039, 0.008873,\n    0.008604, 0.00824, 0.007795, 0.007559, 0.00799, 0.008342, 0.008604,\n    0.008764, 0.008819, 0.008764, 0.008604, 0.008342, 0.00799, 0.007559,\n    0.007239, 0.007653, 0.00799, 0.00824, 0.008394, 0.008446, 0.008394, 0.00824,\n    0.00799, 0.007653, 0.007239, 0.006849, 0.007239, 0.007559, 0.007795,\n    0.007941, 0.00799, 0.007941, 0.007795, 0.007559, 0.007239, 0.006849);\n\nvec3 getColor(float x, float y) {\n  float posX = x / (float(u_Dimensions.x) - 1.0);\n  float posY = y / (float(u_Dimensions.y) - 1.0);\n\n  vec4 col = texture(u_frame, vec2(posX, posY));\n  return col.xyz;\n}\n\nfloat getDepth(float x, float y) {\n  float posX = x / (float(u_Dimensions.x) - 1.0);\n  float posY = y / (float(u_Dimensions.y) - 1.0);\n\n  vec4 col = texture(u_gb0, vec2(posX, posY));\n  return col.w;\n}\n\nvoid main() {\n  int halfSize = FILTER_SIZE / 2;\n\n  vec2 coords = gl_FragCoord.xy - float(halfSize);\n\n  float depth = getDepth(coords.x, coords.y);\n\n  vec3 baseColor = getColor(coords.x, coords.y);\n\n  float amount = clamp(depth / u_DOF_Focal, 0.0, 1.0);\n\n  vec3 val = vec3(0, 0, 0);\n\n  for (int i = 0; i < FILTER_SIZE; i++) {\n    float x = coords.x + float(i);\n\n    for (int j = 0; j < FILTER_SIZE; j++) {\n      float y = coords.y + float(j);\n\n      int key = j + (FILTER_SIZE * i);\n\n      float filterValue = BLUR_MATRIX[key];\n      val += filterValue * getColor(x, y);\n    }\n  }\n\n  vec4 finalColor = vec4(mix(baseColor, val, amount), 1.0);\n\n  out_Col = finalColor;\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform float u_DOF_Blend;\r\nuniform float u_DOF_Focal;\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_gb0;\r\nuniform ivec2 u_Dimensions;\r\n\r\nconst int FILTER_SIZE = 11;\r\nconst float BLUR_MATRIX[121] = float[](\r\n    0.006849, 0.007239, 0.007559, 0.007795, 0.007941, 0.00799, 0.007941,\r\n    0.007795, 0.007559, 0.007239, 0.006849, 0.007239, 0.007653, 0.00799,\r\n    0.00824, 0.008394, 0.008446, 0.008394, 0.00824, 0.00799, 0.007653, 0.007239,\r\n    0.007559, 0.00799, 0.008342, 0.008604, 0.008764, 0.008819, 0.008764,\r\n    0.008604, 0.008342, 0.00799, 0.007559, 0.007795, 0.00824, 0.008604,\r\n    0.008873, 0.009039, 0.009095, 0.009039, 0.008873, 0.008604, 0.00824,\r\n    0.007795, 0.007941, 0.008394, 0.008764, 0.009039, 0.009208, 0.009265,\r\n    0.009208, 0.009039, 0.008764, 0.008394, 0.007941, 0.00799, 0.008446,\r\n    0.008819, 0.009095, 0.009265, 0.009322, 0.009265, 0.009095, 0.008819,\r\n    0.008446, 0.00799, 0.007941, 0.008394, 0.008764, 0.009039, 0.009208,\r\n    0.009265, 0.009208, 0.009039, 0.008764, 0.008394, 0.007941, 0.007795,\r\n    0.00824, 0.008604, 0.008873, 0.009039, 0.009095, 0.009039, 0.008873,\r\n    0.008604, 0.00824, 0.007795, 0.007559, 0.00799, 0.008342, 0.008604,\r\n    0.008764, 0.008819, 0.008764, 0.008604, 0.008342, 0.00799, 0.007559,\r\n    0.007239, 0.007653, 0.00799, 0.00824, 0.008394, 0.008446, 0.008394, 0.00824,\r\n    0.00799, 0.007653, 0.007239, 0.006849, 0.007239, 0.007559, 0.007795,\r\n    0.007941, 0.00799, 0.007941, 0.007795, 0.007559, 0.007239, 0.006849);\r\n\r\nvec3 getColor(float x, float y) {\r\n  float posX = x / (float(u_Dimensions.x) - 1.0);\r\n  float posY = y / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec4 col = texture(u_frame, vec2(posX, posY));\r\n  return col.xyz;\r\n}\r\n\r\nfloat getDepth(float x, float y) {\r\n  float posX = x / (float(u_Dimensions.x) - 1.0);\r\n  float posY = y / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec4 col = texture(u_gb0, vec2(posX, posY));\r\n  return col.w;\r\n}\r\n\r\nvoid main() {\r\n  int halfSize = FILTER_SIZE / 2;\r\n\r\n  vec2 coords = gl_FragCoord.xy - float(halfSize);\r\n\r\n  float depth = getDepth(coords.x, coords.y);\r\n\r\n  vec3 baseColor = getColor(coords.x, coords.y);\r\n\r\n  float amount = clamp(depth / u_DOF_Focal, 0.0, 1.0);\r\n\r\n  vec3 val = vec3(0, 0, 0);\r\n\r\n  for (int i = 0; i < FILTER_SIZE; i++) {\r\n    float x = coords.x + float(i);\r\n\r\n    for (int j = 0; j < FILTER_SIZE; j++) {\r\n      float y = coords.y + float(j);\r\n\r\n      int key = j + (FILTER_SIZE * i);\r\n\r\n      float filterValue = BLUR_MATRIX[key];\r\n      val += filterValue * getColor(x, y);\r\n    }\r\n  }\r\n\r\n  vec4 finalColor = vec4(mix(baseColor, val, amount), 1.0);\r\n\r\n  out_Col = finalColor;\r\n}"
 
 /***/ }),
 /* 49 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform float u_Bloom_DS;\nuniform sampler2D u_frame;\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV * u_Bloom_DS);\n  float brightness = dot(baseColor.rgb, vec3(0.2126, 0.7152, 0.0722));\n\n  if(brightness > 1.0) {\n    out_Col = vec4(baseColor.rgb, 1.0);\n  }\n  else {\n    out_Col = vec4(0.0, 0.0, 0.0, 1.0);\n  }\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform float u_Bloom_DS;\r\nuniform sampler2D u_frame;\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV * u_Bloom_DS);\r\n  float brightness = dot(baseColor.rgb, vec3(0.2126, 0.7152, 0.0722));\r\n\r\n  if(brightness > 1.0) {\r\n    out_Col = vec4(baseColor.rgb, 1.0);\r\n  }\r\n  else {\r\n    out_Col = vec4(0.0, 0.0, 0.0, 1.0);\r\n  }\r\n}"
 
 /***/ }),
 /* 50 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 5; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n  }\n\n  out_Col = vec4(result, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 5; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result, 1.0);\r\n}"
 
 /***/ }),
 /* 51 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 5; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n  }\n\n  out_Col = vec4(result, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 5; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result, 1.0);\r\n}"
 
 /***/ }),
 /* 52 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform float u_BloomBlend;\nuniform float u_GodRay_Blend;\nuniform float u_GodRay_DS;\nuniform float u_Bloom_DS;\n\nuniform sampler2D u_frame;\nuniform sampler2D u_BloomBlur;\nuniform sampler2D u_GodRay;\n\nvoid main() {\n  vec3 baseColor = texture(u_frame, fs_UV).rgb;\n  vec3 bloomColor = texture(u_BloomBlur, fs_UV / u_Bloom_DS).rgb;\n  vec3 godRayColor = texture(u_GodRay, fs_UV / u_GodRay_DS).rgb;\n\n  vec3 finalColor = baseColor + bloomColor * u_BloomBlend + godRayColor * u_GodRay_Blend;\n  // vec3 finalColor = godRayColor;\n\n  out_Col = vec4(finalColor, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform float u_BloomBlend;\r\nuniform float u_GodRay_Blend;\r\nuniform float u_GodRay_DS;\r\nuniform float u_Bloom_DS;\r\n\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_BloomBlur;\r\nuniform sampler2D u_GodRay;\r\n\r\nvoid main() {\r\n  vec3 baseColor = texture(u_frame, fs_UV).rgb;\r\n  vec3 bloomColor = texture(u_BloomBlur, fs_UV / u_Bloom_DS).rgb;\r\n  vec3 godRayColor = texture(u_GodRay, fs_UV / u_GodRay_DS).rgb;\r\n\r\n  vec3 finalColor = baseColor + bloomColor * u_BloomBlend + godRayColor * u_GodRay_Blend;\r\n  // vec3 finalColor = godRayColor;\r\n\r\n  out_Col = vec4(finalColor, 1.0);\r\n}"
 
 /***/ }),
 /* 53 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform sampler2D u_gb3;\nuniform float u_GodRay_DS;\n\nuniform sampler2D u_frame;\n\nvoid main() {\n  vec4 gb3 = texture(u_gb3, fs_UV * u_GodRay_DS);\n  out_Col = gb3;\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform sampler2D u_gb3;\r\nuniform float u_GodRay_DS;\r\n\r\nuniform sampler2D u_frame;\r\n\r\nvoid main() {\r\n  vec4 gb3 = texture(u_gb3, fs_UV * u_GodRay_DS);\r\n  out_Col = gb3;\r\n}"
 
 /***/ }),
 /* 54 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\nuniform float u_GodRay_DS;\n\n#define MAX_SPOT_LIGHTS 20\n#define NUM_SAMPLES 200\n\nstruct SpotLight {\n    vec4 ambient;\n    vec4 diffuse;\n    vec4 specular;\n\n    vec3 position;\n    float range;\n    float contrib;\n\n    vec3 direction;\n    float kSpot;\n\n    vec3 attn;\n};\n\nuniform SpotLight u_SpotLights[MAX_SPOT_LIGHTS];\nuniform uint u_NumSpotLights;\n\nuniform sampler2D u_frame;\nuniform sampler2D u_gb0;\n\nuniform mat4 u_View;\nuniform mat4 u_Proj;\nuniform vec4 u_CamPos;\nuniform vec4 u_GodRay_Options;\n\nvec4 computeGodRay(vec4 inputColor) {\n  vec2 texCoord = fs_UV;\n\n  // vec4 gbData = texture(u_gb0, texCoord);\n\n  float density = u_GodRay_Options.x;\n  float weight = u_GodRay_Options.y;\n  float decay = u_GodRay_Options.z;\n  float exposure = u_GodRay_Options.w;\n\n  for (uint i = uint(0); i < u_NumSpotLights; i++) {\n    SpotLight light = u_SpotLights[i];\n\n    vec4 p1 = u_Proj * u_View * vec4(0, 0, 0, 1.0);\n    vec4 p2 = u_Proj * u_View * vec4(light.direction, 1.0);\n    p1 /= p1.w; // NDC\n    p2 /= p2.w; // NDC\n\n    p1.x = (p1.x + 1.0) * 0.5;\n    p1.y = (p1.y + 1.0) * 0.5; // Pixel Space\n\n    p2.x = (p2.x + 1.0) * 0.5;\n    p2.y = (p2.y + 1.0) * 0.5; // Pixel Space\n\n    vec2 deltaPos = normalize(vec2(p2.xy - p1.xy)); // \n\n    vec4 lightScreenPos = u_Proj * u_View * vec4(light.position, 1.0);\n    lightScreenPos /= lightScreenPos.w; // NDC\n\n    lightScreenPos.x = (lightScreenPos.x + 1.0) * 0.5;\n    lightScreenPos.y = (lightScreenPos.y + 1.0) * 0.5; // Pixel Space\n\n    // if (lightScreenPos.x >= -1.0 && lightScreenPos.x <= 1.0 && lightScreenPos.y >= -1.0 && lightScreenPos.y <= 1.0) {\n      // Safe to Process God Ray\n      float illuminationDecay = 1.0;\n\n      vec2 lightToCoord = texCoord - lightScreenPos.xy;\n      vec2 deltaTexCoord = deltaPos;\n\n      // deltaTexCoord = lightToCoord;\n\n      if (length(lightToCoord) > 0.075) {\n        continue;\n      }\n\n      float dotValue = dot(normalize(lightToCoord), deltaTexCoord);\n      float cosFactor = acos(dotValue);\n\n      if (dotValue < 0.0) {\n        continue;\n      }\n\n      // 25 degree search limit\n      // if (abs(cosFactor) > 0.436332) {\n      //   continue;\n      // }\n\n      deltaTexCoord *= 1.0 / float(NUM_SAMPLES) * density;\n\n      for (uint j = uint(0); j < uint(NUM_SAMPLES); j++) {\n        // Step sample location along ray.\n        texCoord -= deltaTexCoord;\n        // Retrieve sample at new location.\n        vec3 sampledValue = texture(u_frame, texCoord).xyz;\n        // Apply sample attenuation scale/decay factors.\n        sampledValue *= illuminationDecay * weight;\n        // Accumulate combined color.\n        inputColor += vec4(sampledValue, 0.0f);\n        // Update exponential decay factor.\n        illuminationDecay *= decay;\n      }\n    // }\n  }\n\n  return vec4(inputColor.xyz * exposure, 1.0);\n}\n\n// float4 main(float2 texCoord : TEXCOORD0) : COLOR0\n// {\n//   // Calculate vector from pixel to light source in screen space.\n//    half2 deltaTexCoord = (texCoord - ScreenLightPos.xy);\n//   // Divide by number of samples and scale by control factor.\n//   deltaTexCoord *= 1.0f / NUM_SAMPLES * Density;\n//   // Store initial sample.\n//    half3 color = tex2D(frameSampler, texCoord);\n//   // Set up illumination decay factor.\n//    half illuminationDecay = 1.0f;\n//   // Evaluate summation from Equation 3 NUM_SAMPLES iterations.\n//    for (int i = 0; i < NUM_SAMPLES; i++)\n//   {\n//     // Step sample location along ray.\n//     texCoord -= deltaTexCoord;\n//     // Retrieve sample at new location.\n//    half3 sample = tex2D(frameSampler, texCoord);\n//     // Apply sample attenuation scale/decay factors.\n//     sample *= illuminationDecay * Weight;\n//     // Accumulate combined color.\n//     color += sample;\n//     // Update exponential decay factor.\n//     illuminationDecay *= Decay;\n//   }\n//   // Output final color with a further scale control factor.\n//    return float4( color * Exposure, 1);\n// }\n\nvoid main() {\n  vec4 finalColor = texture(u_frame, fs_UV);\n  finalColor = computeGodRay(finalColor);\n\n  out_Col = finalColor;\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\nuniform float u_GodRay_DS;\r\n\r\n#define MAX_SPOT_LIGHTS 20\r\n#define NUM_SAMPLES 200\r\n\r\nstruct SpotLight {\r\n    vec4 ambient;\r\n    vec4 diffuse;\r\n    vec4 specular;\r\n\r\n    vec3 position;\r\n    float range;\r\n    float contrib;\r\n\r\n    vec3 direction;\r\n    float kSpot;\r\n\r\n    vec3 attn;\r\n};\r\n\r\nuniform SpotLight u_SpotLights[MAX_SPOT_LIGHTS];\r\nuniform uint u_NumSpotLights;\r\n\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_gb0;\r\n\r\nuniform mat4 u_View;\r\nuniform mat4 u_Proj;\r\nuniform vec4 u_CamPos;\r\nuniform vec4 u_GodRay_Options;\r\n\r\nvec4 computeGodRay(vec4 inputColor) {\r\n  vec2 texCoord = fs_UV;\r\n\r\n  // vec4 gbData = texture(u_gb0, texCoord);\r\n\r\n  float density = u_GodRay_Options.x;\r\n  float weight = u_GodRay_Options.y;\r\n  float decay = u_GodRay_Options.z;\r\n  float exposure = u_GodRay_Options.w;\r\n\r\n  for (uint i = uint(0); i < u_NumSpotLights; i++) {\r\n    SpotLight light = u_SpotLights[i];\r\n\r\n    vec4 p1 = u_Proj * u_View * vec4(0, 0, 0, 1.0);\r\n    vec4 p2 = u_Proj * u_View * vec4(light.direction, 1.0);\r\n    p1 /= p1.w; // NDC\r\n    p2 /= p2.w; // NDC\r\n\r\n    p1.x = (p1.x + 1.0) * 0.5;\r\n    p1.y = (p1.y + 1.0) * 0.5; // Pixel Space\r\n\r\n    p2.x = (p2.x + 1.0) * 0.5;\r\n    p2.y = (p2.y + 1.0) * 0.5; // Pixel Space\r\n\r\n    vec2 deltaPos = normalize(vec2(p2.xy - p1.xy)); // \r\n\r\n    vec4 lightScreenPos = u_Proj * u_View * vec4(light.position, 1.0);\r\n    lightScreenPos /= lightScreenPos.w; // NDC\r\n\r\n    lightScreenPos.x = (lightScreenPos.x + 1.0) * 0.5;\r\n    lightScreenPos.y = (lightScreenPos.y + 1.0) * 0.5; // Pixel Space\r\n\r\n    // if (lightScreenPos.x >= -1.0 && lightScreenPos.x <= 1.0 && lightScreenPos.y >= -1.0 && lightScreenPos.y <= 1.0) {\r\n      // Safe to Process God Ray\r\n      float illuminationDecay = 1.0;\r\n\r\n      vec2 lightToCoord = texCoord - lightScreenPos.xy;\r\n      vec2 deltaTexCoord = deltaPos;\r\n\r\n      // deltaTexCoord = lightToCoord;\r\n\r\n      if (length(lightToCoord) > 0.075) {\r\n        continue;\r\n      }\r\n\r\n      float dotValue = dot(normalize(lightToCoord), deltaTexCoord);\r\n      float cosFactor = acos(dotValue);\r\n\r\n      if (dotValue < 0.0) {\r\n        continue;\r\n      }\r\n\r\n      // 25 degree search limit\r\n      // if (abs(cosFactor) > 0.436332) {\r\n      //   continue;\r\n      // }\r\n\r\n      deltaTexCoord *= 1.0 / float(NUM_SAMPLES) * density;\r\n\r\n      for (uint j = uint(0); j < uint(NUM_SAMPLES); j++) {\r\n        // Step sample location along ray.\r\n        texCoord -= deltaTexCoord;\r\n        // Retrieve sample at new location.\r\n        vec3 sampledValue = texture(u_frame, texCoord).xyz;\r\n        // Apply sample attenuation scale/decay factors.\r\n        sampledValue *= illuminationDecay * weight;\r\n        // Accumulate combined color.\r\n        inputColor += vec4(sampledValue, 0.0f);\r\n        // Update exponential decay factor.\r\n        illuminationDecay *= decay;\r\n      }\r\n    // }\r\n  }\r\n\r\n  return vec4(inputColor.xyz * exposure, 1.0);\r\n}\r\n\r\n// float4 main(float2 texCoord : TEXCOORD0) : COLOR0\r\n// {\r\n//   // Calculate vector from pixel to light source in screen space.\r\n//    half2 deltaTexCoord = (texCoord - ScreenLightPos.xy);\r\n//   // Divide by number of samples and scale by control factor.\r\n//   deltaTexCoord *= 1.0f / NUM_SAMPLES * Density;\r\n//   // Store initial sample.\r\n//    half3 color = tex2D(frameSampler, texCoord);\r\n//   // Set up illumination decay factor.\r\n//    half illuminationDecay = 1.0f;\r\n//   // Evaluate summation from Equation 3 NUM_SAMPLES iterations.\r\n//    for (int i = 0; i < NUM_SAMPLES; i++)\r\n//   {\r\n//     // Step sample location along ray.\r\n//     texCoord -= deltaTexCoord;\r\n//     // Retrieve sample at new location.\r\n//    half3 sample = tex2D(frameSampler, texCoord);\r\n//     // Apply sample attenuation scale/decay factors.\r\n//     sample *= illuminationDecay * Weight;\r\n//     // Accumulate combined color.\r\n//     color += sample;\r\n//     // Update exponential decay factor.\r\n//     illuminationDecay *= Decay;\r\n//   }\r\n//   // Output final color with a further scale control factor.\r\n//    return float4( color * Exposure, 1);\r\n// }\r\n\r\nvoid main() {\r\n  vec4 finalColor = texture(u_frame, fs_UV);\r\n  finalColor = computeGodRay(finalColor);\r\n\r\n  out_Col = finalColor;\r\n}"
 
 /***/ }),
 /* 55 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform float u_GodRay_DS;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 5; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n  }\n\n  out_Col = vec4(result, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform float u_GodRay_DS;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 5; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result, 1.0);\r\n}"
 
 /***/ }),
 /* 56 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform float u_GodRay_DS;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 5; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n  }\n\n  out_Col = vec4(result, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform float u_GodRay_DS;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 5; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result, 1.0);\r\n}"
 
 /***/ }),
 /* 57 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform vec2 u_DOF_Options; // x = Focal Length y = Focal plane size\nuniform sampler2D u_frame;\nuniform sampler2D u_gb0;\nuniform ivec2 u_Dimensions;\n\nvec3 getColor(float x, float y) {\n  float posX = x / (float(u_Dimensions.x) - 1.0);\n  float posY = y / (float(u_Dimensions.y) - 1.0);\n\n  vec4 col = texture(u_frame, vec2(posX, posY));\n  return col.xyz;\n}\n\nfloat getDepth(float x, float y) {\n  vec4 col = texture(u_gb0, vec2(x, y));\n  return col.w;\n}\n\nvoid main() {\n  float cutoffDepth = u_DOF_Options.x - (u_DOF_Options.y / 2.0);\n\n  float depth = getDepth(fs_UV.x, fs_UV.y);\n\n  if (abs(depth) > cutoffDepth) {\n    out_Col = vec4(0, 0, 0, 0);\n    return;\n  }\n\n  vec4 finalColor = vec4(getColor(gl_FragCoord.x, gl_FragCoord.y), 1.0f);\n\n  out_Col = finalColor;\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform vec2 u_DOF_Options; // x = Focal Length y = Focal plane size\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_gb0;\r\nuniform ivec2 u_Dimensions;\r\n\r\nvec3 getColor(float x, float y) {\r\n  float posX = x / (float(u_Dimensions.x) - 1.0);\r\n  float posY = y / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec4 col = texture(u_frame, vec2(posX, posY));\r\n  return col.xyz;\r\n}\r\n\r\nfloat getDepth(float x, float y) {\r\n  vec4 col = texture(u_gb0, vec2(x, y));\r\n  return col.w;\r\n}\r\n\r\nvoid main() {\r\n  float cutoffDepth = u_DOF_Options.x - (u_DOF_Options.y / 2.0);\r\n\r\n  float depth = getDepth(fs_UV.x, fs_UV.y);\r\n\r\n  if (abs(depth) > cutoffDepth) {\r\n    out_Col = vec4(0, 0, 0, 0);\r\n    return;\r\n  }\r\n\r\n  vec4 finalColor = vec4(getColor(gl_FragCoord.x, gl_FragCoord.y), 1.0f);\r\n\r\n  out_Col = finalColor;\r\n}"
 
 /***/ }),
 /* 58 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform vec2 u_DOF_Options; // x = Focal Length y = Focal plane size\nuniform sampler2D u_frame;\nuniform sampler2D u_gb0;\nuniform ivec2 u_Dimensions;\n\nvec3 getColor(float x, float y) {\n  float posX = x / (float(u_Dimensions.x) - 1.0);\n  float posY = y / (float(u_Dimensions.y) - 1.0);\n\n  vec4 col = texture(u_frame, vec2(posX, posY));\n  return col.xyz;\n}\n\nfloat getDepth(float x, float y) {\n  // float posX = x / (float(u_Dimensions.x) - 1.0);\n  // float posY = y / (float(u_Dimensions.y) - 1.0);\n\n  vec4 col = texture(u_gb0, vec2(x, y));\n  return col.w;\n}\n\nvoid main() {\n  float cutoffDepth = u_DOF_Options.x + (u_DOF_Options.y / 2.0);\n\n  float depth = getDepth(fs_UV.x, fs_UV.y);\n\n  if (abs(depth) < cutoffDepth) {\n    out_Col = vec4(0, 0, 0, 0);\n    return;\n  }\n\n  vec4 finalColor = vec4(getColor(gl_FragCoord.x, gl_FragCoord.y), 1.0f);\n\n  out_Col = finalColor;\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform vec2 u_DOF_Options; // x = Focal Length y = Focal plane size\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_gb0;\r\nuniform ivec2 u_Dimensions;\r\n\r\nvec3 getColor(float x, float y) {\r\n  float posX = x / (float(u_Dimensions.x) - 1.0);\r\n  float posY = y / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec4 col = texture(u_frame, vec2(posX, posY));\r\n  return col.xyz;\r\n}\r\n\r\nfloat getDepth(float x, float y) {\r\n  // float posX = x / (float(u_Dimensions.x) - 1.0);\r\n  // float posY = y / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec4 col = texture(u_gb0, vec2(x, y));\r\n  return col.w;\r\n}\r\n\r\nvoid main() {\r\n  float cutoffDepth = u_DOF_Options.x + (u_DOF_Options.y / 2.0);\r\n\r\n  float depth = getDepth(fs_UV.x, fs_UV.y);\r\n\r\n  if (abs(depth) < cutoffDepth) {\r\n    out_Col = vec4(0, 0, 0, 0);\r\n    return;\r\n  }\r\n\r\n  vec4 finalColor = vec4(getColor(gl_FragCoord.x, gl_FragCoord.y), 1.0f);\r\n\r\n  out_Col = finalColor;\r\n}"
 
 /***/ }),
 /* 59 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[7] = float[] (0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n\n  if (baseColor.a < 0.01) {\n    out_Col = vec4(0,0,0,0);\n    return;\n  }\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 7; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\n  }\n\n  out_Col = vec4(result * 0.5, 1.0f);\n\n  // out_Col = vec4(vec3(baseColor.a), 1);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[7] = float[] (0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n\r\n  if (baseColor.a < 0.01) {\r\n    out_Col = vec4(0,0,0,0);\r\n    return;\r\n  }\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 7; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(tex_offset.x * float(i), 0.0)).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result * 0.5, 1.0f);\r\n\r\n  // out_Col = vec4(vec3(baseColor.a), 1);\r\n}"
 
 /***/ }),
 /* 60 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform ivec2 u_Dimensions;\nuniform sampler2D u_frame;\n\nconst float weight[7] = float[] (0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598);\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n\n  if (baseColor.a < 0.01) {\n    out_Col = vec4(0,0,0,0);\n    return;\n  }\n  \n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\n\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\n\n  for(int i = 1; i < 7; ++i)\n  {\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\n  }\n\n  out_Col = vec4(result * 0.5, 1.0f);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform ivec2 u_Dimensions;\r\nuniform sampler2D u_frame;\r\n\r\nconst float weight[7] = float[] (0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598);\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n\r\n  if (baseColor.a < 0.01) {\r\n    out_Col = vec4(0,0,0,0);\r\n    return;\r\n  }\r\n  \r\n  float posX = 1.0 / (float(u_Dimensions.x) - 1.0);\r\n  float posY = 1.0 / (float(u_Dimensions.y) - 1.0);\r\n\r\n  vec2 tex_offset = vec2(posX, posY); // gets size of single texel\r\n  vec3 result = baseColor.rgb * weight[0]; // current fragment's contribution\r\n\r\n  for(int i = 1; i < 7; ++i)\r\n  {\r\n      result += texture(u_frame, fs_UV + vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n      result += texture(u_frame, fs_UV - vec2(0.0, tex_offset.y * float(i))).rgb * weight[i];\r\n  }\r\n\r\n  out_Col = vec4(result * 0.5, 1.0f);\r\n}"
 
 /***/ }),
 /* 61 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec2 fs_UV;\nout vec4 out_Col;\n\nuniform sampler2D u_frame;\nuniform sampler2D u_gb0; // Near Blur\nuniform sampler2D u_gb1; // Far Blur\n\nvec4 blend(vec4 color1, vec4 color2) {\n  // if (color2.w > 0.5) {\n  //   return 2.0 * color1 * color2;\n  // } else {\n  //   return 1.0 - 2.0 * (1.0 - color1) * (1.0 - color2);\n  // }\n\n  if (length(color2.rgb) > 0.1) {\n    return color2;\n  }\n\n  return color1;\n  // return color1 * color2;\n}\n\nvoid main() {\n  vec4 baseColor = texture(u_frame, fs_UV);\n  vec4 nearBlurColor = texture(u_gb0, fs_UV);\n  vec4 farBlurColor = texture(u_gb1, fs_UV);\n\n  vec4 finalColor;\n\n  finalColor = blend(baseColor, farBlurColor);\n  finalColor = blend(finalColor, nearBlurColor);\n\n  // finalColor = baseColor + nearBlurColor + farBlurColor;\n\n  // finalColor.rgb = mix(baseColor.rgb, nearBlurColor.rgb, length(nearBlurColor.rgb));\n  // finalColor.a   = mix(1.0, 0.25, length(nearBlurColor.rgb));\n\n  out_Col = vec4(finalColor.xyz, 1.0);\n}"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec2 fs_UV;\r\nout vec4 out_Col;\r\n\r\nuniform sampler2D u_frame;\r\nuniform sampler2D u_gb0; // Near Blur\r\nuniform sampler2D u_gb1; // Far Blur\r\n\r\nvec4 blend(vec4 color1, vec4 color2) {\r\n  // if (color2.w > 0.5) {\r\n  //   return 2.0 * color1 * color2;\r\n  // } else {\r\n  //   return 1.0 - 2.0 * (1.0 - color1) * (1.0 - color2);\r\n  // }\r\n\r\n  if (length(color2.rgb) > 0.1) {\r\n    return color2;\r\n  }\r\n\r\n  return color1;\r\n  // return color1 * color2;\r\n}\r\n\r\nvoid main() {\r\n  vec4 baseColor = texture(u_frame, fs_UV);\r\n  vec4 nearBlurColor = texture(u_gb0, fs_UV);\r\n  vec4 farBlurColor = texture(u_gb1, fs_UV);\r\n\r\n  vec4 finalColor;\r\n\r\n  finalColor = blend(baseColor, farBlurColor);\r\n  finalColor = blend(finalColor, nearBlurColor);\r\n\r\n  // finalColor = baseColor + nearBlurColor + farBlurColor;\r\n\r\n  // finalColor.rgb = mix(baseColor.rgb, nearBlurColor.rgb, length(nearBlurColor.rgb));\r\n  // finalColor.a   = mix(1.0, 0.25, length(nearBlurColor.rgb));\r\n\r\n  out_Col = vec4(finalColor.xyz, 1.0);\r\n}"
 
 /***/ }),
 /* 62 */
@@ -14786,8 +14803,8 @@ class Camera {
         __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, this.controls.eye, this.controls.center, this.controls.up);
         this.updateProjectionMatrix();
         if (cameraControls && cameraControls.isOrtho) {
-            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].ortho(this.projectionMatrix, -50.0, 50.0, -50.0, 50.0, -100, 200.0);
-            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, [15, 15, 15], __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1));
+            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].ortho(this.projectionMatrix, -100.0, 100.0, -100.0, 100.0, -100, 200.0);
+            __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["a" /* mat4 */].lookAt(this.viewMatrix, [30, 40, 30], __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 0), __WEBPACK_IMPORTED_MODULE_1_gl_matrix__["c" /* vec3 */].fromValues(0, 0, 1));
         }
     }
 }
@@ -15041,7 +15058,7 @@ function createCamera(element, options) {
     return +new Date
   }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
 /* 65 */
@@ -15180,12 +15197,12 @@ function createViewController(options) {
 
 module.exports = createTurntableController
 
-var filterVector = __webpack_require__(12)
+var filterVector = __webpack_require__(13)
 var invert44     = __webpack_require__(3)
 var rotateM      = __webpack_require__(68)
-var cross        = __webpack_require__(14)
+var cross        = __webpack_require__(15)
 var normalize3   = __webpack_require__(6)
-var dot3         = __webpack_require__(15)
+var dot3         = __webpack_require__(16)
 
 function len3(x, y, z) {
   return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2))
@@ -15872,8 +15889,8 @@ function rotate(out, a, rad, axis) {
 
 module.exports = createOrbitController
 
-var filterVector  = __webpack_require__(12)
-var lookAt        = __webpack_require__(16)
+var filterVector  = __webpack_require__(13)
+var lookAt        = __webpack_require__(17)
 var mat4FromQuat  = __webpack_require__(70)
 var invert44      = __webpack_require__(3)
 var quatFromFrame = __webpack_require__(71)
@@ -16368,15 +16385,15 @@ function quatFromFrame(
 "use strict";
 
 
-var bsearch   = __webpack_require__(13)
+var bsearch   = __webpack_require__(14)
 var m4interp  = __webpack_require__(73)
 var invert44  = __webpack_require__(3)
 var rotateX   = __webpack_require__(85)
 var rotateY   = __webpack_require__(86)
 var rotateZ   = __webpack_require__(87)
-var lookAt    = __webpack_require__(16)
-var translate = __webpack_require__(18)
-var scale     = __webpack_require__(20)
+var lookAt    = __webpack_require__(17)
+var translate = __webpack_require__(19)
+var scale     = __webpack_require__(21)
 var normalize = __webpack_require__(6)
 
 var DEFAULT_CENTER = [0,0,0]
@@ -16574,7 +16591,7 @@ var lerp = __webpack_require__(74)
 
 var recompose = __webpack_require__(75)
 var decompose = __webpack_require__(78)
-var determinant = __webpack_require__(21)
+var determinant = __webpack_require__(22)
 var slerp = __webpack_require__(83)
 
 var state0 = state()
@@ -16664,11 +16681,11 @@ From: http://www.w3.org/TR/css3-transforms/#recomposing-to-a-3d-matrix
 */
 
 var mat4 = {
-    identity: __webpack_require__(17),
-    translate: __webpack_require__(18),
+    identity: __webpack_require__(18),
+    translate: __webpack_require__(19),
     multiply: __webpack_require__(76),
-    create: __webpack_require__(19),
-    scale: __webpack_require__(20),
+    create: __webpack_require__(20),
+    scale: __webpack_require__(21),
     fromRotationTranslation: __webpack_require__(77)
 }
 
@@ -16841,16 +16858,16 @@ http://www.w3.org/TR/css3-transforms/#decomposing-a-3d-matrix
 
 var normalize = __webpack_require__(79)
 
-var create = __webpack_require__(19)
+var create = __webpack_require__(20)
 var clone = __webpack_require__(80)
-var determinant = __webpack_require__(21)
+var determinant = __webpack_require__(22)
 var invert = __webpack_require__(3)
 var transpose = __webpack_require__(81)
 var vec3 = {
     length: __webpack_require__(82),
     normalize: __webpack_require__(6),
-    dot: __webpack_require__(15),
-    cross: __webpack_require__(14)
+    dot: __webpack_require__(16),
+    cross: __webpack_require__(15)
 }
 
 var tmp = create()
@@ -35626,7 +35643,7 @@ class WFC {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(97)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(97)(module)))
 
 /***/ }),
 /* 97 */
@@ -35660,31 +35677,31 @@ module.exports = function(module) {
 /* 98 */
 /***/ (function(module, exports) {
 
-module.exports = {"set":{"tiles":[{"name":"WallCurved1","symmetry":"L","config":{"heightRange":[0,1]}},{"name":"WallCurved_Tall","symmetry":"L","config":{"heightRange":[0,1]}},{"name":"WallStraight1","symmetry":"T","config":{"heightRange":[0,1],"meshes":[["WallStraight1",50],["WallStraight2",50]]}},{"name":"WallGate1","symmetry":"T","config":{"heightRange":[0,1]}},{"name":"WallJunction1","symmetry":"T","config":{"heightRange":[0,1]}},{"name":"WallJunction_Tall","symmetry":"T","config":{"heightRange":[0,1]}},{"name":"WallJunction_TallUpper","symmetry":"X","config":{"heightRange":[2,2]}},{"name":"WallCurved_TallUpper","symmetry":"L","config":{"heightRange":[2,3]}},{"name":"WallCurved_Middle","symmetry":"L","config":{"heightRange":[2,2]}},{"name":"empty","symmetry":"X","weight":3},{"name":"ground","symmetry":"X"}],"neighbors":[["horizontal","WallCurved1 1","empty"],["horizontal","WallCurved1","WallCurved1 1"],["horizontal","WallCurved_Tall 1","empty"],["horizontal","WallCurved_Tall","WallCurved_Tall 1"],["horizontal","WallCurved1","WallStraight1"],["horizontal","WallStraight1","WallCurved1 1"],["horizontal","WallCurved_Tall","WallStraight1"],["horizontal","WallStraight1","WallCurved_Tall 1"],["horizontal","WallStraight1","WallStraight1"],["horizontal","WallStraight1 1","empty"],["horizontal","empty","WallStraight1 1"],["horizontal","WallCurved1","WallGate1"],["horizontal","WallGate1","WallCurved1 1"],["horizontal","WallCurved_Tall","WallGate1"],["horizontal","WallGate1","WallCurved_Tall 1"],["horizontal","WallGate1 1","empty"],["horizontal","empty","WallGate1 1"],["horizontal","WallStraight1","WallGate1"],["horizontal","WallCurved1 1","WallCurved_Tall"],["horizontal","WallJunction1","WallStraight1"],["horizontal","WallJunction1","WallGate1"],["horizontal","WallJunction1","WallCurved1 1"],["horizontal","WallJunction1","WallCurved_Tall 1"],["horizontal","WallJunction1 1","empty"],["horizontal","WallJunction1 1","WallStraight1"],["horizontal","WallJunction1 1","WallGate1"],["horizontal","WallJunction1 1","WallCurved1 1"],["horizontal","WallJunction1 1","WallCurved_Tall 1"],["horizontal","WallJunction1 2","WallStraight1"],["horizontal","WallJunction1 2","WallGate1"],["horizontal","WallJunction1 2","WallCurved1 1"],["horizontal","WallJunction1 2","WallCurved_Tall 1"],["horizontal","WallJunction1 3","empty"],["horizontal","WallJunction1 3","WallStraight1"],["horizontal","WallJunction1 3","WallGate1"],["horizontal","WallJunction1 3","WallCurved1 1"],["horizontal","WallJunction1 3","WallCurved_Tall 1"],["horizontal","WallJunction_Tall","WallStraight1"],["horizontal","WallJunction_Tall","WallGate1"],["horizontal","WallJunction_Tall","WallCurved1 1"],["horizontal","WallJunction_Tall","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 1","empty"],["horizontal","WallJunction_Tall 1","WallStraight1"],["horizontal","WallJunction_Tall 1","WallGate1"],["horizontal","WallJunction_Tall 1","WallCurved1 1"],["horizontal","WallJunction_Tall 1","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 2","WallStraight1"],["horizontal","WallJunction_Tall 2","WallGate1"],["horizontal","WallJunction_Tall 2","WallCurved1 1"],["horizontal","WallJunction_Tall 2","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 3","empty"],["horizontal","WallJunction_Tall 3","WallStraight1"],["horizontal","WallJunction_Tall 3","WallGate1"],["horizontal","WallJunction_Tall 3","WallCurved1 1"],["horizontal","WallJunction_Tall 3","WallCurved_Tall 1"],["horizontal","empty","empty"],["horizontal","empty","WallJunction_TallUpper"],["horizontal","WallJunction_TallUpper","empty"],["horizontal","WallCurved_TallUpper","empty"],["horizontal","WallCurved_TallUpper","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 1","empty"],["horizontal","WallCurved_TallUpper 1","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 2","empty"],["horizontal","WallCurved_TallUpper 2","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 3","empty"],["horizontal","WallCurved_TallUpper 3","WallJunction_TallUpper"],["horizontal","WallCurved_Middle","empty"],["horizontal","WallCurved_Middle","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 1","empty"],["horizontal","WallCurved_Middle 1","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 2","empty"],["horizontal","WallCurved_Middle 2","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 3","empty"],["horizontal","WallCurved_Middle 3","WallJunction_TallUpper"],["horizontal","WallCurved_Middle","WallCurved_Middle 1"],["horizontal","WallCurved_Middle 1","WallCurved_Middle"],["horizontal","WallCurved_Middle","WallCurved_TallUpper 1"],["horizontal","WallCurved_Middle 1","WallCurved_TallUpper"],["horizontal","WallCurved_TallUpper","WallCurved_Middle 1"],["horizontal","WallCurved_TallUpper 1","WallCurved_Middle"],["horizontal","WallCurved_TallUpper","WallCurved_TallUpper 1"],["horizontal","WallCurved_TallUpper 1","WallCurved_TallUpper"],["vertical","WallJunction_TallUpper","WallJunction_Tall"],["vertical","WallCurved_TallUpper","WallCurved_Tall"],["vertical","WallCurved_Middle","WallCurved_Tall"],["vertical","WallCurved_TallUpper","WallCurved_Middle"],["vertical","WallCurved_Middle","WallCurved_Middle"],["vertical","empty","empty"],["vertical","empty","WallCurved1"],["vertical","empty","WallStraight1"],["vertical","empty","WallJunction1"],["vertical","empty","WallJunction_TallUpper"],["vertical","empty","WallCurved_TallUpper"],["vertical","empty","WallGate1"],["vertical","empty","ground"],["vertical","WallCurved1","ground"],["vertical","WallCurved_Tall","ground"],["vertical","WallStraight1","ground"],["vertical","WallJunction1","ground"],["vertical","WallJunction_Tall","ground"],["vertical","WallGate1","ground"]],"pixelsize":8,"voxelsize":6}}
+module.exports = {"set":{"tiles":[{"name":"WallCurved1","symmetry":"L","config":{"heightRange":[0,1]}},{"name":"WallCurved_Tall","symmetry":"L","config":{"heightRange":[0,1]}},{"name":"WallStraight1","symmetry":"T","config":{"heightRange":[0,1],"meshes":[["WallStraight1",50],["WallStraight2",50]]},"weight":20},{"name":"WallGate1","symmetry":"T","config":{"heightRange":[0,1],"meshes":[["WallGate1",75],["WallGate2",25]]},"weight":2},{"name":"WallJunction1","symmetry":"T","config":{"heightRange":[0,1]}},{"name":"WallJunction_Tall","symmetry":"T","config":{"heightRange":[0,1]}},{"name":"WallJunction_TallUpper","symmetry":"X","config":{"heightRange":[2,2]}},{"name":"WallCurved_TallUpper","symmetry":"L","config":{"heightRange":[2,3],"meshes":[["WallCurved_TallUpper",10],["WallCurved_TallUpper1",90]]}},{"name":"WallCurved_Middle","symmetry":"L","config":{"heightRange":[2,2]}},{"name":"empty","symmetry":"X","weight":3},{"name":"ground","symmetry":"X"}],"neighbors":[["horizontal","WallCurved1 1","empty"],["horizontal","WallCurved1","WallCurved1 1"],["horizontal","WallCurved_Tall 1","empty"],["horizontal","WallCurved_Tall","WallCurved_Tall 1"],["horizontal","WallCurved1","WallStraight1"],["horizontal","WallStraight1","WallCurved1 1"],["horizontal","WallCurved_Tall","WallStraight1"],["horizontal","WallStraight1","WallCurved_Tall 1"],["horizontal","WallStraight1","WallStraight1"],["horizontal","WallStraight1 1","empty"],["horizontal","empty","WallStraight1 1"],["horizontal","WallCurved1","WallGate1"],["horizontal","WallGate1","WallCurved1 1"],["horizontal","WallCurved_Tall","WallGate1"],["horizontal","WallGate1","WallCurved_Tall 1"],["horizontal","WallGate1 1","empty"],["horizontal","empty","WallGate1 1"],["horizontal","WallStraight1","WallGate1"],["horizontal","WallCurved1 1","WallCurved_Tall"],["horizontal","WallJunction1","WallStraight1"],["horizontal","WallJunction1","WallGate1"],["horizontal","WallJunction1","WallCurved1 1"],["horizontal","WallJunction1","WallCurved_Tall 1"],["horizontal","WallJunction1 1","empty"],["horizontal","WallJunction1 1","WallStraight1"],["horizontal","WallJunction1 1","WallGate1"],["horizontal","WallJunction1 1","WallCurved1 1"],["horizontal","WallJunction1 1","WallCurved_Tall 1"],["horizontal","WallJunction1 2","WallStraight1"],["horizontal","WallJunction1 2","WallGate1"],["horizontal","WallJunction1 2","WallCurved1 1"],["horizontal","WallJunction1 2","WallCurved_Tall 1"],["horizontal","WallJunction1 3","empty"],["horizontal","WallJunction1 3","WallStraight1"],["horizontal","WallJunction1 3","WallGate1"],["horizontal","WallJunction1 3","WallCurved1 1"],["horizontal","WallJunction1 3","WallCurved_Tall 1"],["horizontal","WallJunction_Tall","WallStraight1"],["horizontal","WallJunction_Tall","WallGate1"],["horizontal","WallJunction_Tall","WallCurved1 1"],["horizontal","WallJunction_Tall","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 1","empty"],["horizontal","WallJunction_Tall 1","WallStraight1"],["horizontal","WallJunction_Tall 1","WallGate1"],["horizontal","WallJunction_Tall 1","WallCurved1 1"],["horizontal","WallJunction_Tall 1","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 2","WallStraight1"],["horizontal","WallJunction_Tall 2","WallGate1"],["horizontal","WallJunction_Tall 2","WallCurved1 1"],["horizontal","WallJunction_Tall 2","WallCurved_Tall 1"],["horizontal","WallJunction_Tall 3","empty"],["horizontal","WallJunction_Tall 3","WallStraight1"],["horizontal","WallJunction_Tall 3","WallGate1"],["horizontal","WallJunction_Tall 3","WallCurved1 1"],["horizontal","WallJunction_Tall 3","WallCurved_Tall 1"],["horizontal","empty","empty"],["horizontal","empty","WallJunction_TallUpper"],["horizontal","WallJunction_TallUpper","empty"],["horizontal","WallCurved_TallUpper","empty"],["horizontal","WallCurved_TallUpper","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 1","empty"],["horizontal","WallCurved_TallUpper 1","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 2","empty"],["horizontal","WallCurved_TallUpper 2","WallJunction_TallUpper"],["horizontal","WallCurved_TallUpper 3","empty"],["horizontal","WallCurved_TallUpper 3","WallJunction_TallUpper"],["horizontal","WallCurved_Middle","empty"],["horizontal","WallCurved_Middle","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 1","empty"],["horizontal","WallCurved_Middle 1","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 2","empty"],["horizontal","WallCurved_Middle 2","WallJunction_TallUpper"],["horizontal","WallCurved_Middle 3","empty"],["horizontal","WallCurved_Middle 3","WallJunction_TallUpper"],["horizontal","WallCurved_Middle","WallCurved_Middle 1"],["horizontal","WallCurved_Middle 1","WallCurved_Middle"],["horizontal","WallCurved_Middle","WallCurved_TallUpper 1"],["horizontal","WallCurved_Middle 1","WallCurved_TallUpper"],["horizontal","WallCurved_TallUpper","WallCurved_Middle 1"],["horizontal","WallCurved_TallUpper 1","WallCurved_Middle"],["horizontal","WallCurved_TallUpper","WallCurved_TallUpper 1"],["horizontal","WallCurved_TallUpper 1","WallCurved_TallUpper"],["vertical","WallJunction_TallUpper","WallJunction_Tall"],["vertical","WallCurved_TallUpper","WallCurved_Tall"],["vertical","WallCurved_Middle","WallCurved_Tall"],["vertical","WallCurved_TallUpper","WallCurved_Middle"],["vertical","WallCurved_Middle","WallCurved_Middle"],["vertical","empty","empty"],["vertical","empty","WallCurved1"],["vertical","empty","WallStraight1"],["vertical","empty","WallJunction1"],["vertical","empty","WallJunction_TallUpper"],["vertical","empty","WallCurved_TallUpper"],["vertical","empty","WallGate1"],["vertical","empty","ground"],["vertical","WallCurved1","ground"],["vertical","WallCurved_Tall","ground"],["vertical","WallStraight1","ground"],["vertical","WallJunction1","ground"],["vertical","WallJunction_Tall","ground"],["vertical","WallGate1","ground"]],"pixelsize":8,"voxelsize":16}}
 
 /***/ }),
 /* 99 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\n#define MAX_INSTANCES 200\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;  \n\nuniform mat4 u_View;   \nuniform mat4 u_Proj;\n\n/*----------  Shader UI Controls  ----------*/\n\n/*----------  Shader Inputs  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\nin vec2 vs_UV;\nin vec4 vs_InstPos;\nin vec4 vs_InstScale;\nin vec4 vs_InstRotation;\n\n/*----------  Shader Outputs  ----------*/\nout vec4 fs_Pos;\nout vec4 fs_Nor;        \nout vec4 fs_Col;           \nout vec2 fs_UV;\nout vec4 fs_WorldPos;\n\nconst float PI = 3.14159265359;\nconst float TWO_PI = 6.28318530718;\n\nvec4 quatConjugate(vec4 q)\n{ \n  return vec4(-q.x, -q.y, -q.z, q.w); \n}\n\nvec4 quatMultiply(vec4 q1, vec4 q2)\n{ \n  vec4 qr;\n  qr.x = (q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y);\n  qr.y = (q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x);\n  qr.z = (q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w);\n  qr.w = (q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z);\n  return qr;\n}\n\nvec4 rotateByQuat(vec4 position, vec4 quat)\n{ \n  vec4 quatConj = quatConjugate(quat);\n  vec4 quatPos = vec4(position.x, position.y, position.z, 0);\n  \n  vec4 quatTemp = quatMultiply(quat, quatPos);\n  quatTemp = quatMultiply(quatTemp, quatConj);\n  \n  return vec4(quatTemp.x, quatTemp.y, quatTemp.z, 0);\n}\n\nmat4 rotationMatrix(vec3 axis, float angle) {\n  axis = normalize(axis);\n  float s = sin(angle);\n  float c = cos(angle);\n  float oc = 1.0 - c;\n\n  return mat4(\n      oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s,\n      oc * axis.z * axis.x + axis.y * s, 0.0, oc * axis.x * axis.y + axis.z * s,\n      oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,\n      oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,\n      oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n  vec4 vertexScale = vs_InstScale;\n\n  fs_Col = vs_Col;\n\n  vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);\n  vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);\n\n  // mat3 invTranspose = inverse(mat3(instanceModel));\n  fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);\n\n  vec4 modelposition =  vertexPosition;\n  modelposition = vertexScale * vertexPosition;\n  modelposition *= u_Model;\n  modelposition = rotateByQuat(modelposition, vs_InstRotation);\n  modelposition +=  vs_InstPos;\n\n  fs_WorldPos = modelposition;\n  fs_Pos = u_View * fs_WorldPos;\n\n  fs_UV = vs_UV;\n  fs_UV.y = 1.0 - fs_UV.y;\n\n  gl_Position = u_Proj * u_View * modelposition;\n}\n"
+module.exports = "#version 300 es\r\n\r\n#define MAX_INSTANCES 200\r\n\r\n/*----------  Shader Uniforms  ----------*/\r\nuniform mat4 u_Model;\r\nuniform mat4 u_ModelInvTr;  \r\n\r\nuniform mat4 u_View;   \r\nuniform mat4 u_Proj;\r\n\r\n/*----------  Shader UI Controls  ----------*/\r\n\r\n/*----------  Shader Inputs  ----------*/\r\nin vec4 vs_Pos;\r\nin vec4 vs_Nor;\r\nin vec4 vs_Col;\r\nin vec2 vs_UV;\r\nin vec4 vs_InstPos;\r\nin vec4 vs_InstScale;\r\nin vec4 vs_InstRotation;\r\n\r\n/*----------  Shader Outputs  ----------*/\r\nout vec4 fs_Pos;\r\nout vec4 fs_Nor;        \r\nout vec4 fs_Col;           \r\nout vec2 fs_UV;\r\nout vec4 fs_WorldPos;\r\n\r\nconst float PI = 3.14159265359;\r\nconst float TWO_PI = 6.28318530718;\r\n\r\nvec4 quatConjugate(vec4 q)\r\n{ \r\n  return vec4(-q.x, -q.y, -q.z, q.w); \r\n}\r\n\r\nvec4 quatMultiply(vec4 q1, vec4 q2)\r\n{ \r\n  vec4 qr;\r\n  qr.x = (q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y);\r\n  qr.y = (q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x);\r\n  qr.z = (q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w);\r\n  qr.w = (q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z);\r\n  return qr;\r\n}\r\n\r\nvec4 rotateByQuat(vec4 position, vec4 quat)\r\n{ \r\n  vec4 quatConj = quatConjugate(quat);\r\n  vec4 quatPos = vec4(position.x, position.y, position.z, 0);\r\n  \r\n  vec4 quatTemp = quatMultiply(quat, quatPos);\r\n  quatTemp = quatMultiply(quatTemp, quatConj);\r\n  \r\n  return vec4(quatTemp.x, quatTemp.y, quatTemp.z, 0);\r\n}\r\n\r\nmat4 rotationMatrix(vec3 axis, float angle) {\r\n  axis = normalize(axis);\r\n  float s = sin(angle);\r\n  float c = cos(angle);\r\n  float oc = 1.0 - c;\r\n\r\n  return mat4(\r\n      oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s,\r\n      oc * axis.z * axis.x + axis.y * s, 0.0, oc * axis.x * axis.y + axis.z * s,\r\n      oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,\r\n      oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s,\r\n      oc * axis.z * axis.z + c, 0.0, 0.0, 0.0, 0.0, 1.0);\r\n}\r\n\r\nmat4 rotationMatrixFromQuat(vec4 quat) {\r\n  float qx = quat.x;\r\n  float qy = quat.y;\r\n  float qz = quat.z;\r\n  float qw = quat.w;\r\n\r\n  return transpose(mat4(\r\n    1.0f - 2.0f*qy*qy - 2.0f*qz*qz, 2.0f*qx*qy - 2.0f*qz*qw, 2.0f*qx*qz + 2.0f*qy*qw, 0.0f,\r\n    2.0f*qx*qy + 2.0f*qz*qw, 1.0f - 2.0f*qx*qx - 2.0f*qz*qz, 2.0f*qy*qz - 2.0f*qx*qw, 0.0f,\r\n    2.0f*qx*qz - 2.0f*qy*qw, 2.0f*qy*qz + 2.0f*qx*qw, 1.0f - 2.0f*qx*qx - 2.0f*qy*qy, 0.0f,\r\n    0.0f, 0.0f, 0.0f, 1.0f));\r\n}\r\n\r\nmat4 translationMatrix(vec4 trans) {\r\n  return mat4(\r\n    1, 0, 0, 0,\r\n    0, 1, 0, 0,\r\n    0, 0, 1, 0,\r\n    trans.x, trans.y, trans.z, 1\r\n    );\r\n}\r\n\r\nvoid main() {\r\n  vec4 vertexColor;\r\n  vec4 vertexPosition = vs_Pos;\r\n  vec4 vertexNormal = vs_Nor;\r\n  vec4 vertexScale = vs_InstScale;\r\n\r\n  fs_Col = vs_Col;\r\n  vec4 rot = vec4(0.707, 0, 0, 0.707); // hardcoded.\r\n\r\n  // vertexNormal = transpose(inverse(mat3(u_Model))) * vertexNormal;\r\n\r\n  // vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);\r\n  vertexNormal = rotateByQuat(vertexNormal, rot);\r\n  vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);\r\n  // vertexNormal = vec4(mat3(m) * vec3(vertexNormal), 0.0);\r\n\r\n  // mat3 invTranspose = inverse(mat3(instanceModel));\r\n  fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);\r\n\r\n  vec4 modelposition =  vertexPosition;\r\n  modelposition = vertexScale * vertexPosition;\r\n  modelposition *= u_Model;\r\n  modelposition = rotateByQuat(modelposition, vs_InstRotation);\r\n  modelposition +=  vs_InstPos;\r\n\r\n  fs_WorldPos = modelposition;\r\n  fs_Pos = u_View * fs_WorldPos;\r\n\r\n  fs_UV = vs_UV;\r\n  fs_UV.y = 1.0 - fs_UV.y;\r\n\r\n  gl_Position = u_Proj * u_View * modelposition;\r\n}\r\n"
 
 /***/ }),
 /* 100 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\nin vec4 fs_WorldPos;\nin vec4 fs_Pos;\nin vec4 fs_Nor;\nin vec4 fs_Col;\nin vec2 fs_UV;\n\nout vec4 fragColor[4]; // The data in the ith index of this array of outputs\n                       // is passed to the ith index of OpenGLRenderer's\n                       // gbTargets array, which is an array of textures.\n                       // This lets us output different types of data,\n                       // such as albedo, normal, and position, as\n                       // separate images from a single render pass.\n\nuniform sampler2D tex_Color;\nuniform sampler2D emi_Color;\n\n\nvoid main() {\n    // TODO: pass proper data into gbuffers\n    // Presently, the provided shader passes \"nothing\" to the first\n    // two gbuffers and basic color to the third.\n\n    vec3 col = texture(tex_Color, fs_UV).rgb;\n    vec3 emissive = texture(emi_Color, fs_UV).rgb;\n\n    // if using textures, inverse gamma correct\n    col = pow(col, vec3(2.2));\n\n    fragColor[0] = vec4(fs_Nor.xyz, fs_Pos.z);\n    fragColor[1] = vec4(fs_Pos.xyz, 1.0);\n    fragColor[2] = vec4(col, 1.0);\n    fragColor[3] = vec4(emissive, 1.0);\n}\n"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\nin vec4 fs_WorldPos;\r\nin vec4 fs_Pos;\r\nin vec4 fs_Nor;\r\nin vec4 fs_Col;\r\nin vec2 fs_UV;\r\n\r\nout vec4 fragColor[4]; // The data in the ith index of this array of outputs\r\n                       // is passed to the ith index of OpenGLRenderer's\r\n                       // gbTargets array, which is an array of textures.\r\n                       // This lets us output different types of data,\r\n                       // such as albedo, normal, and position, as\r\n                       // separate images from a single render pass.\r\n\r\nuniform sampler2D tex_Color;\r\nuniform sampler2D emi_Color;\r\n\r\n\r\nvoid main() {\r\n    // TODO: pass proper data into gbuffers\r\n    // Presently, the provided shader passes \"nothing\" to the first\r\n    // two gbuffers and basic color to the third.\r\n\r\n    vec3 col = texture(tex_Color, fs_UV).rgb;\r\n    vec3 emissive = texture(emi_Color, fs_UV).rgb;\r\n\r\n    // if using textures, inverse gamma correct\r\n    col = pow(col, vec3(2.2));\r\n\r\n    fragColor[0] = vec4(fs_Nor.xyz, fs_Pos.z);\r\n    fragColor[1] = vec4(fs_Pos.xyz, 1.0);\r\n    fragColor[2] = vec4(col, 1.0);\r\n    fragColor[3] = vec4(emissive, 1.0);\r\n}\r\n"
 
 /***/ }),
 /* 101 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\nprecision highp float;\n\n\n/*----------  Shader Uniforms  ----------*/\nuniform mat4 u_Model;\nuniform mat4 u_ModelInvTr;  \nuniform mat4 u_LightSpaceMatrix;\n\nuniform mat4 u_View;   \nuniform mat4 u_Proj;\n\n/*----------  Shader UI Controls  ----------*/\n\n/*----------  Shader Inputs  ----------*/\nin vec4 vs_Pos;\nin vec4 vs_Nor;\nin vec4 vs_Col;\nin vec2 vs_UV;\nin vec4 vs_InstPos;\nin vec4 vs_InstScale;\nin vec4 vs_InstRotation;\n\n/*----------  Shader Outputs  ----------*/\nout vec4 fs_Pos;\nout vec4 fs_Nor;        \nout vec4 fs_Col;           \nout vec2 fs_UV;\nout vec4 fs_WorldPos;\n\nvec4 quatConjugate(vec4 q)\n{ \n  return vec4(-q.x, -q.y, -q.z, q.w); \n}\n\nvec4 quatMultiply(vec4 q1, vec4 q2)\n{ \n  vec4 qr;\n  qr.x = (q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y);\n  qr.y = (q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x);\n  qr.z = (q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w);\n  qr.w = (q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z);\n  return qr;\n}\n\nvec4 rotateByQuat(vec4 position, vec4 quat)\n{ \n  vec4 quatConj = quatConjugate(quat);\n  vec4 quatPos = vec4(position.x, position.y, position.z, 0);\n  \n  vec4 quatTemp = quatMultiply(quat, quatPos);\n  quatTemp = quatMultiply(quatTemp, quatConj);\n  \n  return vec4(quatTemp.x, quatTemp.y, quatTemp.z, 0);\n}\n\nvoid main() {\n  vec4 vertexColor;\n  vec4 vertexPosition = vs_Pos;\n  vec4 vertexNormal = vs_Nor;\n  vec4 vertexScale = vs_InstScale;\n\n  fs_Col = vs_Col;\n\n  vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);\n  vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);\n\n  // mat3 invTranspose = inverse(mat3(instanceModel));\n  fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);\n\n  vec4 modelposition = u_Model * vertexPosition;\n  modelposition = vertexScale * vertexPosition;\n  modelposition = rotateByQuat(modelposition, vs_InstRotation);\n  modelposition += vs_InstPos;\n\n  fs_WorldPos = modelposition;\n  fs_Pos = u_View * fs_WorldPos;\n\n  fs_UV = vs_UV;\n  fs_UV.y = 1.0 - fs_UV.y;\n\n  fs_Pos = u_LightSpaceMatrix * vec4(modelposition.xyz, 1);\n  gl_Position = fs_Pos;\n}\n"
+module.exports = "#version 300 es\r\nprecision highp float;\r\n\r\n\r\n/*----------  Shader Uniforms  ----------*/\r\nuniform mat4 u_Model;\r\nuniform mat4 u_ModelInvTr;  \r\nuniform mat4 u_LightSpaceMatrix;\r\n\r\nuniform mat4 u_View;   \r\nuniform mat4 u_Proj;\r\n\r\n/*----------  Shader UI Controls  ----------*/\r\n\r\n/*----------  Shader Inputs  ----------*/\r\nin vec4 vs_Pos;\r\nin vec4 vs_Nor;\r\nin vec4 vs_Col;\r\nin vec2 vs_UV;\r\nin vec4 vs_InstPos;\r\nin vec4 vs_InstScale;\r\nin vec4 vs_InstRotation;\r\n\r\n/*----------  Shader Outputs  ----------*/\r\nout vec4 fs_Pos;\r\nout vec4 fs_Nor;        \r\nout vec4 fs_Col;           \r\nout vec2 fs_UV;\r\nout vec4 fs_WorldPos;\r\n\r\nvec4 quatConjugate(vec4 q)\r\n{ \r\n  return vec4(-q.x, -q.y, -q.z, q.w); \r\n}\r\n\r\nvec4 quatMultiply(vec4 q1, vec4 q2)\r\n{ \r\n  vec4 qr;\r\n  qr.x = (q1.w * q2.x) + (q1.x * q2.w) + (q1.y * q2.z) - (q1.z * q2.y);\r\n  qr.y = (q1.w * q2.y) - (q1.x * q2.z) + (q1.y * q2.w) + (q1.z * q2.x);\r\n  qr.z = (q1.w * q2.z) + (q1.x * q2.y) - (q1.y * q2.x) + (q1.z * q2.w);\r\n  qr.w = (q1.w * q2.w) - (q1.x * q2.x) - (q1.y * q2.y) - (q1.z * q2.z);\r\n  return qr;\r\n}\r\n\r\nvec4 rotateByQuat(vec4 position, vec4 quat)\r\n{ \r\n  vec4 quatConj = quatConjugate(quat);\r\n  vec4 quatPos = vec4(position.x, position.y, position.z, 0);\r\n  \r\n  vec4 quatTemp = quatMultiply(quat, quatPos);\r\n  quatTemp = quatMultiply(quatTemp, quatConj);\r\n  \r\n  return vec4(quatTemp.x, quatTemp.y, quatTemp.z, 0);\r\n}\r\n\r\nvoid main() {\r\n  vec4 vertexColor;\r\n  vec4 vertexPosition = vs_Pos;\r\n  vec4 vertexNormal = vs_Nor;\r\n  vec4 vertexScale = vs_InstScale;\r\n\r\n  fs_Col = vs_Col;\r\n\r\n  vec4 rot = vec4(0.707, 0, 0, 0.707); // hardcoded.\r\n\r\n  // vertexNormal = transpose(inverse(mat3(u_Model))) * vertexNormal;\r\n\r\n  // vertexNormal = vertexNormal * vec4(1.0 / vertexScale.x, 1.0 / vertexScale.y, 1.0 / vertexScale.z, 0.0);\r\n  vertexNormal = rotateByQuat(vertexNormal, rot);\r\n  vertexNormal = rotateByQuat(vertexNormal, vs_InstRotation);\r\n  // vertexNormal = vec4(mat3(m) * vec3(vertexNormal), 0.0);\r\n\r\n  // mat3 invTranspose = inverse(mat3(instanceModel));\r\n  fs_Nor = normalize(vertexNormal); // vec4(invTranspose * vec3(vertexNormal), 0);\r\n\r\n  vec4 modelposition =  vertexPosition;\r\n  modelposition = vertexScale * vertexPosition;\r\n  modelposition *= u_Model;\r\n  modelposition = rotateByQuat(modelposition, vs_InstRotation);\r\n  modelposition +=  vs_InstPos;\r\n\r\n  fs_WorldPos = modelposition;\r\n  fs_Pos = u_View * fs_WorldPos;\r\n\r\n  fs_UV = vs_UV;\r\n  fs_UV.y = 1.0 - fs_UV.y;\r\n\r\n  fs_Pos = u_LightSpaceMatrix * vec4(modelposition.xyz, 1);\r\n  gl_Position = fs_Pos;\r\n}\r\n"
 
 /***/ }),
 /* 102 */
 /***/ (function(module, exports) {
 
-module.exports = "#version 300 es\n\nprecision highp float;\n\nin vec4 fs_Pos;\nout vec4 out_Col;\n\nvoid main() {\n  out_Col = vec4(vec3(fs_Pos.z), 1.0); // vec4(fs_Pos.z, fs_Pos.z, gl_FragCoord.z, 1);\n}"
+module.exports = "#version 300 es\r\n\r\nprecision highp float;\r\n\r\nin vec4 fs_Pos;\r\nout vec4 out_Col;\r\n\r\nvoid main() {\r\n  out_Col = vec4(vec3(fs_Pos.z), 1.0); // vec4(fs_Pos.z, fs_Pos.z, gl_FragCoord.z, 1);\r\n}"
 
 /***/ })
 /******/ ]);
