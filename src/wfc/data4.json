@@ -33,7 +33,7 @@
                     ["WallGate2", 25]
                  ]
              },
-             "weight": 2
+             "weight": 10
          }, {
              "name": "WallJunction1",
              "symmetry": "T",
