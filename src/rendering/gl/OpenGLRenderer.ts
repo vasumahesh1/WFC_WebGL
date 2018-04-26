@@ -716,7 +716,7 @@ class OpenGLRenderer {
 
     gl.activeTexture(gl.TEXTURE0);
     // bound texture is the last one processed before
-    gl.bindTexture(gl.TEXTURE_2D, this.post32Targets[7]); // TODO: 7
+    gl.bindTexture(gl.TEXTURE_2D, this.post32Targets[2]); // TODO: 7
 
     let val = config.enabled ? 1 : 0;
     this.tonemapPass.setToneMapping(val);

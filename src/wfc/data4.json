@@ -33,7 +33,7 @@
                     ["WallGate2", 25]
                  ]
              },
-             "weight": 2
+             "weight": 10
          }, {
              "name": "WallJunction1",
              "symmetry": "T",
@@ -66,7 +66,11 @@
              "name": "WallCurved_Middle",
              "symmetry": "L",
              "config": {
-                 "heightRange": [2, 2]
+                 "heightRange": [2, 2],
+                 "meshes": [
+                    ["WallCurved_Middle", 70],
+                    ["WallCurved_Middle2", 30]
+                 ]
              }
          }, {
              "name": "empty",

@@ -178,6 +178,7 @@ let meshes:any = {
   'WallJunction_Middle' : './resources/obj/WallJunction_Middle.obj',
   'WallCurved_Tall' : './resources/obj/WallCurved_Tall.obj',
   'WallCurved_Middle' : './resources/obj/WallCurved_Middle.obj',
+  'WallCurved_Middle2' : './resources/obj/WallCurved_Middle2.obj',
   'WallCurved_TallUpper' : './resources/obj/WallCurved_TallUpper.obj',
   'WallCurved_TallUpper1' : './resources/obj/WallCurved_TallUpper1.obj',
   'roof' : './resources/obj/roof.obj',
@@ -217,6 +218,7 @@ let textures: any = [
   ['./resources/obj/WallJunction_Middle.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_Tall.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_Middle.png', './resources/textures/default_emissive.png'],
+  ['./resources/obj/WallCurved_Middle2.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_TallUpper.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/WallCurved_TallUpper1.png', './resources/textures/default_emissive.png'],
   ['./resources/obj/roof.png', './resources/textures/default_emissive.png'],
@@ -434,13 +436,6 @@ function main() {
   group.add(controls.wfc, 'isDebug').name('Capture States');
   group.open();
 
-
-  group = gui.addFolder('Depth of Field');
-  group.add(controls.dof, 'enabled').name('Enabled').listen();
-  group.add(controls.dof, 'blend', 0, 1.0).step(0.05).name('Blend Amount').listen();
-  group.add(controls.dof, 'focalLength', 0, 30.0).step(0.05).name('Focal Length').listen();
-  group.add(controls.dof, 'inFocusPlaneSize', 0, 30.0).step(0.05).name('Focal Plane Size').listen();
-
   group = gui.addFolder('Tonemap');
   group.add(controls.tonemap, 'enabled').name('Enabled').listen();
 
@@ -461,18 +456,6 @@ function main() {
   group = gui.addFolder('Camera');
   group.add(controls.camera, 'isOrtho').name('Is Static').listen();
   group.open();
-
-  group = gui.addFolder('God Rays');
-  group.add(controls.godray, 'blend', 0, 1.0).step(0.05).name('GR Blend Amount').listen();
-  group.add(controls.godray, 'iterations', 1.0, 10.0).step(1.0).name('Iterations').listen();
-  group.add(controls.godray, 'enabled').name('Enabled').listen();
-  group.add(controls.godray, 'density', 0.0, 4.0).step(0.05).name('Density').listen();
-  group.add(controls.godray, 'weight', 0.0, 10.0).step(0.25).name('Weight').listen();
-  group.add(controls.godray, 'decay', 0.0, 1.0).step(0.05).name('Decay').listen();
-  group.add(controls.godray, 'exposure', 0.0, 10.0).step(0.25).name('Exposure').listen();
-  
-  group = gui.addFolder('Artistic');
-  group.add(controls.artistic, 'effect', { 'None': 'none', 'Pencil Sketch': 'sketch' } ).name('Effect');
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -547,19 +530,12 @@ function main() {
     // renderer.renderPostProcessLDR();
 
     renderer.renderPass_Bloom(controls.bloom);
-    renderer.renderPass_GodRay(camera, controls.godray);
 
     renderer.renderPass_Composite(controls);
 
-    renderer.renderPass_DOF(camera, controls.dof);
-
     renderer.renderPass_ToneMapping(controls.tonemap);
     
-    if (controls.artistic.effect == 'none') {
-      renderer.renderPass_Present(camera);
-    } else if (controls.artistic.effect == 'sketch') {
-      renderer.renderPass_PresentSketch(camera);
-    }
+    renderer.renderPass_Present(camera);
 
     stats.end();
 
