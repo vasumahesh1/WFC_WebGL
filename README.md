@@ -87,7 +87,7 @@ GIF:
 
 The following voxels were used by us for making the scene. We created them on MagicaVoxel. And they look janky af.
 
-
+| - | - | - |
 |:-------------:|:-----:|:-----:|
 | ![](screens/Capture1.PNG) | ![](screens/Capture2.PNG) | ![](screens/Capture3.PNG) |
 | ![](screens/Capture4.PNG) | ![](screens/Capture5.PNG) | ![](screens/Capture6.PNG) |
