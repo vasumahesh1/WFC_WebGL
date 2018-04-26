@@ -344,7 +344,7 @@ function loadScene(capture:boolean = false) {
 
     let mesh = sceneMeshMap[voxel.mesh];
 
-    computeLightingForVoxel(voxel);
+    // computeLightingForVoxel(voxel);
 
     if (mesh) {
       mesh.addInstance(voxel.position, vec4.fromValues(voxel.rotation[0], voxel.rotation[1], voxel.rotation[2], voxel.rotation[3]), voxel.scale);
